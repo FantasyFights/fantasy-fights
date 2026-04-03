@@ -937,6 +937,218 @@
             line-height: 1.4;
         }
 
+        /* ============ UPCOMING SCHEDULE PAGE ============ */
+        .schedule-page { padding: 0; }
+
+        .schedule-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .schedule-top-bar h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111;
+            margin: 0;
+        }
+        .schedule-live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+        .schedule-live-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #16a34a;
+            animation: pulse-dot 1.8s ease infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.7); }
+        }
+
+        .schedule-week { margin-bottom: 28px; }
+
+        .schedule-date-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+        .schedule-date-pill {
+            background: #111827;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .schedule-date-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, #e5e7eb, transparent);
+        }
+        .schedule-fight-count {
+            font-size: 11px;
+            color: #9ca3af;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* H2H card */
+        .h2h-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+            border: 1px solid rgba(0,0,0,0.06);
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .h2h-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08), 0 8px 28px rgba(0,0,0,0.1);
+        }
+        .h2h-top-bar { height: 5px; }
+
+        .h2h-inner {
+            display: flex;
+            align-items: stretch;
+            padding: 14px 18px 16px;
+            gap: 0;
+        }
+        .h2h-team-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-shrink: 0;
+            width: 68px;
+        }
+        .h2h-team-name {
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 5px 10px;
+            border-radius: 6px;
+            width: 100%;
+            text-align: center;
+        }
+        .h2h-team-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #9ca3af;
+        }
+        .h2h-centre {
+            flex: 1;
+            text-align: center;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+        }
+        .h2h-matchup-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin: 0 auto 2px;
+        }
+        .h2h-vs-divider {
+            font-size: 10px;
+            font-weight: 900;
+            color: #d1d5db;
+            letter-spacing: 0.1em;
+        }
+        .h2h-fight-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: #111827;
+            line-height: 1.35;
+        }
+        .h2h-fight-detail {
+            font-size: 12px;
+            color: #6b7280;
+            line-height: 1.4;
+            margin-top: 1px;
+        }
+        .h2h-belt-row {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Regular fight row */
+        .fight-row {
+            background: #fff;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            gap: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .fight-row:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.09);
+        }
+        .fight-row-team {
+            color: #fff;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 5px 10px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            min-width: 58px;
+            text-align: center;
+        }
+        .fight-row-info { flex: 1; min-width: 0; }
+        .fight-row-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.3;
+        }
+        .fight-row-detail {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+        .fight-row-belts { font-size: 14px; flex-shrink: 0; }
+
         /* ============ LADDER PAGE ============ */
         .ladder-section {
             background: white;
@@ -1583,6 +1795,13 @@
 
         /* ============ RESPONSIVE ============ */
         @media (max-width: 768px) {
+            .h2h-inner { flex-direction: column; align-items: center; gap: 10px; padding: 12px 14px 14px; }
+            .h2h-team-col { flex-direction: row; width: auto; gap: 8px; justify-content: center; }
+            .h2h-centre { padding: 0; }
+            .fight-row { flex-wrap: wrap; }
+        }
+
+        @media (max-width: 768px) {
             .header-container {
                 padding: 0 15px;
             }
@@ -1705,6 +1924,7 @@
             </div>
             <nav id="mainNav">
                 <a onclick="showPage('home')" class="nav-home active">Home</a>
+                <a onclick="showPage('upcoming')" class="nav-upcoming">Upcoming</a>
                 <a onclick="showPage('ladder')" class="nav-ladder">Ladder</a>
                 <a onclick="showPage('teams')" class="nav-teams">Teams</a>
                 <a onclick="showPage('draft')" class="nav-draft">Draft</a>
@@ -1735,6 +1955,25 @@
                     <div style="text-align:center;padding:30px;color:#999;">
                         <div style="display:inline-block;width:24px;height:24px;border:3px solid #ddd;border-top-color:#e63333;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
                         <p style="margin-top:8px;font-size:13px;">Loading boxing news...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPCOMING SCHEDULE PAGE -->
+        <div class="page" id="upcomingPage">
+            <div class="schedule-page">
+                <div class="schedule-top-bar">
+                    <h2>📅 Full Schedule</h2>
+                    <div class="schedule-live-badge">
+                        <div class="schedule-live-dot"></div>
+                        Live from Google Sheets
+                    </div>
+                </div>
+                <div id="scheduleContainer">
+                    <div style="text-align:center;padding:40px;color:#999;">
+                        <div style="display:inline-block;width:24px;height:24px;border:3px solid #ddd;border-top-color:#e63333;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+                        <p style="margin-top:10px;font-size:13px;">Loading schedule…</p>
                     </div>
                 </div>
             </div>
@@ -2448,6 +2687,7 @@
 
             switch (pageName) {
                 case 'home': renderHome(); break;
+                case 'upcoming': renderUpcoming(); break;
                 case 'ladder': renderLadder(); break;
                 case 'teams': renderTeams(); break;
                 case 'draft': renderDraft(); break;
@@ -2520,6 +2760,10 @@
 
             // Fetch live news
             app.fetchBoxingNews();
+        }
+
+        function renderUpcoming() {
+            loadFullScheduleFromSheets();
         }
 
         function renderLadder() {
@@ -2993,6 +3237,147 @@
         };
 
         // Initialize on load — with Firebase availability check
+        // ============ FULL SCHEDULE (UPCOMING PAGE) ============
+
+        function getTeamColor(name) {
+            if (!name) return '#555';
+            // normalise REJECT → Rejects
+            const n = name.toLowerCase() === 'reject' ? 'Rejects' : name;
+            const key = Object.keys(TEAM_COLOR_MAP).find(k => k.toLowerCase() === n.toLowerCase());
+            return key ? TEAM_COLOR_MAP[key] : '#555';
+        }
+
+        function parseScheduleRow(date, desc) {
+            const d = (desc || '').trim();
+            if (!d) return null;
+            const isH2H = /^H2H\s*-/i.test(d);
+            if (isH2H) {
+                const body = d.replace(/^H2H\s*-\s*/i, '');
+                const firstDash = body.indexOf(' - ');
+                const matchup = firstDash > -1 ? body.substring(0, firstDash).trim() : body;
+                const fight   = firstDash > -1 ? body.substring(firstDash + 3).trim() : '';
+                const vMatch  = matchup.match(/^(.+?)\s+[Vv]\s+(.+)$/);
+                const team1   = vMatch ? vMatch[1].trim().toUpperCase() : matchup.toUpperCase();
+                const team2   = vMatch ? vMatch[2].trim().toUpperCase() : '';
+                return { type: 'h2h', date, team1, team2, fight };
+            } else {
+                const dashIdx = d.indexOf(' - ');
+                if (dashIdx === -1) return { type: 'regular', date, team: d.toUpperCase(), fight: '' };
+                const team  = d.substring(0, dashIdx).trim().toUpperCase();
+                const fight = d.substring(dashIdx + 3).trim();
+                return { type: 'regular', date, team, fight };
+            }
+        }
+
+        function renderH2HCard(f) {
+            const c1 = getTeamColor(f.team1);
+            const c2 = getTeamColor(f.team2);
+            const belts = getBeltImages(f.fight);
+            const vsIdx = f.fight.search(/ vs\.? /i);
+            let fightName = f.fight, fightDetail = '';
+            if (vsIdx > -1) {
+                // Split on first comma after the fighter names
+                const commaIdx = f.fight.indexOf(',', vsIdx);
+                if (commaIdx > -1) {
+                    fightName   = f.fight.substring(0, commaIdx).trim();
+                    fightDetail = f.fight.substring(commaIdx + 1).trim();
+                }
+            }
+            return `
+            <div class="h2h-card">
+                <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
+                <div class="h2h-inner">
+                    <div class="h2h-team-col">
+                        <div class="h2h-team-label">Your Pick</div>
+                        <div class="h2h-team-name" style="background:${c1}">${f.team1}</div>
+                    </div>
+                    <div class="h2h-centre">
+                        <div style="display:flex;justify-content:center;">
+                            <div class="h2h-matchup-label">⚔️ Head-to-Head</div>
+                        </div>
+                        <div class="h2h-vs-divider">— VS —</div>
+                        <div class="h2h-fight-name">${fightName || f.fight}</div>
+                        ${fightDetail ? `<div class="h2h-fight-detail">${fightDetail}</div>` : ''}
+                        ${belts ? `<div class="h2h-belt-row">${belts}</div>` : ''}
+                    </div>
+                    <div class="h2h-team-col">
+                        <div class="h2h-team-label">Opponent</div>
+                        <div class="h2h-team-name" style="background:${c2}">${f.team2}</div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function renderFightRow(f) {
+            const color = getTeamColor(f.team);
+            const belts = getBeltImages(f.fight);
+            const commaIdx = f.fight ? f.fight.indexOf(',') : -1;
+            const fightName   = commaIdx > -1 ? f.fight.substring(0, commaIdx).trim() : f.fight;
+            const fightDetail = commaIdx > -1 ? f.fight.substring(commaIdx + 1).trim() : '';
+            return `
+            <div class="fight-row">
+                <div class="fight-row-team" style="background:${color}">${f.team}</div>
+                <div class="fight-row-info">
+                    <div class="fight-row-name">${fightName || '—'}</div>
+                    ${fightDetail ? `<div class="fight-row-detail">${fightDetail}</div>` : ''}
+                </div>
+                ${belts ? `<div class="fight-row-belts">${belts}</div>` : ''}
+            </div>`;
+        }
+
+        async function loadFullScheduleFromSheets() {
+            const container = document.getElementById('scheduleContainer');
+            if (!container) return;
+            try {
+                const data = await fetchGviz(GS_SCHEDULE_GID);
+                const rows = data.table?.rows || [];
+
+                let lastDate = '';
+                const parsed = [];
+                rows.forEach(row => {
+                    if (!row.c) return;
+                    const dc = String(gvizCell(row, 0) || '').trim();
+                    const fc = String(gvizCell(row, 1) || '').trim();
+                    if (dc) lastDate = dc;
+                    if (!fc || !lastDate) return;
+                    const item = parseScheduleRow(lastDate, fc);
+                    if (item) parsed.push(item);
+                });
+
+                // Group by date preserving order
+                const dateOrder = [];
+                const byDate = {};
+                parsed.forEach(f => {
+                    if (!byDate[f.date]) { byDate[f.date] = []; dateOrder.push(f.date); }
+                    byDate[f.date].push(f);
+                });
+
+                if (!dateOrder.length) {
+                    container.innerHTML = '<div style="color:#999;padding:20px;text-align:center;">No upcoming fights scheduled.</div>';
+                    return;
+                }
+
+                container.innerHTML = dateOrder.map(date => {
+                    const fights = byDate[date];
+                    const h2hCount = fights.filter(f => f.type === 'h2h').length;
+                    const tag = h2hCount ? `${h2hCount} H2H · ${fights.length} fights` : `${fights.length} fight${fights.length !== 1 ? 's' : ''}`;
+                    return `
+                    <div class="schedule-week">
+                        <div class="schedule-date-header">
+                            <div class="schedule-date-pill">${date} 2026</div>
+                            <div class="schedule-date-line"></div>
+                            <div class="schedule-fight-count">${tag}</div>
+                        </div>
+                        ${fights.map(f => f.type === 'h2h' ? renderH2HCard(f) : renderFightRow(f)).join('')}
+                    </div>`;
+                }).join('');
+
+            } catch (err) {
+                console.warn('Schedule load error:', err);
+                container.innerHTML = '<div style="color:#999;padding:20px;text-align:center;">Could not load schedule — check sheet sharing settings.</div>';
+            }
+        }
+
         // ============ GOOGLE SHEETS LIVE INTEGRATION ============
         const GS_SHEET_ID = '1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc';
         const GS_LADDER_GID  = '779860156';
