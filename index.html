@@ -1736,18 +1736,26 @@
         <!-- LADDER PAGE -->
         <div class="page" id="ladderPage">
             <div class="ladder-section">
-                <div class="ladder-header">League Ladder</div>
+                <div class="ladder-header" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span>League Ladder</span>
+                    <span id="ladderLastUpdated" style="font-size:11px;font-weight:400;color:rgba(255,255,255,0.65);"></span>
+                </div>
                 <table class="ladder-table">
                     <thead>
                         <tr>
-                            <th>Rank</th>
+                            <th>#</th>
                             <th>Team</th>
-                            <th>Points</th>
-                            <th>Wins</th>
-                            <th>Losses</th>
+                            <th>Pts</th>
+                            <th>W</th>
+                            <th>L</th>
+                            <th>D</th>
+                            <th>KOs</th>
+                            <th>H2H</th>
                         </tr>
                     </thead>
-                    <tbody id="ladderBody"></tbody>
+                    <tbody id="ladderBody">
+                        <tr><td colspan="8" style="text-align:center;padding:20px;color:#999;">Loading live standings…</td></tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -2443,6 +2451,7 @@
 
         // ============ PAGE RENDERERS ============
         function renderHome() {
+            loadUpcomingFromSheets();
             const upcomingDiv = document.getElementById('upcomingFights');
             const newsDiv = document.getElementById('newsItems');
 
@@ -2488,27 +2497,7 @@
         }
 
         function renderLadder() {
-            const tbody = document.getElementById('ladderBody');
-            tbody.innerHTML = '';
-
-            teams.forEach((team, index) => {
-                const wins = Math.floor(Math.random() * 15);
-                const losses = Math.floor(Math.random() * 10);
-                const points = wins * 3 - losses * 1;
-
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td class="team-name">
-                        <span class="team-color-dot" style="background:${team.color}"></span>
-                        ${team.name}
-                    </td>
-                    <td class="stat-number">${Math.max(0, points)}</td>
-                    <td class="stat-number">${wins}</td>
-                    <td class="stat-number">${losses}</td>
-                `;
-                tbody.appendChild(row);
-            });
+            loadLadderFromSheets();
         }
 
         function renderTeams() {
@@ -2857,6 +2846,7 @@
                         showMainApp();
                         updateNavigation();
                         renderHome();
+                        startSheetsAutoRefresh();
                     });
                 } else {
                     currentUser = null;
@@ -2974,6 +2964,175 @@
         };
 
         // Initialize on load — with Firebase availability check
+        // ============ GOOGLE SHEETS LIVE INTEGRATION ============
+        const GS_SHEET_ID = '1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc';
+        const GS_LADDER_GID  = '779860156';
+        const GS_RESULTS_GID = '1081462908';
+        const GS_SCHEDULE_GID = '394257468';
+
+        const TEAM_COLOR_MAP = {
+            'Tom':     '#FF6B35',
+            'Mort':    '#4ECDC4',
+            'Dom':     '#e63333',
+            'Kieran':  '#9B59B6',
+            'Elyse':   '#FF69B4',
+            'Ash':     '#2ECC71',
+            'Pat':     '#F39C12',
+            'Brad':    '#3498DB',
+            'Rejects': '#95A5A6',
+        };
+
+        async function fetchGviz(gid) {
+            const url = `https://docs.google.com/spreadsheets/d/${GS_SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`;
+            const resp = await fetch(url, { cache: 'no-store' });
+            if (!resp.ok) throw new Error('Sheet fetch failed: ' + resp.status);
+            const text = await resp.text();
+            const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);?\s*$/);
+            if (!match) throw new Error('Unexpected sheet response format');
+            return JSON.parse(match[1]);
+        }
+
+        function gvizCell(row, col) {
+            const c = row.c?.[col];
+            if (!c || c.v === null || c.v === undefined) return '';
+            return c.f || c.v; // prefer formatted value if available
+        }
+
+        function gvizNum(row, col) {
+            const c = row.c?.[col];
+            if (!c || c.v === null || c.v === undefined) return 0;
+            return Number(c.v) || 0;
+        }
+
+        async function loadLadderFromSheets() {
+            const tbody = document.getElementById('ladderBody');
+            const status = document.getElementById('ladderLastUpdated');
+            if (!tbody) return;
+
+            try {
+                const data = await fetchGviz(GS_LADDER_GID);
+                const rows = data.table?.rows || [];
+                // Row 0 = header, rows 1+ = team data
+                const teamRows = rows.slice(1).filter(r => r.c && gvizCell(r, 1));
+
+                tbody.innerHTML = '';
+                teamRows.forEach((row, i) => {
+                    // Columns: A=rank, B=Team, C=W, D=L, E=D, F=KOs, G=belt, H=★, I=H2H, J=Points
+                    const team   = gvizCell(row, 1);
+                    const w      = gvizNum(row, 2);
+                    const l      = gvizNum(row, 3);
+                    const d      = gvizNum(row, 4);
+                    const kos    = gvizNum(row, 5);
+                    const h2h    = gvizNum(row, 8);
+                    const pts    = gvizNum(row, 9);
+                    const color  = TEAM_COLOR_MAP[team] || '#999';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="font-weight:700;color:#888;">${i + 1}</td>
+                        <td class="team-name">
+                            <span class="team-color-dot" style="background:${color}"></span>
+                            ${team}
+                        </td>
+                        <td class="stat-number" style="font-size:18px;font-weight:800;color:#e63333;">${pts}</td>
+                        <td class="stat-number">${w}</td>
+                        <td class="stat-number">${l}</td>
+                        <td class="stat-number">${d}</td>
+                        <td class="stat-number">${kos}</td>
+                        <td class="stat-number">${h2h}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                if (status) status.textContent = '🟢 Live · Updated ' + new Date().toLocaleTimeString();
+            } catch (err) {
+                console.warn('Google Sheets ladder error:', err);
+                if (tbody.innerHTML.includes('Loading')) {
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:#999;">Could not load live standings — check sheet is set to "Anyone with link can view"</td></tr>';
+                }
+                if (status) status.textContent = '⚠️ Could not load';
+            }
+        }
+
+        async function loadUpcomingFromSheets() {
+            const div = document.getElementById('upcomingFights');
+            if (!div) return;
+            try {
+                const data = await fetchGviz(GS_SCHEDULE_GID);
+                const rows = data.table?.rows || [];
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                // Collect upcoming H2H fights (yellow rows = H2H matchups)
+                const upcoming = [];
+                rows.forEach(row => {
+                    if (!row.c) return;
+                    const dateCell = gvizCell(row, 0);
+                    const descCell = gvizCell(row, 1);
+                    if (!dateCell || !descCell) return;
+                    if (!descCell.includes('H2H')) return; // only show H2H fights
+
+                    // Parse date — formats like "12 Apr", "3 May"
+                    const dateStr = String(dateCell).trim();
+                    const parsed = new Date(dateStr + ' 2026');
+                    if (isNaN(parsed)) return;
+                    parsed.setHours(0,0,0,0);
+                    if (parsed < today) return; // skip past fights
+                    upcoming.push({ date: parsed, dateStr, desc: String(descCell).trim() });
+                });
+
+                upcoming.sort((a, b) => a.date - b.date);
+                const next = upcoming.slice(0, 6);
+
+                if (next.length === 0) {
+                    div.innerHTML = '<div style="color:#999;padding:16px;">No upcoming H2H fights scheduled yet.</div>';
+                    return;
+                }
+
+                div.innerHTML = next.map(f => {
+                    // Parse "H2H - DOM V TOM - Fighter A vs Fighter B, ..."
+                    const parts = f.desc.replace(/^H2H\s*-\s*/, '').split(' - ');
+                    const matchup = parts[0] || '';
+                    const fight = parts.slice(1).join(' - ');
+                    const [t1, t2] = matchup.split(' V ').map(s => s.trim());
+                    const c1 = TEAM_COLOR_MAP[t1] || '#e63333';
+                    const c2 = TEAM_COLOR_MAP[t2] || '#666';
+                    return `
+                        <div class="upcoming-fight-card" style="background:white;border-radius:10px;padding:14px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-left:4px solid #e63333;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                                <div style="display:flex;align-items:center;gap:8px;">
+                                    <span style="background:${c1};color:white;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;">${t1}</span>
+                                    <span style="font-weight:800;color:#e63333;">VS</span>
+                                    <span style="background:${c2};color:white;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;">${t2}</span>
+                                </div>
+                                <span style="font-size:12px;font-weight:600;color:#e63333;">${f.dateStr}</span>
+                            </div>
+                            <div style="font-size:13px;color:#555;">${fight}</div>
+                        </div>`;
+                }).join('');
+            } catch (err) {
+                console.warn('Google Sheets schedule error:', err);
+            }
+        }
+
+        // Auto-refresh every 90 seconds when tab is visible
+        let gsRefreshTimer = null;
+        function startSheetsAutoRefresh() {
+            if (gsRefreshTimer) clearInterval(gsRefreshTimer);
+            gsRefreshTimer = setInterval(() => {
+                const ladderPage = document.getElementById('ladderPage');
+                if (ladderPage?.classList.contains('active')) loadLadderFromSheets();
+                const homePage = document.getElementById('homePage');
+                if (homePage?.classList.contains('active')) loadUpcomingFromSheets();
+            }, 90000);
+        }
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                const ladderPage = document.getElementById('ladderPage');
+                if (ladderPage?.classList.contains('active')) loadLadderFromSheets();
+            }
+        });
+
         window.addEventListener('load', () => {
             if (typeof firebase === 'undefined') {
                 // Firebase SDK didn't load (file:// protocol or no internet)
