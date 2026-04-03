@@ -191,18 +191,14 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 16px;
             justify-content: center;
-            font-size: 48px;
-            font-weight: 900;
-            letter-spacing: -1px;
-            text-transform: uppercase;
-            color: #222;
         }
 
-        .glove-svg {
-            width: 50px;
-            height: 50px;
+        .logo-img {
+            height: 44px;
+            width: auto;
+            object-fit: contain;
+            display: block;
         }
 
         .user-menu {
@@ -600,18 +596,14 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 16px;
             justify-content: center;
-            font-size: 48px;
-            font-weight: 900;
-            letter-spacing: -1px;
-            text-transform: uppercase;
-            color: #222;
         }
 
-        .glove-svg {
-            width: 50px;
-            height: 50px;
+        .logo-img {
+            height: 44px;
+            width: auto;
+            object-fit: contain;
+            display: block;
         }
 
         .user-menu {
@@ -1869,7 +1861,7 @@
     <div class="auth-container" id="authContainer">
         <div class="auth-card">
             <div class="auth-logo">
-                <span>🥊</span> Fantasy Fights
+                <img src="Fantasy Fights Logo.png" alt="Fantasy Fights" style="height:56px;width:auto;object-fit:contain;display:block;margin:0 auto;">
             </div>
 
             <div class="auth-toggle">
@@ -1901,7 +1893,7 @@
         <div class="header-container">
             <div class="header-top">
                 <div class="logo">
-                    <span>🥊</span> Fantasy Fights
+                    <img src="Fantasy Fights Logo.png" alt="Fantasy Fights" class="logo-img">
                 </div>
                 <div class="user-menu">
                     <button class="user-menu-button" onclick="toggleUserMenu()">
@@ -3515,8 +3507,8 @@
                     const matchup = parts[0] || '';
                     const fight = parts.slice(1).join(' - ');
                     const [t1, t2] = matchup.split(' V ').map(s => s.trim());
-                    const c1 = TEAM_COLOR_MAP[t1] || '#e63333';
-                    const c2 = TEAM_COLOR_MAP[t2] || '#666';
+                    const c1 = getTeamColor(t1);
+                    const c2 = getTeamColor(t2);
                     const beltImgs = getBeltImages(fight);
                     return `
                         <div class="upcoming-fight-card" style="background:white;border-radius:10px;padding:14px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-left:4px solid #e63333;">
