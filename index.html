@@ -1204,54 +1204,100 @@
         /* ============ TEAMS PAGE ============ */
         .teams-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            align-items: start;
         }
 
-        .team-card {
+        .squad-card {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
 
-        .team-card:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        .squad-card:hover {
+            box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+            transform: translateY(-2px);
         }
 
-        .team-header {
-            padding: 20px;
-            color: white;
-            font-weight: 700;
-            font-size: 20px;
-        }
-
-        .team-body {
-            padding: 20px;
-        }
-
-        .team-owner {
-            color: #666;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .team-roster-label {
-            font-weight: 600;
-            color: #222;
-            margin-bottom: 10px;
-            font-size: 14px;
-            text-transform: uppercase;
-            color: #999;
-        }
-
-        .team-roster {
+        .squad-header {
+            padding: 14px 18px 13px;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f0f0f0;
         }
 
+        .squad-name {
+            font-size: 17px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .squad-count {
+            font-size: 10px;
+            font-weight: 700;
+            color: #aaa;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        .squad-body { padding: 0; }
+
+        .div-section { border-bottom: 1px solid #f4f4f4; }
+        .div-section:last-child { border-bottom: none; }
+
+        .div-label {
+            padding: 6px 18px 5px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: #bbb;
+            background: #fafafa;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .fighter-row {
+            display: flex;
+            align-items: center;
+            padding: 6px 18px;
+            gap: 9px;
+            border-bottom: 1px solid #f9f9f9;
+            transition: background 0.12s;
+        }
+        .fighter-row:last-child { border-bottom: none; }
+        .fighter-row:hover { background: #f7f7f7; }
+
+        .f-flag { font-size: 13px; flex-shrink: 0; width: 20px; line-height: 1; }
+
+        .f-name {
+            flex: 1;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #1a1a1a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .rd-badge {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #aaa;
+            background: #f2f2f2;
+            padding: 2px 6px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            letter-spacing: 0.2px;
+        }
+
+        /* keep old selectors alive so non-teams code doesn't break */
+        .team-card { display: none; }
+        .team-header { display: none; }
+        .team-body { display: none; }
         .team-roster-item {
             background: #f8f8f8;
             padding: 10px 12px;
@@ -1820,7 +1866,7 @@
             }
 
             .teams-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
 
             .team-assignment-row {
@@ -2764,39 +2810,244 @@
 
         function renderTeams() {
             const grid = document.getElementById('teamsGrid');
-            grid.innerHTML = '';
 
-            teams.forEach(team => {
-                const roster = rosters[team.id] || [];
-                const isUserTeam = userRole === 'owner' && userTeamId === team.id;
-                const owner = Object.values(users).find(u => u.teamId === team.id);
+            const FLAG = {
+                'USA':'🇺🇸','United Kingdom':'🇬🇧','Australia':'🇦🇺','Mexico':'🇲🇽',
+                'Japan':'🇯🇵','Tokyo, Japan':'🇯🇵','Canada':'🇨🇦','Cuba':'🇨🇺',
+                'France':'🇫🇷','Germany':'🇩🇪','Russia':'🇷🇺','Ukraine':'🇺🇦',
+                'Puerto Rico':'🇵🇷','Philippines':'🇵🇭','Ireland':'🇮🇪','Uzbekistan':'🇺🇿',
+                'Kazakhstan':'🇰🇿','Croatia':'🇭🇷','Venezuela':'🇻🇪','Nigeria':'🇳🇬',
+                'New Zealand':'🇳🇿','Nicaragua':'🇳🇮','Sweden':'🇸🇪','Thailand':'🇹🇭',
+                'Italy':'🇮🇹','China':'🇨🇳','Congo':'🇨🇩','Dominican Republic':'🇩🇴',
+                'Guatemala':'🇬🇹'
+            };
 
-                const card = document.createElement('div');
-                card.className = 'team-card';
-                card.innerHTML = `
-                    <div class="team-header" style="background-color: ${team.color}">${team.name}</div>
-                    <div class="team-body">
-                        <div class="team-owner">${owner?.displayName || 'Unassigned'}</div>
-                        <div class="team-roster-label">Roster (${roster.length}/${leagueData.rosterSize || 10})</div>
-                        <div class="team-roster">
-                            ${roster.length === 0 ? '<div style="color: #999; font-style: italic; padding: 10px;">No fighters yet</div>' : ''}
-                            ${roster.map(fighterId => {
-                                const fighter = fighters.find(f => f.id === fighterId);
-                                return `
-                                    <div class="team-roster-item ${isUserTeam ? 'highlighted' : ''}">
-                                        <div>
-                                            <strong>${fighter?.name || 'Unknown'}</strong>
-                                            ${fighter?.beltCount > 0 ? `<div class="fighter-belt">${fighter.belts}</div>` : ''}
-                                        </div>
-                                        <div style="font-size:11px;color:#999;">${fighter?.division}</div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
+            const DIV_ORDER = ['Heavies','Middles','Welters','Lights','Smalls'];
+            const DIV_LABEL = {
+                'Heavies':'Heavyweight','Middles':'Super Middle & Middleweight',
+                'Welters':'Welterweight','Lights':'Lightweight','Smalls':'Featherweight & Below'
+            };
+
+            const ROSTER = [
+                // ── DOM ──────────────────────────────────────────────
+                {team:'Dom',rd:1, name:'Oleksandr Usyk',       div:'Heavies', country:'Ukraine'},
+                {team:'Dom',rd:5, name:'Daniel Dubois',         div:'Heavies', country:'United Kingdom'},
+                {team:'Dom',rd:10,name:'Tyson Fury',            div:'Heavies', country:'United Kingdom'},
+                {team:'Dom',rd:19,name:'Derek Chisora',         div:'Heavies', country:'United Kingdom'},
+                {team:'Dom',rd:3, name:'Artur Beterbiev',       div:'Middles', country:'Canada'},
+                {team:'Dom',rd:12,name:'Osleys Iglesias',       div:'Middles', country:'Cuba'},
+                {team:'Dom',rd:14,name:'Armando Resendiz',      div:'Middles', country:'Mexico'},
+                {team:'Dom',rd:18,name:'Anthony Yarde',         div:'Middles', country:'United Kingdom'},
+                {team:'Dom',rd:7, name:'Bakhram Murtazaliev',   div:'Welters', country:'Russia'},
+                {team:'Dom',rd:9, name:'Israil Madrimov',       div:'Welters', country:'Uzbekistan'},
+                {team:'Dom',rd:16,name:'Errol Spence',          div:'Welters', country:'USA'},
+                {team:'Dom',rd:20,name:'Serhii Bohachuk',       div:'Welters', country:'Ukraine'},
+                {team:'Dom',rd:4, name:'Keyshawn Davis',        div:'Lights',  country:'USA'},
+                {team:'Dom',rd:8, name:'Ryan Garcia',           div:'Lights',  country:'USA'},
+                {team:'Dom',rd:11,name:'Gary Antuanne Russell', div:'Lights',  country:'USA'},
+                {team:'Dom',rd:15,name:'Eduardo Nunez',         div:'Lights',  country:'Mexico'},
+                {team:'Dom',rd:2, name:'Jesse Rodriguez',       div:'Smalls',  country:'USA'},
+                {team:'Dom',rd:6, name:'Rafael Espinoza',       div:'Smalls',  country:'Mexico'},
+                {team:'Dom',rd:13,name:'Luis Nery',             div:'Smalls',  country:'Mexico'},
+                {team:'Dom',rd:17,name:'Christian Medina',      div:'Smalls',  country:'Mexico'},
+                // ── TOM ──────────────────────────────────────────────
+                {team:'Tom',rd:20,name:'Arslanbek Makhmudov',  div:'Heavies', country:'Canada'},
+                {team:'Tom',rd:7, name:'Gilberto Ramirez',     div:'Heavies', country:'Mexico'},
+                {team:'Tom',rd:10,name:'Jared Anderson',       div:'Heavies', country:'USA'},
+                {team:'Tom',rd:15,name:'David Nyika',          div:'Heavies', country:'New Zealand'},
+                {team:'Tom',rd:3, name:'Canelo Alvarez',       div:'Middles', country:'Mexico'},
+                {team:'Tom',rd:4, name:'Diego Pacheco',        div:'Middles', country:'USA'},
+                {team:'Tom',rd:9, name:'Carlos Adames',        div:'Middles', country:'Dominican Republic'},
+                {team:'Tom',rd:11,name:'Lester Martínez',      div:'Middles', country:'Guatemala'},
+                {team:'Tom',rd:1, name:'Jaron Ennis',          div:'Welters', country:'USA'},
+                {team:'Tom',rd:2, name:'Sebastian Fundora',    div:'Welters', country:'USA'},
+                {team:'Tom',rd:14,name:'Rohan Polanco',        div:'Welters', country:'Dominican Republic'},
+                {team:'Tom',rd:17,name:'Callum Walsh',         div:'Welters', country:'Ireland'},
+                {team:'Tom',rd:5, name:'Emanuel Navarrete',    div:'Lights',  country:'Mexico'},
+                {team:'Tom',rd:8, name:'Delante Johnson',      div:'Lights',  country:'USA'},
+                {team:'Tom',rd:12,name:"O'Shaquie Foster",     div:'Lights',  country:'USA'},
+                {team:'Tom',rd:18,name:'Jazza Dickens',        div:'Lights',  country:'United Kingdom'},
+                {team:'Tom',rd:6, name:'Skye Nicholson',       div:'Smalls',  country:'Australia'},
+                {team:'Tom',rd:13,name:'Angelo Leo',           div:'Smalls',  country:'USA'},
+                {team:'Tom',rd:16,name:'Ryosuke Nishida',      div:'Smalls',  country:'Japan'},
+                {team:'Tom',rd:19,name:'Anthony Olascuaga',    div:'Smalls',  country:'USA'},
+                // ── ELYSE ─────────────────────────────────────────────
+                {team:'Elyse',rd:3, name:'Claressa Shields',        div:'Heavies', country:'USA'},
+                {team:'Elyse',rd:7, name:'Bakhodir Jalolov',        div:'Heavies', country:'Uzbekistan'},
+                {team:'Elyse',rd:12,name:'Martin Bakole',           div:'Heavies', country:'Congo'},
+                {team:'Elyse',rd:16,name:'Tony Yoka',               div:'Heavies', country:'France'},
+                {team:'Elyse',rd:2, name:'Hamzah Sheeraz',          div:'Middles', country:'United Kingdom'},
+                {team:'Elyse',rd:8, name:'Najee Lopez',             div:'Middles', country:'USA'},
+                {team:'Elyse',rd:13,name:'Ammo Williams',           div:'Middles', country:'USA'},
+                {team:'Elyse',rd:17,name:'Albert Ramirez',          div:'Middles', country:'Venezuela'},
+                {team:'Elyse',rd:4, name:'Jesus Alejandro Ramos',   div:'Welters', country:'Mexico'},
+                {team:'Elyse',rd:7, name:'Tim Tszyu',               div:'Welters', country:'Australia'},
+                {team:'Elyse',rd:9, name:'Jorge Garcia Perez',      div:'Welters', country:'Mexico'},
+                {team:'Elyse',rd:18,name:'Paddy Donovan',           div:'Welters', country:'Ireland'},
+                {team:'Elyse',rd:5, name:'Alycia Baumgardner',      div:'Lights',  country:'USA'},
+                {team:'Elyse',rd:10,name:'Anthony Cacace',          div:'Lights',  country:'United Kingdom'},
+                {team:'Elyse',rd:14,name:'Arnold Barboza Jr',       div:'Lights',  country:'USA'},
+                {team:'Elyse',rd:19,name:'Luis Alberto Lopez',      div:'Lights',  country:'Mexico'},
+                {team:'Elyse',rd:1, name:'Naoya Inoue',             div:'Smalls',  country:'Japan'},
+                {team:'Elyse',rd:11,name:'Murodjon Akhmadaliev',    div:'Smalls',  country:'Uzbekistan'},
+                {team:'Elyse',rd:15,name:'Tenshin Nasukawa',        div:'Smalls',  country:'Japan'},
+                {team:'Elyse',rd:20,name:'Robeisy Ramirez',         div:'Smalls',  country:'Cuba'},
+                // ── PAT ───────────────────────────────────────────────
+                {team:'Pat',rd:1, name:'David Benavidez',      div:'Heavies', country:'Mexico'},
+                {team:'Pat',rd:6, name:'Filip Hrgovic',         div:'Heavies', country:'Croatia'},
+                {team:'Pat',rd:15,name:'Efe Ajagba',            div:'Heavies', country:'Nigeria'},
+                {team:'Pat',rd:18,name:'Richard Riakporhe',     div:'Heavies', country:'United Kingdom'},
+                {team:'Pat',rd:4, name:'Christian Mbilli',      div:'Middles', country:'France'},
+                {team:'Pat',rd:7, name:'Jaime Munguia',         div:'Middles', country:'Mexico'},
+                {team:'Pat',rd:13,name:'Jermall Charlo',        div:'Middles', country:'USA'},
+                {team:'Pat',rd:20,name:'Paulo Aokuso',          div:'Middles', country:'Australia'},
+                {team:'Pat',rd:2, name:'Vergil Ortiz Jr',       div:'Welters', country:'USA'},
+                {team:'Pat',rd:8, name:'Brian Norman Jr',       div:'Welters', country:'USA'},
+                {team:'Pat',rd:12,name:'Raul Curiel',           div:'Welters', country:'Mexico'},
+                {team:'Pat',rd:19,name:'Charles Conwell',       div:'Welters', country:'USA'},
+                {team:'Pat',rd:3, name:'Katie Taylor',          div:'Lights',  country:'Ireland'},
+                {team:'Pat',rd:5, name:'Dalton Smith',          div:'Lights',  country:'United Kingdom'},
+                {team:'Pat',rd:10,name:'Caroline Dubois',       div:'Lights',  country:'United Kingdom'},
+                {team:'Pat',rd:17,name:'Raymond Ford',          div:'Lights',  country:'USA'},
+                {team:'Pat',rd:9, name:'Kenshiro Teraji',       div:'Smalls',  country:'Japan'},
+                {team:'Pat',rd:11,name:'Oscar Collazo',         div:'Smalls',  country:'Puerto Rico'},
+                {team:'Pat',rd:14,name:'Takuma Inoue',          div:'Smalls',  country:'Japan'},
+                {team:'Pat',rd:16,name:'Alan Picasso',          div:'Smalls',  country:'Mexico'},
+                // ── MORT ──────────────────────────────────────────────
+                {team:'Mort',rd:2, name:'Fabio Wardley',        div:'Heavies', country:'United Kingdom'},
+                {team:'Mort',rd:5, name:'Teremoana Teremoana',  div:'Heavies', country:'Australia'},
+                {team:'Mort',rd:6, name:'Joseph Parker',        div:'Heavies', country:'New Zealand'},
+                {team:'Mort',rd:15,name:'Anthony Joshua',       div:'Heavies', country:'United Kingdom'},
+                {team:'Mort',rd:4, name:'Callum Smith',         div:'Middles', country:'United Kingdom'},
+                {team:'Mort',rd:11,name:'Michael Zerafa',       div:'Middles', country:'Australia'},
+                {team:'Mort',rd:12,name:'Edgar Berlanga',       div:'Middles', country:'Puerto Rico'},
+                {team:'Mort',rd:20,name:'Troy Isley',           div:'Middles', country:'USA'},
+                {team:'Mort',rd:3, name:'Conor Benn',           div:'Welters', country:'United Kingdom'},
+                {team:'Mort',rd:10,name:'Nikita Tszyu',         div:'Welters', country:'Australia'},
+                {team:'Mort',rd:13,name:'Alexis Rocha',         div:'Welters', country:'USA'},
+                {team:'Mort',rd:14,name:'Mario Barrios',        div:'Welters', country:'USA'},
+                {team:'Mort',rd:1, name:'Shakur Stevenson',     div:'Lights',  country:'USA'},
+                {team:'Mort',rd:16,name:'Emiliano Vargas',      div:'Lights',  country:'USA'},
+                {team:'Mort',rd:17,name:'Liam Wilson',          div:'Lights',  country:'Australia'},
+                {team:'Mort',rd:18,name:'Frank Martin',         div:'Lights',  country:'USA'},
+                {team:'Mort',rd:7, name:'Stephen Fulton',       div:'Smalls',  country:'USA'},
+                {team:'Mort',rd:8, name:'Bruce Carrington',     div:'Smalls',  country:'USA'},
+                {team:'Mort',rd:9, name:'Brandon Figueroa',     div:'Smalls',  country:'USA'},
+                {team:'Mort',rd:19,name:'Yoshiki Takei',        div:'Smalls',  country:'Japan'},
+                // ── ASH ───────────────────────────────────────────────
+                {team:'Ash',rd:4, name:'Agit Kabayel',          div:'Heavies', country:'Germany'},
+                {team:'Ash',rd:6, name:'Richard Torrez Jr',     div:'Heavies', country:'USA'},
+                {team:'Ash',rd:14,name:'Lenier Pero',           div:'Heavies', country:'Cuba'},
+                {team:'Ash',rd:17,name:'Guido Vianello',        div:'Heavies', country:'Italy'},
+                {team:'Ash',rd:2, name:'Dmitry Bivol',          div:'Middles', country:'Russia'},
+                {team:'Ash',rd:7, name:'David Morrell',         div:'Middles', country:'Cuba'},
+                {team:'Ash',rd:16,name:'Willy Hutchinson',      div:'Middles', country:'United Kingdom'},
+                {team:'Ash',rd:20,name:'Yoenli Hernandez',      div:'Middles', country:'Cuba'},
+                {team:'Ash',rd:1, name:'Devin Haney',           div:'Welters', country:'USA'},
+                {team:'Ash',rd:11,name:'Lauren Price',          div:'Welters', country:'United Kingdom'},
+                {team:'Ash',rd:15,name:'Mikaela Mayer',         div:'Welters', country:'USA'},
+                {team:'Ash',rd:19,name:'Conah Walker',          div:'Welters', country:'United Kingdom'},
+                {team:'Ash',rd:5, name:'Abdullah Mason',        div:'Lights',  country:'USA'},
+                {team:'Ash',rd:8, name:'Adam Azim',             div:'Lights',  country:'United Kingdom'},
+                {team:'Ash',rd:10,name:'Isaac Cruz',            div:'Lights',  country:'Mexico'},
+                {team:'Ash',rd:18,name:'Ernesto Mercado',       div:'Lights',  country:'USA'},
+                {team:'Ash',rd:3, name:'Gabriela Fundora',      div:'Smalls',  country:'USA'},
+                {team:'Ash',rd:9, name:'Ellie Scotney',         div:'Smalls',  country:'United Kingdom'},
+                {team:'Ash',rd:12,name:'Amanda Serrano',        div:'Smalls',  country:'Puerto Rico'},
+                {team:'Ash',rd:13,name:'Seiya Tsutsumi',        div:'Smalls',  country:'Japan'},
+                // ── BRAD ──────────────────────────────────────────────
+                {team:'Brad',rd:1, name:'Jai Opetaia',              div:'Heavies', country:'Australia'},
+                {team:'Brad',rd:6, name:'Murat Gassiev',            div:'Heavies', country:'Russia'},
+                {team:'Brad',rd:9, name:'Jarrell Miller',           div:'Heavies', country:'USA'},
+                {team:'Brad',rd:10,name:'David Allen',              div:'Heavies', country:'United Kingdom'},
+                {team:'Brad',rd:11,name:'Zhanibek Alimkhanuly',     div:'Middles', country:'Kazakhstan'},
+                {team:'Brad',rd:16,name:'Erislandy Lara',           div:'Middles', country:'Cuba'},
+                {team:'Brad',rd:17,name:'Aaron McKenna',            div:'Middles', country:'Ireland'},
+                {team:'Brad',rd:18,name:'Lyndon Arthur',            div:'Middles', country:'United Kingdom'},
+                {team:'Brad',rd:2, name:'Rolando Romero',           div:'Welters', country:'USA'},
+                {team:'Brad',rd:5, name:'Lewis Crocker',            div:'Welters', country:'United Kingdom'},
+                {team:'Brad',rd:19,name:'Jack Catterall',           div:'Welters', country:'United Kingdom'},
+                {team:'Brad',rd:20,name:'Liam Smith',               div:'Welters', country:'United Kingdom'},
+                {team:'Brad',rd:4, name:'Teofimo Lopez',            div:'Lights',  country:'USA'},
+                {team:'Brad',rd:7, name:'Richardson Hitchins',      div:'Lights',  country:'USA'},
+                {team:'Brad',rd:8, name:'Lamont Roach',             div:'Lights',  country:'USA'},
+                {team:'Brad',rd:14,name:'Liam Paro',                div:'Lights',  country:'Australia'},
+                {team:'Brad',rd:3, name:'Nick Ball',                div:'Smalls',  country:'United Kingdom'},
+                {team:'Brad',rd:12,name:'Galal Yafai',              div:'Smalls',  country:'United Kingdom'},
+                {team:'Brad',rd:13,name:'Leigh Wood',               div:'Smalls',  country:'United Kingdom'},
+                {team:'Brad',rd:15,name:'Jason Moloney',            div:'Smalls',  country:'Australia'},
+                // ── KIERAN ────────────────────────────────────────────
+                {team:'Kieran',rd:2, name:'Moses Itauma',           div:'Heavies', country:'United Kingdom'},
+                {team:'Kieran',rd:7, name:'Justis Huni',            div:'Heavies', country:'Australia'},
+                {team:'Kieran',rd:11,name:'Frank Sanchez',          div:'Heavies', country:'Cuba'},
+                {team:'Kieran',rd:15,name:'Lawrence Okolie',        div:'Heavies', country:'United Kingdom'},
+                {team:'Kieran',rd:3, name:'Ben Whittaker',          div:'Middles', country:'United Kingdom'},
+                {team:'Kieran',rd:6, name:'Joshua Buatsi',          div:'Middles', country:'United Kingdom'},
+                {team:'Kieran',rd:12,name:'Chris Eubank Jr',        div:'Middles', country:'United Kingdom'},
+                {team:'Kieran',rd:18,name:'Conor Wallace',          div:'Middles', country:'Australia'},
+                {team:'Kieran',rd:4, name:'Xander Zayas',           div:'Welters', country:'Puerto Rico'},
+                {team:'Kieran',rd:8, name:'Bakary Samake',          div:'Welters', country:'France'},
+                {team:'Kieran',rd:10,name:'Shakhram Giyasov',       div:'Welters', country:'Uzbekistan'},
+                {team:'Kieran',rd:19,name:'Abass Baraou',           div:'Welters', country:'Germany'},
+                {team:'Kieran',rd:1, name:'Andy Cruz',              div:'Lights',  country:'Cuba'},
+                {team:'Kieran',rd:13,name:'Raymond Muratalla',      div:'Lights',  country:'USA'},
+                {team:'Kieran',rd:16,name:'Jadier Herrera',         div:'Lights',  country:'Cuba'},
+                {team:'Kieran',rd:17,name:'Floyd Schofield',        div:'Lights',  country:'USA'},
+                {team:'Kieran',rd:5, name:'Junto Nakatani',         div:'Smalls',  country:'Japan'},
+                {team:'Kieran',rd:9, name:'Ricardo Rafael Sandoval',div:'Smalls',  country:'USA'},
+                {team:'Kieran',rd:14,name:'Sam Goodman',            div:'Smalls',  country:'Australia'},
+                {team:'Kieran',rd:20,name:'Sebastian Reyes',        div:'Smalls',  country:'Mexico'},
+                // ── REJECTS ───────────────────────────────────────────
+                {team:'Rejects',rd:4, name:'Deontay Wilder',            div:'Heavies', country:'USA'},
+                {team:'Rejects',rd:8, name:'Andy Ruiz',                 div:'Heavies', country:'Mexico'},
+                {team:'Rejects',rd:10,name:'Zhilei Zhang',              div:'Heavies', country:'China'},
+                {team:'Rejects',rd:19,name:'Otto Wallin',               div:'Heavies', country:'Sweden'},
+                {team:'Rejects',rd:2, name:'Terence Crawford',          div:'Middles', country:'USA'},
+                {team:'Rejects',rd:7, name:'Caleb Plant',               div:'Middles', country:'USA'},
+                {team:'Rejects',rd:15,name:'Oleksandr Gvozdyk',         div:'Middles', country:'Ukraine'},
+                {team:'Rejects',rd:20,name:'Bektemir Melikuziev',       div:'Middles', country:'Uzbekistan'},
+                {team:'Rejects',rd:1, name:'Manny Pacquiao',            div:'Welters', country:'Philippines'},
+                {team:'Rejects',rd:5, name:'Jermell Charlo',            div:'Welters', country:'USA'},
+                {team:'Rejects',rd:6, name:'Keith Thurman',             div:'Welters', country:'USA'},
+                {team:'Rejects',rd:13,name:'Erickson Lubin',            div:'Welters', country:'USA'},
+                {team:'Rejects',rd:3, name:'Gervonta Davis',            div:'Lights',  country:'USA'},
+                {team:'Rejects',rd:12,name:'Subriel Matias',            div:'Lights',  country:'Puerto Rico'},
+                {team:'Rejects',rd:14,name:'William Zepeda',            div:'Lights',  country:'Mexico'},
+                {team:'Rejects',rd:16,name:'Oscar Valdez',              div:'Lights',  country:'Mexico'},
+                {team:'Rejects',rd:9, name:'Chocolatito',               div:'Smalls',  country:'Nicaragua'},
+                {team:'Rejects',rd:11,name:'Juan Francisco Estrada',    div:'Smalls',  country:'Mexico'},
+                {team:'Rejects',rd:17,name:'Srisaket Sor Rungvisai',    div:'Smalls',  country:'Thailand'},
+                {team:'Rejects',rd:18,name:'Andrew Moloney',            div:'Smalls',  country:'Australia'},
+            ];
+
+            const TEAM_ORDER = ['Dom','Tom','Elyse','Pat','Mort','Ash','Brad','Kieran','Rejects'];
+
+            grid.innerHTML = TEAM_ORDER.map(teamName => {
+                const color = TEAM_COLOR_MAP[teamName] || '#999';
+                const squad = ROSTER.filter(f => f.team === teamName);
+
+                const bodyHTML = DIV_ORDER.map(div => {
+                    const rows = squad.filter(f => f.div === div).sort((a,b) => a.rd - b.rd);
+                    if (!rows.length) return '';
+                    return `<div class="div-section">
+                        <div class="div-label">${DIV_LABEL[div]}</div>
+                        ${rows.map(f => `
+                        <div class="fighter-row">
+                            <span class="f-flag">${FLAG[f.country] || '🌍'}</span>
+                            <span class="f-name">${f.name}</span>
+                            <span class="rd-badge">Rd ${f.rd}</span>
+                        </div>`).join('')}
+                    </div>`;
+                }).join('');
+
+                return `<div class="squad-card">
+                    <div class="squad-header" style="border-top:4px solid ${color}">
+                        <span class="squad-name" style="color:${color}">${teamName}</span>
+                        <span class="squad-count">${squad.length} fighters</span>
                     </div>
-                `;
-                grid.appendChild(card);
-            });
+                    <div class="squad-body">${bodyHTML}</div>
+                </div>`;
+            }).join('');
         }
 
         function renderDraft() {
