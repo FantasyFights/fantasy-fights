@@ -860,17 +860,10 @@
         }
 
         .fight-belts {
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-
-        .belt-img {
-            height: 22px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+            gap: 2px;
+            font-size: 16px;
         }
 
         .news-section {
@@ -1760,15 +1753,18 @@
                             <th>#</th>
                             <th>Team</th>
                             <th>Pts</th>
+                            <th>Fights</th>
                             <th>W</th>
                             <th>L</th>
                             <th>D</th>
                             <th>KOs</th>
+                            <th>🏆</th>
+                            <th>⭐️</th>
                             <th>H2H</th>
                         </tr>
                     </thead>
                     <tbody id="ladderBody">
-                        <tr><td colspan="8" style="text-align:center;padding:20px;color:#999;">Loading live standings…</td></tr>
+                        <tr><td colspan="11" style="text-align:center;padding:20px;color:#999;">Loading live standings…</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -2463,23 +2459,17 @@
             }
         }
 
-        // ============ BELT IMAGE HELPER ============
+        // ============ BELT EMOJI HELPER ============
         function getBeltImages(str) {
             const s = (str || '').toLowerCase();
             // Exclude interim titles, eliminators and exhibition events
             if (s.includes('interim') || s.includes('eliminator') || s.includes('exhibition')) return '';
-            const map = { wba: 'wba.png', wbc: 'WBC.png', wbo: 'wbo.png', ibf: 'ibf.png' };
-            const imgs = [];
-            for (const [org, file] of Object.entries(map)) {
-                if (s.includes(org)) imgs.push(`<img src="BELTS/${file}" class="belt-img" title="${org.toUpperCase()}">`);
-            }
+            const orgs = ['wba', 'wbc', 'wbo', 'ibf'];
+            let count = orgs.filter(org => s.includes(org)).length;
             // "undisputed" = all 4 belts when no org is explicitly listed
-            if (s.includes('undisputed') && imgs.length === 0) {
-                for (const file of Object.values(map)) {
-                    imgs.push(`<img src="BELTS/${file}" class="belt-img">`);
-                }
-            }
-            return imgs.length ? `<span class="fight-belts">${imgs.join('')}</span>` : '';
+            if (s.includes('undisputed') && count === 0) count = 4;
+            if (!count) return '';
+            return `<span class="fight-belts" title="${count} belt${count > 1 ? 's' : ''}">${'🏆'.repeat(count)}</span>`;
         }
 
         // ============ PAGE RENDERERS ============
@@ -3058,10 +3048,13 @@
                 teamRows.forEach((row, i) => {
                     // Columns: A=rank, B=Team, C=Fights, D=W, E=L, F=D, G=KOs, H=Belts, I=⭐️, J=H2H, K=Points
                     const team   = gvizCell(row, 1);
+                    const fights = gvizNum(row, 2);
                     const w      = gvizNum(row, 3);
                     const l      = gvizNum(row, 4);
                     const d      = gvizNum(row, 5);
                     const kos    = gvizNum(row, 6);
+                    const belts  = gvizNum(row, 7);
+                    const stars  = gvizNum(row, 8);
                     const h2h    = gvizNum(row, 9);
                     const pts    = gvizNum(row, 10);
                     const color  = TEAM_COLOR_MAP[team] || '#999';
@@ -3074,10 +3067,13 @@
                             ${team}
                         </td>
                         <td class="stat-number" style="font-size:18px;font-weight:800;color:#e63333;">${pts}</td>
+                        <td class="stat-number">${fights}</td>
                         <td class="stat-number">${w}</td>
                         <td class="stat-number">${l}</td>
                         <td class="stat-number">${d}</td>
                         <td class="stat-number">${kos}</td>
+                        <td class="stat-number">${belts}</td>
+                        <td class="stat-number">${stars}</td>
                         <td class="stat-number">${h2h}</td>
                     `;
                     tbody.appendChild(tr);
@@ -3087,7 +3083,7 @@
             } catch (err) {
                 console.warn('Google Sheets ladder error:', err);
                 if (tbody.innerHTML.includes('Loading')) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:#999;">Could not load live standings — check sheet is set to "Anyone with link can view"</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;color:#999;">Could not load live standings — check sheet is set to "Anyone with link can view"</td></tr>';
                 }
                 if (status) status.textContent = '⚠️ Could not load';
             }
