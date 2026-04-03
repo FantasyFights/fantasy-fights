@@ -3758,7 +3758,7 @@
                     const parts = f.desc.replace(/^H2H\s*-\s*/, '').split(' - ');
                     const matchup = parts[0] || '';
                     const fight = parts.slice(1).join(' - ');
-                    const [t1, t2] = matchup.split(' V ').map(s => s.trim());
+                    const [t1, t2] = matchup.split(/ V /i).map(s => s.trim());
                     const c1 = getTeamColor(t1);
                     const c2 = getTeamColor(t2);
                     const beltImgs = getBeltImages(fight);
