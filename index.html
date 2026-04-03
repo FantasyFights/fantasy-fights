@@ -3280,7 +3280,7 @@
                 <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
                 <div class="h2h-inner">
                     <div class="h2h-team-col">
-                        <div class="h2h-team-label">Your Pick</div>
+                        
                         <div class="h2h-team-name" style="background:${c1}">${f.team1}</div>
                     </div>
                     <div class="h2h-centre">
@@ -3293,7 +3293,7 @@
                         ${belts ? `<div class="h2h-belt-row">${belts}</div>` : ''}
                     </div>
                     <div class="h2h-team-col">
-                        <div class="h2h-team-label">Opponent</div>
+                        
                         <div class="h2h-team-name" style="background:${c2}">${f.team2}</div>
                     </div>
                 </div>
@@ -3375,6 +3375,7 @@
         const GS_LADDER_GID  = '779860156';
         const GS_RESULTS_GID = '1081462908';
         const GS_SCHEDULE_GID = '394257468';
+        const GS_H2H_SCHEDULE_GID = '1949894692';
 
         const TEAM_COLOR_MAP = {
             'Dom':     '#e63333',  // Red
@@ -3470,19 +3471,19 @@
             const div = document.getElementById('upcomingFights');
             if (!div) return;
             try {
-                const data = await fetchGviz(GS_SCHEDULE_GID);
+                const data = await fetchGviz(GS_H2H_SCHEDULE_GID);
                 const rows = data.table?.rows || [];
                 const today = new Date();
                 today.setHours(0,0,0,0);
 
-                // Collect upcoming H2H fights (yellow rows = H2H matchups)
+                // Collect upcoming H2H fights from dedicated H2H SCHEDULE tab
                 const upcoming = [];
                 rows.forEach(row => {
                     if (!row.c) return;
                     const dateCell = gvizCell(row, 0);
                     const descCell = gvizCell(row, 1);
                     if (!dateCell || !descCell) return;
-                    if (!descCell.includes('H2H')) return; // only show H2H fights
+                    if (!descCell.includes('H2H')) return;
 
                     // Parse date — formats like "12 Apr", "3 May"
                     const dateStr = String(dateCell).trim();
