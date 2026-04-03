@@ -859,6 +859,20 @@
             font-weight: 500;
         }
 
+        .fight-belts {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .belt-img {
+            height: 22px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+        }
+
         .news-section {
             background: white;
             border-radius: 8px;
@@ -2449,6 +2463,25 @@
             }
         }
 
+        // ============ BELT IMAGE HELPER ============
+        function getBeltImages(str) {
+            const s = (str || '').toLowerCase();
+            // Exclude interim titles, eliminators and exhibition events
+            if (s.includes('interim') || s.includes('eliminator') || s.includes('exhibition')) return '';
+            const map = { wba: 'wba.png', wbc: 'WBC.png', wbo: 'wbo.png', ibf: 'ibf.png' };
+            const imgs = [];
+            for (const [org, file] of Object.entries(map)) {
+                if (s.includes(org)) imgs.push(`<img src="BELTS/${file}" class="belt-img" title="${org.toUpperCase()}">`);
+            }
+            // "undisputed" = all 4 belts when no org is explicitly listed
+            if (s.includes('undisputed') && imgs.length === 0) {
+                for (const file of Object.values(map)) {
+                    imgs.push(`<img src="BELTS/${file}" class="belt-img">`);
+                }
+            }
+            return imgs.length ? `<span class="fight-belts">${imgs.join('')}</span>` : '';
+        }
+
         // ============ PAGE RENDERERS ============
         function renderHome() {
             loadUpcomingFromSheets();
@@ -2459,7 +2492,9 @@
             const now = new Date();
             const upcoming = UPCOMING_FIGHTS.filter(f => new Date(f.date) >= now);
 
-            upcomingDiv.innerHTML = upcoming.map(fight => `
+            upcomingDiv.innerHTML = upcoming.map(fight => {
+                const beltImgs = getBeltImages(fight.belt);
+                return `
                 <div class="fight-card">
                     <div class="fight-date">${new Date(fight.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
                     <div class="fight-matchup">
@@ -2480,6 +2515,7 @@
                             <span class="fight-detail-label">Title:</span>
                             <span class="fight-detail-value">${fight.belt}</span>
                         </div>
+                        ${beltImgs ? `<div class="fight-detail-row" style="justify-content:flex-end;margin-top:2px;">${beltImgs}</div>` : ''}
                         <div class="fight-detail-row">
                             <span class="fight-detail-label">Venue:</span>
                             <span class="fight-detail-value">${fight.venue}</span>
@@ -2489,8 +2525,8 @@
                             <span class="fight-detail-value">${fight.network}</span>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
 
             // Fetch live news
             app.fetchBoxingNews();
@@ -2910,7 +2946,8 @@
             },
 
             _renderNewsJSON(container, items) {
-                container.innerHTML = items.map(item => {
+                const sorted = [...items].sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+                container.innerHTML = sorted.map(item => {
                     const date = new Date(item.pubDate);
                     const ago = this._timeAgo(date);
                     const snippet = (item.description || '').replace(/<[^>]*>/g, '').slice(0, 100);
@@ -2925,25 +2962,27 @@
             },
 
             _renderNewsXML(container, items) {
-                let html = '';
-                let count = 0;
-                items.forEach(item => {
-                    if (count >= 12) return;
-                    const title = item.querySelector('title')?.textContent || '';
-                    const link = item.querySelector('link')?.textContent || '#';
-                    const pubDate = item.querySelector('pubDate')?.textContent || '';
-                    const desc = (item.querySelector('description')?.textContent || '').replace(/<[^>]*>/g, '').slice(0, 100);
-                    const ago = pubDate ? this._timeAgo(new Date(pubDate)) : '';
-                    html += `<div class="news-item">
-                        <a href="${link}" target="_blank" rel="noopener">
-                            <h4>${this._esc(title)}</h4>
+                const arr = Array.from(items).map(item => ({
+                    title:   item.querySelector('title')?.textContent || '',
+                    link:    item.querySelector('link')?.textContent || '#',
+                    pubDate: item.querySelector('pubDate')?.textContent || '',
+                    desc:    (item.querySelector('description')?.textContent || '').replace(/<[^>]*>/g, '').slice(0, 100),
+                }));
+                arr.sort((a, b) => {
+                    const da = a.pubDate ? new Date(a.pubDate) : new Date(0);
+                    const db = b.pubDate ? new Date(b.pubDate) : new Date(0);
+                    return db - da;
+                });
+                container.innerHTML = arr.slice(0, 12).map(item => {
+                    const ago = item.pubDate ? this._timeAgo(new Date(item.pubDate)) : '';
+                    return `<div class="news-item">
+                        <a href="${item.link}" target="_blank" rel="noopener">
+                            <h4>${this._esc(item.title)}</h4>
                             <div class="news-date">${ago}</div>
-                            ${desc ? `<div class="news-snippet">${this._esc(desc)}</div>` : ''}
+                            ${item.desc ? `<div class="news-snippet">${this._esc(item.desc)}</div>` : ''}
                         </a>
                     </div>`;
-                    count++;
-                });
-                container.innerHTML = html;
+                }).join('');
             },
 
             _timeAgo(date) {
@@ -3017,14 +3056,14 @@
 
                 tbody.innerHTML = '';
                 teamRows.forEach((row, i) => {
-                    // Columns: A=rank, B=Team, C=W, D=L, E=D, F=KOs, G=belt, H=★, I=H2H, J=Points
+                    // Columns: A=rank, B=Team, C=Fights, D=W, E=L, F=D, G=KOs, H=Belts, I=⭐️, J=H2H, K=Points
                     const team   = gvizCell(row, 1);
-                    const w      = gvizNum(row, 2);
-                    const l      = gvizNum(row, 3);
-                    const d      = gvizNum(row, 4);
-                    const kos    = gvizNum(row, 5);
-                    const h2h    = gvizNum(row, 8);
-                    const pts    = gvizNum(row, 9);
+                    const w      = gvizNum(row, 3);
+                    const l      = gvizNum(row, 4);
+                    const d      = gvizNum(row, 5);
+                    const kos    = gvizNum(row, 6);
+                    const h2h    = gvizNum(row, 9);
+                    const pts    = gvizNum(row, 10);
                     const color  = TEAM_COLOR_MAP[team] || '#999';
 
                     const tr = document.createElement('tr');
@@ -3097,6 +3136,7 @@
                     const [t1, t2] = matchup.split(' V ').map(s => s.trim());
                     const c1 = TEAM_COLOR_MAP[t1] || '#e63333';
                     const c2 = TEAM_COLOR_MAP[t2] || '#666';
+                    const beltImgs = getBeltImages(fight);
                     return `
                         <div class="upcoming-fight-card" style="background:white;border-radius:10px;padding:14px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-left:4px solid #e63333;">
                             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -3108,6 +3148,7 @@
                                 <span style="font-size:12px;font-weight:600;color:#e63333;">${f.dateStr}</span>
                             </div>
                             <div style="font-size:13px;color:#555;">${fight}</div>
+                            ${beltImgs ? `<div style="margin-top:7px;">${beltImgs}</div>` : ''}
                         </div>`;
                 }).join('');
             } catch (err) {
