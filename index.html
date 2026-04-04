@@ -3881,15 +3881,17 @@
             try {
                 const data = await fetchGviz(GS_LADDER_GID);
                 const rows = data.table?.rows || [];
-                // Row 0 = header, rows 1+ = team data
-                const teamRows = rows.slice(1).filter(r => r.c && gvizCell(r, 1));
+                // All expected teams — ensure every one appears even if sheet is missing them
+                const ALL_TEAMS = ['Dom','Tom','Elyse','Pat','Mort','Ash','Brad','Kieran','Rejects'];
+                // Filter to only known teams (handles gviz returning header rows or blank rows)
+                const teamRows = rows
+                    .filter(r => r.c && ALL_TEAMS.includes(gvizCell(r, 1)))
+                    .sort((a, b) => gvizNum(b, 10) - gvizNum(a, 10)); // sort by points descending
 
                 tbody.innerHTML = '';
 
                 // Build a map of teams already in the sheet
                 const sheetTeams = new Set(teamRows.map(r => gvizCell(r, 1)));
-                // All expected teams — ensure every one appears even if sheet is missing them
-                const ALL_TEAMS = ['Dom','Tom','Elyse','Pat','Mort','Ash','Brad','Kieran','Rejects'];
                 const missingTeams = ALL_TEAMS.filter(t => !sheetTeams.has(t));
 
                 // Render sheet rows first (ranked), then missing teams at bottom with dashes
