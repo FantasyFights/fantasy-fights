@@ -2996,10 +2996,12 @@
         async function initApp() {
             try {
                 await initializeFirebase();
-                showAuthScreen();
+                // Auth bypassed — setupAuthListener handles showing the app directly
             } catch (error) {
                 console.error('Failed to initialize Firebase:', error);
-                alert('Failed to connect to Fantasy Fights servers. Please try refreshing the page.');
+                // Show app even if Firebase fails
+                showMainApp();
+                renderHome();
             }
         }
 
