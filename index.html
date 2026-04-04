@@ -2875,6 +2875,7 @@
             if (_fighterImgCache[name] !== undefined) return _fighterImgCache[name];
             if (_fighterImgInflight[name]) return _fighterImgInflight[name];
 
+            // REST summary — fastest, works for main articles
             const wikiSummary = async (query) => {
                 try {
                     const enc = encodeURIComponent(query.trim().replace(/ /g, '_'));
@@ -2885,13 +2886,30 @@
                 } catch { return null; }
             };
 
+            // Search API — broader, catches fighters whose article title differs from ring name
+            const wikiSearch = async (query) => {
+                try {
+                    const enc = encodeURIComponent(query);
+                    const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${enc}&gsrlimit=3&prop=pageimages&pithumbsize=400&format=json&origin=*`;
+                    const r = await fetch(url, { cache: 'force-cache' });
+                    if (!r.ok) return null;
+                    const d = await r.json();
+                    const pages = Object.values(d?.query?.pages || {});
+                    const hit = pages.find(p => p.thumbnail?.source);
+                    return hit?.thumbnail?.source || null;
+                } catch { return null; }
+            };
+
             const promise = (async () => {
-                // 1. Try exact name
-                let url = await wikiSummary(name);
-                // 2. Try with "(boxer)" disambiguation
+                let url = null;
+                // 1. Exact Wikipedia article
+                url = await wikiSummary(name);
+                // 2. "(boxer)" disambiguation page
                 if (!url) url = await wikiSummary(name + ' (boxer)');
-                // 3. Try with "(professional boxer)" for women's/less common entries
+                // 3. "(professional boxer)" — common for women fighters
                 if (!url) url = await wikiSummary(name + ' (professional boxer)');
+                // 4. Wikipedia full-text search — catches ring names, nicknames, non-English entries
+                if (!url) url = await wikiSearch(name + ' boxer');
                 _fighterImgCache[name] = url;
                 return url;
             })();
@@ -2925,6 +2943,82 @@
             if (!fightStr) return ['', ''];
             const m = fightStr.match(/^(.+?)\s+vs\.?\s+(.+?)(?:,|$)/i);
             return m ? [m[1].trim(), m[2].trim()] : ['', ''];
+        }
+
+        // ============ FIGHT STAR RATINGS (BoxRec-style) ============
+        // Keyed by lowercase fighter name — returns stars for any fight they're in
+        const FIGHTER_STARS = {
+            // ⭐⭐⭐⭐⭐
+            'naoya inoue': 5,
+            'junto nakatani': 5,
+            // ⭐⭐⭐⭐
+            'conor benn': 4,
+            'regis prograis': 4,
+            'david benavidez': 4,
+            'gilberto ramirez': 4,
+            'fabio wardley': 4,
+            'daniel dubois': 4,
+            'shakur stevenson': 4,
+            'devin haney': 4,
+            'gervonta davis': 4,
+            'canelo alvarez': 4,
+            'artur beterbiev': 4,
+            'dmitry bivol': 4,
+            'jaron ennis': 4,
+            'oleksandr usyk': 4,
+            'terence crawford': 4,
+            'ryan garcia': 4,
+            'jesse rodriguez': 4,
+            'manny pacquiao': 4,
+            // ⭐⭐⭐
+            'tyson fury': 3,
+            'sebastian fundora': 3,
+            'keith thurman': 3,
+            'carlos adames': 3,
+            'moses itauma': 3,
+            'errol spence': 3,
+            'vergil ortiz jr': 3,
+            'teofimo lopez': 3,
+            'katie taylor': 3,
+            'caroline dubois': 3,
+            'alycia baumgardner': 3,
+            'ellie scotney': 3,
+            'hamzah sheeraz': 3,
+            'ben whittaker': 3,
+            'chris eubank jr': 3,
+            'callum walsh': 3,
+            'xander zayas': 3,
+            'keyshawn davis': 3,
+            'andy cruz': 3,
+            'joe parker': 3,
+            'jai opetaia': 3,
+            'zhanibek alimkhanuly': 3,
+            'anthony joshua': 3,
+            // ⭐⭐
+            'deontay wilder': 2,
+            'derek chisora': 2,
+            'floyd mayweather': 2,
+            'arslanbek makhmudov': 2,
+            'justis huni': 2,
+            'frazer clarke': 2,
+            'bo mi re shin': 2,
+            'rico verhoeven': 2,
+        };
+
+        function getFightStars(fightStr) {
+            if (!fightStr) return 0;
+            const low = fightStr.toLowerCase();
+            let best = 0;
+            for (const [fighter, stars] of Object.entries(FIGHTER_STARS)) {
+                if (low.includes(fighter)) best = Math.max(best, stars);
+            }
+            return best;
+        }
+
+        function renderStars(count) {
+            if (!count) return '';
+            return `<span style="font-size:12px;letter-spacing:1px;" title="${count} star fight">` +
+                   '⭐'.repeat(count) + '</span>';
         }
 
         // ============ PAGE RENDERERS ============
@@ -3709,6 +3803,8 @@
                 }
             }
             const [nameA, nameB] = parseFightNames(fightName || f.fight);
+            const stars = getFightStars(f.fight);
+            const starsHtml = renderStars(stars);
             return `
             <div class="h2h-card">
                 <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
@@ -3722,8 +3818,9 @@
                         <div class="h2h-team-name" style="background:${c1}">${f.team1}</div>
                     </div>
                     <div class="h2h-centre">
-                        <div style="display:flex;justify-content:center;">
+                        <div style="display:flex;justify-content:center;align-items:center;gap:6px;">
                             <div class="h2h-matchup-label">⚔️ Head-to-Head</div>
+                            ${starsHtml || ''}
                         </div>
                         <div class="h2h-vs-divider">— VS —</div>
                         <div class="h2h-fight-name">${fightName || f.fight}</div>
@@ -3748,6 +3845,8 @@
             const commaIdx = f.fight ? f.fight.indexOf(',') : -1;
             const fightName   = commaIdx > -1 ? f.fight.substring(0, commaIdx).trim() : f.fight;
             const fightDetail = commaIdx > -1 ? f.fight.substring(commaIdx + 1).trim() : '';
+            const stars = getFightStars(f.fight);
+            const starsHtml = renderStars(stars);
             return `
             <div class="fight-row">
                 <div class="fight-row-team" style="background:${color}">${f.team}</div>
@@ -3755,6 +3854,7 @@
                     <div class="fight-row-name">${fightName || '—'}</div>
                     ${fightDetail ? `<div class="fight-row-detail">${fightDetail}</div>` : ''}
                 </div>
+                ${starsHtml ? `<div style="flex-shrink:0;">${starsHtml}</div>` : ''}
                 ${belts ? `<div class="fight-row-belts">${belts}</div>` : ''}
             </div>`;
         }
@@ -3866,26 +3966,23 @@
                 const teamRows = rows.slice(1).filter(r => r.c && gvizCell(r, 1));
 
                 tbody.innerHTML = '';
-                teamRows.forEach((row, i) => {
-                    // Columns: A=rank, B=Team, C=Fights, D=W, E=L, F=D, G=KOs, H=Belts, I=⭐️, J=H2H, K=Points
-                    const team   = gvizCell(row, 1);
-                    const fights = gvizNum(row, 2);
-                    const w      = gvizNum(row, 3);
-                    const l      = gvizNum(row, 4);
-                    const d      = gvizNum(row, 5);
-                    const kos    = gvizNum(row, 6);
-                    const belts  = gvizNum(row, 7);
-                    const stars  = gvizNum(row, 8);
-                    const h2h    = gvizNum(row, 9);
-                    const pts    = gvizNum(row, 10);
-                    const color  = TEAM_COLOR_MAP[team] || '#999';
 
+                // Build a map of teams already in the sheet
+                const sheetTeams = new Set(teamRows.map(r => gvizCell(r, 1)));
+                // All expected teams — ensure every one appears even if sheet is missing them
+                const ALL_TEAMS = ['Dom','Tom','Elyse','Pat','Mort','Ash','Brad','Kieran','Rejects'];
+                const missingTeams = ALL_TEAMS.filter(t => !sheetTeams.has(t));
+
+                // Render sheet rows first (ranked), then missing teams at bottom with dashes
+                const renderRow = (teamName, pts, fights, w, l, d, kos, belts, stars, h2h, rank, missing) => {
+                    const color = TEAM_COLOR_MAP[teamName] || '#999';
                     const tr = document.createElement('tr');
+                    if (missing) tr.style.opacity = '0.45';
                     tr.innerHTML = `
-                        <td style="font-weight:700;color:#888;">${i + 1}</td>
+                        <td style="font-weight:700;color:#888;">${missing ? '—' : rank}</td>
                         <td class="team-name">
                             <span class="team-color-dot" style="background:${color}"></span>
-                            ${team}
+                            ${teamName}
                         </td>
                         <td class="stat-number" style="font-size:18px;font-weight:800;color:#e63333;">${pts}</td>
                         <td class="stat-number">${fights}</td>
@@ -3898,7 +3995,20 @@
                         <td class="stat-number">${h2h}</td>
                     `;
                     tbody.appendChild(tr);
+                };
+
+                teamRows.forEach((row, i) => {
+                    // Columns: A=rank, B=Team, C=Fights, D=W, E=L, F=D, G=KOs, H=Belts, I=⭐️, J=H2H, K=Points
+                    renderRow(
+                        gvizCell(row, 1), gvizNum(row, 10), gvizNum(row, 2),
+                        gvizNum(row, 3), gvizNum(row, 4), gvizNum(row, 5),
+                        gvizNum(row, 6), gvizNum(row, 7), gvizNum(row, 8),
+                        gvizNum(row, 9), i + 1, false
+                    );
                 });
+
+                // Append any teams not yet in the sheet (greyed out, zeroes)
+                missingTeams.forEach(name => renderRow(name, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, true));
 
                 if (status) status.textContent = '🟢 Live · Updated ' + new Date().toLocaleTimeString();
             } catch (err) {
@@ -3955,6 +4065,8 @@
                     const c2 = getTeamColor(t2);
                     const beltImgs = getBeltImages(fight);
                     const [nameA, nameB] = parseFightNames(fight);
+                    const stars = getFightStars(fight);
+                    const starsHtml = renderStars(stars);
                     return `
                         <div class="home-fight-card">
                             <div class="home-fight-header">
@@ -3985,7 +4097,10 @@
                                 </div>
                             </div>
                             <div class="home-fight-footer">
-                                <div class="home-fight-detail">${fight}</div>
+                                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                                    <div class="home-fight-detail">${fight}</div>
+                                    ${starsHtml ? `<div style="flex-shrink:0;">${starsHtml}</div>` : ''}
+                                </div>
                                 ${beltImgs ? `<div style="margin-top:6px;">${beltImgs}</div>` : ''}
                             </div>
                         </div>`;
