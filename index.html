@@ -3385,48 +3385,200 @@
             return `<span class="fight-belts" title="${count} belt${count > 1 ? 's' : ''}">${'🏆'.repeat(count)}</span>`;
         }
 
-        // ============ FIGHTER IMAGE LOADING (Wikipedia) ============
+        // ============ FIGHTER IMAGE LOADING ============
         const _fighterImgCache = {};
         const _fighterImgInflight = {};
+
+        // Ring name → correct Wikipedia article title for fighters whose names don't match
+        const WIKI_NAME_MAP = {
+            "Chocolatito":           "Román González (boxer)",
+            "Andy Ruiz":             "Andy Ruiz Jr.",
+            "Canelo Alvarez":        "Canelo Álvarez",
+            "Arnold Barboza Jr":     "Arnold Barboza Jr.",
+            "Brian Norman Jr":       "Brian Norman Jr.",
+            "Richard Torrez Jr":     "Richard Torrez Jr.",
+            "Lester Martínez":       "Lester Martínez (boxer)",
+            "Juan Francisco Estrada":"Juan Francisco Estrada (boxer)",
+            "Jesus Alejandro Ramos": "Jesús Alejandro Ramos",
+            "Srisaket Sor Rungvisai":"Srisaket Sor Rungvisai",
+            "Murodjon Akhmadaliev":  "Murodjon Akhmadaliev",
+            "Junto Nakatani":        "Junto Nakatani",
+            "Tenshin Nasukawa":      "Tenshin Nasukawa",
+            "Yoshiki Takei":         "Yoshiki Takei (boxer)",
+            "Ryosuke Nishida":       "Ryosuke Nishida (boxer)",
+            "Seiya Tsutsumi":        "Seiya Tsutsumi",
+            "Kenshiro Teraji":       "Kenshiro Teraji",
+            "Takuma Inoue":          "Takuma Inoue (boxer)",
+            "Bektemir Melikuziev":   "Bektemir Melikuziev",
+            "Shakhram Giyasov":      "Shakhram Giyasov",
+            "Arslanbek Makhmudov":   "Arslanbek Makhmudov",
+            "Bakhodir Jalolov":      "Bakhodir Jalolov",
+            "Zhanibek Alimkhanuly":  "Zhanibek Alimkhanuly",
+            "Israil Madrimov":       "Israil Madrimov",
+            "Bakhram Murtazaliev":   "Bakhram Murtazaliev",
+            "O'Shaquie Foster":      "O'Shaquie Foster",
+            "Galal Yafai":           "Galal Yafai",
+            "Skye Nicholson":        "Skye Nicholson (boxer)",
+            "Sam Goodman":           "Sam Goodman (boxer)",
+            "Justis Huni":           "Justis Huni",
+            "Paulo Aokuso":          "Paulo Aokuso",
+            "Jason Moloney":         "Jason Moloney",
+            "Andrew Moloney":        "Andrew Moloney",
+            "Jai Opetaia":           "Jai Opetaia",
+            "Tim Tszyu":             "Tim Tszyu",
+            "Nikita Tszyu":          "Nikita Tszyu",
+            "Conor Wallace":         "Conor Wallace (boxer)",
+            "Teremoana Teremoana":   "Teremoana Junior",
+            "Chris Eubank Jr":       "Chris Eubank Jr.",
+            "David Morrell":         "David Morrell Jr.",
+            "Erislandy Lara":        "Erislandy Lara",
+            "Martin Bakole":         "Martin Bakole",
+            "Abass Baraou":          "Abass Baraou",
+            "Conah Walker":          "Conah Walker",
+            "Hamzah Sheeraz":        "Hamzah Sheeraz",
+            "Adam Azim":             "Adam Azim",
+            "Dalton Smith":          "Dalton Smith (boxer)",
+            "Lewis Crocker":         "Lewis Crocker",
+            "Paddy Donovan":         "Paddy Donovan (boxer)",
+            "Jack Catterall":        "Jack Catterall",
+            "Callum Walsh":          "Callum Walsh (boxer)",
+            "Aaron McKenna":         "Aaron McKenna (boxer)",
+            "Floyd Schofield":       "Floyd Schofield (boxer)",
+            "Ernesto Mercado":       "Ernesto Mercado (boxer)",
+            "Jadier Herrera":        "Jadier Herrera",
+            "Yoenli Hernandez":      "Yoenli Hernandez",
+            "Osleys Iglesias":       "Osleys Iglesias",
+            "Ammo Williams":         "Ammo Williams (boxer)",
+            "Willy Hutchinson":      "Willy Hutchinson (boxer)",
+            "Liam Paro":             "Liam Paro",
+            "Liam Wilson":           "Liam Wilson (boxer)",
+            "Nick Ball":             "Nick Ball (boxer)",
+            "Jazza Dickens":         "Jazza Dickens",
+            "Anthony Cacace":        "Anthony Cacace",
+            "Leigh Wood":            "Leigh Wood (boxer)",
+            "Andy Cruz":             "Andy Cruz (boxer)",
+            "Robeisy Ramirez":       "Robeisy Ramírez",
+            "Oscar Collazo":         "Oscar Collazo (boxer)",
+            "Alan Picasso":          "Alan Picasso",
+            "Sebastian Reyes":       "Sebastián Reyes (boxer)",
+            "Christian Medina":      "Christian Medina (boxer)",
+            "Emiliano Vargas":       "Emiliano Vargas (boxer)",
+            "Rafael Espinoza":       "Rafael Espinoza (boxer)",
+            "Ricardo Rafael Sandoval":"Ricardo Rafael Sandoval",
+            "Isaac Cruz":            "Isaac Cruz (boxer)",
+            "Luis Nery":             "Luis Nery (boxer)",
+            "Armando Resendiz":      "Armando Resendiz",
+            "Raul Curiel":           "Raul Curiel",
+            "Jorge Garcia Perez":    "Jorge García Pérez (boxer)",
+            "Alberto Ramirez":       "Albert Ramirez (boxer)",
+            "Najee Lopez":           "Najee Lopez",
+            "Alexis Rocha":          "Alexis Rocha (boxer)",
+            "Rohan Polanco":         "Rohan Polanco",
+            "Charles Conwell":       "Charles Conwell",
+            "Delante Johnson":       "Delante Johnson (boxer)",
+            "Troy Isley":            "Troy Isley",
+            "Frank Sanchez":         "Frank Sánchez (boxer)",
+            "Guido Vianello":        "Guido Vianello",
+            "Lenier Pero":           "Lenier Pero",
+            "Murat Gassiev":         "Murat Gassiev",
+            "Richard Riakporhe":     "Richard Riakporhe",
+            "David Nyika":           "David Nyika",
+            "Serhii Bohachuk":       "Serhii Bohachuk",
+            "Oleksandr Gvozdyk":     "Oleksandr Gvozdyk",
+            "Ben Whittaker":         "Ben Whittaker (boxer)",
+            "Bakary Samake":         "Bakary Samake",
+            "Abdullah Mason":        "Abdullah Mason (boxer)",
+            "Keyshawn Davis":        "Keyshawn Davis (boxer)",
+            "Bruce Carrington":      "Bruce Carrington (boxer)",
+            "Anthony Olascuaga":     "Anthony Olascuaga",
+            "Brandon Figueroa":      "Brandon Figueroa (boxer)",
+            "Angelo Leo":            "Angelo Leo (boxer)",
+            "Stephen Fulton":        "Stephen Fulton Jr.",
+            "Gabriela Fundora":      "Gabriela Fundora",
+        };
 
         async function fetchFighterImg(name) {
             if (_fighterImgCache[name] !== undefined) return _fighterImgCache[name];
             if (_fighterImgInflight[name]) return _fighterImgInflight[name];
 
-            // REST summary — fastest, works for main articles
+            // TheSportsDB — boxing-specific database, fewer false matches
+            const sportsdb = async (query) => {
+                try {
+                    const enc = encodeURIComponent(query);
+                    const r = await fetch(`https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=${enc}`, { cache: 'force-cache' });
+                    if (!r.ok) return null;
+                    const d = await r.json();
+                    const players = d?.player;
+                    if (!players?.length) return null;
+                    // Prefer boxing matches; fall back to any match with an image
+                    const nameLower = query.toLowerCase();
+                    const boxers = players.filter(p =>
+                        (p.strSport || '').toLowerCase().includes('box') ||
+                        (p.strPosition || '').toLowerCase().includes('box')
+                    );
+                    const pool = boxers.length ? boxers : players;
+                    // Pick the one whose name best matches
+                    const scored = pool
+                        .filter(p => p.strThumb || p.strCutout)
+                        .map(p => {
+                            const n = (p.strPlayer || '').toLowerCase();
+                            const score = nameLower.split(' ').filter(w => n.includes(w)).length;
+                            return { score, url: p.strThumb || p.strCutout };
+                        })
+                        .sort((a, b) => b.score - a.score);
+                    return scored[0]?.url || null;
+                } catch { return null; }
+            };
+
+            // REST summary — fastest Wikipedia path, works for main articles
             const wikiSummary = async (query) => {
                 try {
                     const enc = encodeURIComponent(query.trim().replace(/ /g, '_'));
                     const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${enc}`, { cache: 'force-cache' });
                     if (!r.ok) return null;
                     const d = await r.json();
+                    // Reject if the article title is wildly different (wrong-fighter guard)
+                    const title = (d?.title || '').toLowerCase();
+                    const nameParts = name.toLowerCase().split(' ');
+                    const matchCount = nameParts.filter(w => w.length > 2 && title.includes(w)).length;
+                    if (matchCount === 0 && nameParts.length > 1) return null; // likely wrong article
                     return d?.thumbnail?.source || null;
                 } catch { return null; }
             };
 
-            // Search API — broader, catches fighters whose article title differs from ring name
+            // Search API — broader, with name-relevance filter to avoid wrong fighters
             const wikiSearch = async (query) => {
                 try {
                     const enc = encodeURIComponent(query);
-                    const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${enc}&gsrlimit=3&prop=pageimages&pithumbsize=400&format=json&origin=*`;
+                    const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${enc}&gsrlimit=5&prop=pageimages|info&pithumbsize=400&format=json&origin=*`;
                     const r = await fetch(url, { cache: 'force-cache' });
                     if (!r.ok) return null;
                     const d = await r.json();
                     const pages = Object.values(d?.query?.pages || {});
-                    const hit = pages.find(p => p.thumbnail?.source);
+                    const nameLower = name.toLowerCase();
+                    // Only accept results whose title contains at least one meaningful word from the fighter's name
+                    const relevant = pages.filter(p => {
+                        const title = (p.title || '').toLowerCase();
+                        return name.toLowerCase().split(' ').some(w => w.length > 2 && title.includes(w));
+                    });
+                    const hit = relevant.find(p => p.thumbnail?.source);
                     return hit?.thumbnail?.source || null;
                 } catch { return null; }
             };
 
             const promise = (async () => {
                 let url = null;
-                // 1. Exact Wikipedia article
-                url = await wikiSummary(name);
-                // 2. "(boxer)" disambiguation page
-                if (!url) url = await wikiSummary(name + ' (boxer)');
-                // 3. "(professional boxer)" — common for women fighters
-                if (!url) url = await wikiSummary(name + ' (professional boxer)');
-                // 4. Wikipedia full-text search — catches ring names, nicknames, non-English entries
+                const wikiName = WIKI_NAME_MAP[name] || name;
+
+                // 1. TheSportsDB (sports-specific, avoids Wikipedia false matches)
+                url = await sportsdb(name);
+                // 2. Exact Wikipedia article (using corrected name if mapped)
+                if (!url) url = await wikiSummary(wikiName);
+                // 3. "(boxer)" disambiguation
+                if (!url && !WIKI_NAME_MAP[name]) url = await wikiSummary(name + ' (boxer)');
+                // 4. "(professional boxer)" — common for women fighters
+                if (!url && !WIKI_NAME_MAP[name]) url = await wikiSummary(name + ' (professional boxer)');
+                // 5. Wikipedia full-text search with name-relevance filter
                 if (!url) url = await wikiSearch(name + ' boxer');
                 _fighterImgCache[name] = url;
                 return url;
