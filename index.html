@@ -1080,6 +1080,7 @@
             color: #d1d5db;
             letter-spacing: 0.1em;
         }
+        .h2h-vs-mobile { display: none; }
         .h2h-fight-name {
             font-size: 14px;
             font-weight: 800;
@@ -1956,9 +1957,28 @@
 
         /* ============ RESPONSIVE ============ */
         @media (max-width: 768px) {
-            .h2h-inner { flex-direction: column; align-items: center; gap: 10px; padding: 12px 14px 14px; }
-            .h2h-team-col { flex-direction: row; width: auto; gap: 8px; justify-content: center; }
-            .h2h-centre { padding: 0; order: -1; }
+            .h2h-inner {
+                display: grid;
+                grid-template-areas: "centre centre centre" "left vs right";
+                grid-template-columns: 1fr auto 1fr;
+                gap: 10px 6px;
+                padding: 12px 14px 14px;
+                align-items: center;
+            }
+            .h2h-centre { grid-area: centre; padding: 0; justify-content: center; }
+            .h2h-vs-divider { display: none; }
+            .h2h-vs-mobile {
+                grid-area: vs;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+                font-weight: 900;
+                color: #d1d5db;
+                letter-spacing: 0.1em;
+            }
+            .h2h-team-col:first-child { grid-area: left; width: auto; align-items: center; }
+            .h2h-team-col:nth-child(3) { grid-area: right; width: auto; align-items: center; }
             .fight-row { flex-wrap: wrap; }
         }
 
@@ -4290,6 +4310,7 @@
                         </div>` : ''}
                         <div class="h2h-team-name" style="background:${c2}">${f.team2}</div>
                     </div>
+                    <div class="h2h-vs-mobile">— VS —</div>
                 </div>
             </div>`;
         }
