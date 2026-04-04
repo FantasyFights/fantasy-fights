@@ -1353,23 +1353,25 @@
         .home-fight-poster {
             display: flex;
             align-items: stretch;
-            background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #111827 100%);
+            background: #f7f7f7;
+            border-top: 1px solid #efefef;
+            border-bottom: 1px solid #efefef;
         }
         .home-fight-fighter {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 16px 12px 14px;
-            gap: 8px;
+            padding: 14px 12px 12px;
+            gap: 7px;
         }
         .home-fight-portrait {
             width: 72px;
             height: 72px;
             border-radius: 50%;
             overflow: hidden;
-            border: 3px solid rgba(255,255,255,0.2);
-            background: #374151;
+            border: 3px solid #e0e0e0;
+            background: #e8e8e8;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1378,7 +1380,7 @@
         .home-fight-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
         .home-fight-portrait .portrait-fallback { font-size: 30px; line-height: 1; }
         .home-fight-fighter-name {
-            color: white;
+            color: #1a1a1a;
             font-weight: 700;
             font-size: 12.5px;
             text-align: center;
@@ -2873,15 +2875,26 @@
             if (_fighterImgCache[name] !== undefined) return _fighterImgCache[name];
             if (_fighterImgInflight[name]) return _fighterImgInflight[name];
 
-            const encoded = encodeURIComponent(name.trim().replace(/ /g, '_'));
-            const promise = fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encoded}`, { cache: 'force-cache' })
-                .then(r => r.ok ? r.json() : null)
-                .then(data => {
-                    const url = data?.thumbnail?.source || null;
-                    _fighterImgCache[name] = url;
-                    return url;
-                })
-                .catch(() => { _fighterImgCache[name] = null; return null; });
+            const wikiSummary = async (query) => {
+                try {
+                    const enc = encodeURIComponent(query.trim().replace(/ /g, '_'));
+                    const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${enc}`, { cache: 'force-cache' });
+                    if (!r.ok) return null;
+                    const d = await r.json();
+                    return d?.thumbnail?.source || null;
+                } catch { return null; }
+            };
+
+            const promise = (async () => {
+                // 1. Try exact name
+                let url = await wikiSummary(name);
+                // 2. Try with "(boxer)" disambiguation
+                if (!url) url = await wikiSummary(name + ' (boxer)');
+                // 3. Try with "(professional boxer)" for women's/less common entries
+                if (!url) url = await wikiSummary(name + ' (professional boxer)');
+                _fighterImgCache[name] = url;
+                return url;
+            })();
 
             _fighterImgInflight[name] = promise;
             return promise;
@@ -2899,6 +2912,9 @@
                         img.src = url;
                         img.style.display = 'block';
                         img.classList.add('loaded');
+                        // Hide the fallback span that sits next to this img
+                        const fallback = img.nextElementSibling;
+                        if (fallback) fallback.style.display = 'none';
                     }
                 });
             });
@@ -3196,8 +3212,9 @@
                         <div class="fighter-row">
                             <div class="fighter-avatar-wrap" style="border-color:${color}40">
                                 <img data-fighter="${f.name}" alt="${f.name}" style="display:none">
-                                <span class="avatar-fallback">${FLAG[f.country] || '🌍'}</span>
+                                <span class="avatar-fallback">👤</span>
                             </div>
+                            <span class="f-flag">${FLAG[f.country] || '🌍'}</span>
                             <span class="f-name">${f.name}</span>
                             <span class="rd-badge">Rd ${f.rd}</span>
                         </div>`).join('')}
