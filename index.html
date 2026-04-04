@@ -3560,49 +3560,12 @@
 
         // ============ PAGE RENDERERS ============
         function renderHome() {
-            loadUpcomingFromSheets();
+            // Show loading spinner while fetching live H2H data
             const upcomingDiv = document.getElementById('upcomingFights');
-            const newsDiv = document.getElementById('newsItems');
-
-            // Filter upcoming fights (not in the past)
-            const now = new Date();
-            const upcoming = UPCOMING_FIGHTS.filter(f => new Date(f.date) >= now);
-
-            upcomingDiv.innerHTML = upcoming.map(fight => {
-                const beltImgs = getBeltImages(fight.belt);
-                return `
-                <div class="fight-card">
-                    <div class="fight-date">${new Date(fight.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
-                    <div class="fight-matchup">
-                        <div class="fighter-side">
-                            <div class="fighter-flag">${fight.flagA}</div>
-                            <div class="fighter-name">${fight.fighterA}</div>
-                            <div class="fighter-country">${fight.fighterA === 'Manny Pacquiao' ? 'Philippines' : 'TBD'}</div>
-                        </div>
-                        <div class="vs-text">VS</div>
-                        <div class="fighter-side">
-                            <div class="fighter-flag">${fight.flagB}</div>
-                            <div class="fighter-name">${fight.fighterB}</div>
-                            <div class="fighter-country">${fight.fighterB === 'Floyd Mayweather' ? 'USA' : 'TBD'}</div>
-                        </div>
-                    </div>
-                    <div class="fight-details">
-                        <div class="fight-detail-row">
-                            <span class="fight-detail-label">Title:</span>
-                            <span class="fight-detail-value">${fight.belt}</span>
-                        </div>
-                        ${beltImgs ? `<div class="fight-detail-row" style="justify-content:flex-end;margin-top:2px;">${beltImgs}</div>` : ''}
-                        <div class="fight-detail-row">
-                            <span class="fight-detail-label">Venue:</span>
-                            <span class="fight-detail-value">${fight.venue}</span>
-                        </div>
-                        <div class="fight-detail-row">
-                            <span class="fight-detail-label">Network:</span>
-                            <span class="fight-detail-value">${fight.network}</span>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
+            if (upcomingDiv) {
+                upcomingDiv.innerHTML = '<div style="text-align:center;padding:24px;color:#999;"><div style="display:inline-block;width:22px;height:22px;border:3px solid #ddd;border-top-color:#e63333;border-radius:50%;animation:spin 0.8s linear infinite;"></div><p style="margin-top:10px;font-size:13px;">Loading schedule…</p></div>';
+            }
+            loadUpcomingFromSheets();
 
             // Fetch live news
             app.fetchBoxingNews();
@@ -4551,27 +4514,29 @@
             const div = document.getElementById('upcomingFights');
             if (!div) return;
             try {
-                const data = await fetchGviz(GS_H2H_SCHEDULE_GID);
+                const data = await fetchGviz(GS_SCHEDULE_GID);
                 const rows = data.table?.rows || [];
                 const today = new Date();
                 today.setHours(0,0,0,0);
 
-                // Collect upcoming H2H fights from dedicated H2H SCHEDULE tab
+                // Collect upcoming H2H fights from full schedule tab
                 const upcoming = [];
+                let lastDate = '';
                 rows.forEach(row => {
                     if (!row.c) return;
                     const dateCell = gvizCell(row, 0);
                     const descCell = gvizCell(row, 1);
-                    if (!dateCell || !descCell) return;
-                    if (!descCell.includes('H2H')) return;
+                    if (dateCell) lastDate = String(dateCell).trim();
+                    if (!descCell || !lastDate) return;
+                    if (!String(descCell).includes('H2H')) return;
 
-                    // Parse date — formats like "12 Apr", "3 May"
-                    const dateStr = String(dateCell).trim();
+                    // Parse date — formats like "12 Apr", "3 May, Sun", "10 Apr, Fri"
+                    const dateStr = lastDate.replace(/,.*$/, '').trim(); // strip ", Sun" etc.
                     const parsed = new Date(dateStr + ' 2026');
                     if (isNaN(parsed)) return;
                     parsed.setHours(0,0,0,0);
                     if (parsed < today) return; // skip past fights
-                    upcoming.push({ date: parsed, dateStr, desc: String(descCell).trim() });
+                    upcoming.push({ date: parsed, dateStr: lastDate.replace(/,.*$/, '').trim(), desc: String(descCell).trim() });
                 });
 
                 upcoming.sort((a, b) => a.date - b.date);
