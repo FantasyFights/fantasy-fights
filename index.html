@@ -2041,6 +2041,38 @@
                 margin-bottom: 10px;
             }
         }
+
+        /* ── Teams page: horizontal swipe carousel on portrait phones ── */
+        @media (max-width: 480px) {
+            .teams-grid {
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                gap: 12px;
+                padding-bottom: 16px;
+                scrollbar-width: none;
+            }
+            .teams-grid::-webkit-scrollbar { display: none; }
+            .squad-card {
+                min-width: 82vw;
+                max-width: 82vw;
+                scroll-snap-align: start;
+                flex-shrink: 0;
+            }
+            #teamsPage::after {
+                content: 'Swipe to see all teams →';
+                display: block;
+                text-align: center;
+                font-size: 11px;
+                font-weight: 600;
+                color: #bbb;
+                letter-spacing: 0.5px;
+                margin-top: 4px;
+                padding-bottom: 4px;
+            }
+        }
         /* ── About / Our Story page ───────────────────────────────── */
         #aboutPage { padding: 0; }
         #aboutPage .about-inner {
@@ -2423,9 +2455,6 @@
                     </div>
                     <button class="rp-refresh" id="rpRefreshBtn" onclick="rpLoad()">↻ Refresh</button>
                 </div>
-
-                <h1 class="home-section-title">🏆 Team Standings</h1>
-                <div class="rp-grid" id="rpGrid"></div>
 
                 <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:14px;margin-top:8px">
                     <h2 class="home-section-title" style="margin:0">⚡ Fighter Leaderboard</h2>
@@ -4689,7 +4718,9 @@
         function rpEsc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 
         function rpRenderGrid(standings) {
-            document.getElementById('rpGrid').innerHTML = standings.map((t,i)=>{
+            const rpGridEl = document.getElementById('rpGrid');
+            if (!rpGridEl) return;
+            rpGridEl.innerHTML = standings.map((t,i)=>{
                 const rank=i+1, color=RP_TEAM_COLORS[t.name]||'#6b7280';
                 const rkCls=rank<=3?`rk${rank}`:'';
                 const rankHtml=RP_MEDALS[rank]?`<span class="rp-medal">${RP_MEDALS[rank]}</span>`:`<span class="rp-ranknum">${rank}</span>`;
