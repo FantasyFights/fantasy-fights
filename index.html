@@ -2183,6 +2183,34 @@
         .about-btn-outline { background: transparent; color: #667eea; border: 2px solid #667eea; }
         .about-btn-outline:hover { background: #667eea; color: white; }
         .about-cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        /* clarity strip */
+        .about-clarity-strip {
+            background: #111; border-radius: 10px; padding: 30px 40px; margin-bottom: 40px; text-align: center;
+        }
+        .about-clarity-headline {
+            font-size: 21px; font-weight: 800; color: white; line-height: 1.35; margin-bottom: 10px; letter-spacing: -0.01em;
+        }
+        .about-clarity-sub {
+            font-size: 14px; color: rgba(255,255,255,0.55); font-weight: 500; line-height: 1.6;
+        }
+        .about-clarity-tag {
+            display: inline-block; margin-top: 14px; background: #e63333; color: white;
+            font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 5px 12px; border-radius: 4px;
+        }
+        /* why different */
+        .about-diff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
+        .about-diff-card {
+            background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 26px 22px; border-left: 4px solid #111;
+        }
+        .about-diff-card:nth-child(2) { border-left-color: #e63333; }
+        .about-diff-card:nth-child(3) { border-left-color: #667eea; }
+        .about-diff-card:nth-child(4) { border-left-color: #10b981; }
+        .about-diff-icon { font-size: 22px; margin-bottom: 10px; }
+        .about-diff-card h4 { font-size: 15px; font-weight: 700; color: #222; margin-bottom: 7px; line-height: 1.3; }
+        .about-diff-card p { font-size: 13px; color: #666; line-height: 1.65; margin: 0; }
+
         @media (max-width: 1100px) {
             .about-features-grid { grid-template-columns: repeat(2, 1fr); }
             .about-how-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2510,7 +2538,7 @@
               <div>
                 <div class="about-hero-eyebrow">The World's First Fantasy Boxing Platform</div>
                 <h1>Fantasy Sports.<br><span>For Boxing.</span></h1>
-                <p class="about-hero-body">Draft a squad of elite professional boxers. Score points from their real fights. Compete against friends in a season-long league. Fantasy Fights brings the world's most exciting sport into a format built for competition, strategy, and bragging rights.</p>
+                <p class="about-hero-body">Draft a stable of elite professional boxers. Score points from their real fights. Compete against friends in a season-long league. Fantasy Fights brings the world's most exciting sport into a format built for competition, strategy, and bragging rights.</p>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;">
                   <a onclick="showPage('home')" class="about-btn about-btn-red" style="cursor:pointer;">Get Early Access — Free</a>
                   <a href="mailto:dominic.pirrello@gmail.com" class="about-btn about-btn-outline">Get in Touch</a>
@@ -2540,6 +2568,13 @@
               </div>
             </div>
 
+            <!-- Clarity Strip -->
+            <div class="about-clarity-strip">
+              <div class="about-clarity-headline">Draft fighters. Keep them. Score points across real fight nights. Win your league.</div>
+              <div class="about-clarity-sub">No weekly picks. No resets. Your stable competes across the entire boxing calendar — every fight counts toward your season total.</div>
+              <span class="about-clarity-tag">Season-Long Fantasy Boxing</span>
+            </div>
+
             <!-- Features -->
             <div class="about-section-header">
               <div class="about-section-label">The Platform</div>
@@ -2550,7 +2585,7 @@
               <div class="about-feature-card">
                 <div class="about-feature-icon">🥊</div>
                 <h3>Season-Long League Play</h3>
-                <p>Draft your squad before the season and score points all year as your fighters compete in real bouts around the world. The longer you plan, the better your team performs.</p>
+                <p>Draft your stable before the season and score points all year as your fighters compete in real bouts around the world. The longer you plan, the better your team performs.</p>
               </div>
               <div class="about-feature-card">
                 <div class="about-feature-icon">⚡</div>
@@ -2579,6 +2614,35 @@
               </div>
             </div>
 
+            <!-- Why Different -->
+            <div class="about-section-header">
+              <div class="about-section-label">Why This Is Different</div>
+              <div class="about-section-title">Not Pick&#x2019;em. Not Betting. Season-Long Fantasy.</div>
+              <div class="about-section-subtitle">Most boxing apps reset after every fight. Fantasy Fights doesn&#x2019;t. You build a stable and own every result across the season.</div>
+            </div>
+            <div class="about-diff-grid">
+              <div class="about-diff-card">
+                <div class="about-diff-icon">🗓️</div>
+                <h4>Draft Once. Own the Season.</h4>
+                <p>Build your stable before the season starts. Every fight your fighters have counts toward your total — no starting over, no weekly resets.</p>
+              </div>
+              <div class="about-diff-card">
+                <div class="about-diff-icon">⚡</div>
+                <h4>Every Fight Night Matters.</h4>
+                <p>Points accumulate across the entire boxing calendar. Decisions you make in January still affect your standing in December.</p>
+              </div>
+              <div class="about-diff-card">
+                <div class="about-diff-icon">🧠</div>
+                <h4>Strategy Beats Luck.</h4>
+                <p>Draft value, target fighters with big fights scheduled, and protect your H2H matchups. The best manager wins — not the luckiest.</p>
+              </div>
+              <div class="about-diff-card">
+                <div class="about-diff-icon">🔄</div>
+                <h4>Timing and Selection Decide Winners.</h4>
+                <p>Who you draft, when you draft them, and which fights they&#x2019;re in — that&#x2019;s what separates champions from also-rans.</p>
+              </div>
+            </div>
+
             <!-- How It Works -->
             <div class="about-section-header">
               <div class="about-section-label">How to Play</div>
@@ -2594,7 +2658,7 @@
               <div class="about-how-card">
                 <div class="about-how-step">2</div>
                 <div class="about-how-icon">📋</div>
-                <h3>Draft Your Squad</h3>
+                <h3>Draft Your Stable</h3>
                 <p>Pick 20 fighters across five weight divisions in a live snake draft. Target fighters with major belts, high BoxRec ratings, and big fights scheduled — they'll score all season.</p>
               </div>
               <div class="about-how-card">
@@ -2689,6 +2753,7 @@
             <div class="about-origin-strip">
               <div>
                 <div class="about-section-label" style="margin-bottom:10px;">Our Story</div>
+                <p style="font-size:15px;font-weight:600;color:#222;line-height:1.6;margin-bottom:14px;">Boxing has always been about debate. Who beats who. Who's overrated. Who's next. Fantasy Fights turns those debates into competition.</p>
                 <p>In 2021, four friends in Bondi sat down to do a boxing fantasy draft — and discovered that <strong>no platform existed anywhere in the world to run one</strong>. So they printed a draft sheet, built a spreadsheet, and did it themselves.</p>
                 <p style="margin-top:14px;">Five seasons later, the league has grown, the game has been refined through real competition, and what started as a private experiment is now the foundation of the world's first public fantasy boxing platform. Everything you see here was built by fans, tested in real seasons, and shaped by the sport itself.</p>
               </div>
@@ -2728,7 +2793,7 @@
             <!-- CTA -->
             <div class="about-cta-banner">
               <h2>🥊 The Draft Starts Here</h2>
-              <p>Join Fantasy Fights and build the world's best fantasy boxing squad. Free to play, built by fans, backed by five seasons of the real thing.</p>
+              <p>Join Fantasy Fights and build the world's best fantasy boxing stable. Free to play, built by fans, backed by five seasons of the real thing.</p>
               <div class="about-cta-actions">
                 <a onclick="showPage('home')" class="about-btn about-btn-red" style="cursor:pointer;">Go to Home</a>
                 <a href="mailto:dominic.pirrello@gmail.com" class="about-btn about-btn-outline">Investor &amp; Partner Enquiries</a>
