@@ -2217,24 +2217,7 @@
                 <div class="logo">
                     <img src="Fantasy Fights Logo.png" alt="Fantasy Fights" class="logo-img">
                 </div>
-                <div class="user-menu">
-                    <button class="user-menu-button" onclick="toggleUserMenu()">
-                        <span id="userMenuName">User</span>
-                        <span class="user-badge" id="userMenuBadge">Owner</span>
-                        <span style="font-size: 16px;">▼</span>
-                    </button>
-                    <div class="user-menu-dropdown" id="userMenuDropdown">
-                        <div class="user-menu-item info">
-                            <span id="userMenuEmail">user@example.com</span>
-                        </div>
-                        <div class="user-menu-item info">
-                            <span id="userMenuTeam"></span>
-                        </div>
-                        <div class="user-menu-item action" onclick="handleSignOut()">
-                            Sign Out
-                        </div>
-                    </div>
-                </div>
+                <div class="user-menu" style="display:none"></div>
             </div>
             <nav id="mainNav">
                 <a onclick="showPage('home')" class="nav-home active">Home</a>
@@ -2242,7 +2225,7 @@
                 <a onclick="showPage('ladder')" class="nav-ladder">Ladder</a>
                 <a onclick="showPage('teams')" class="nav-teams">Teams</a>
                 <a onclick="showPage('draft')" class="nav-draft">Draft</a>
-                <a href="results.html" class="nav-results">Results</a>
+                <a onclick="showPage('results')" class="nav-results">Results</a>
                 <a onclick="showPage('setup')" class="nav-setup">Setup</a>
                 <a onclick="showPage('about')" class="nav-about">Our Story</a>
             </nav>
@@ -2368,57 +2351,109 @@
 
         <!-- RESULTS PAGE -->
         <div class="page" id="resultsPage">
-            <div class="results-container">
-                <div class="results-form-section" id="resultsFormSection">
-                    <h2 class="results-form-title">Enter Fight Result</h2>
-                    <form id="resultsForm" onsubmit="submitFightResult(event)">
-                        <div class="form-section">
-                            <label class="form-label">Fighter A</label>
-                            <select id="fighterA" class="form-select" required>
-                                <option value="">Select Fighter</option>
-                            </select>
-                        </div>
-                        <div class="form-section">
-                            <label class="form-label">Fighter B</label>
-                            <select id="fighterB" class="form-select" required>
-                                <option value="">Select Fighter</option>
-                            </select>
-                        </div>
-                        <div class="form-section">
-                            <label class="form-label">Winner</label>
-                            <select id="fightWinner" class="form-select" required>
-                                <option value="">Select Winner</option>
-                            </select>
-                        </div>
-                        <div class="form-section">
-                            <label class="form-label">Method of Victory</label>
-                            <select id="fightMethod" class="form-select" required>
-                                <option value="">Select Method</option>
-                                <option value="Knockout">Knockout (KO)</option>
-                                <option value="Technical Knockout">Technical Knockout (TKO)</option>
-                                <option value="Decision">Decision</option>
-                                <option value="Submission">Submission</option>
-                            </select>
-                        </div>
-                        <div class="form-section">
-                            <label class="form-label">Stars (1-5)</label>
-                            <input type="number" id="fightStars" class="form-input" min="1" max="5" placeholder="3" required>
-                        </div>
-                        <div class="form-section">
-                            <label class="form-label">Winner Points</label>
-                            <input type="number" id="fightPoints" class="form-input" min="0" placeholder="10" required>
-                        </div>
-                        <div class="form-section">
-                            <label class="form-label">Championship Belts (if applicable)</label>
-                            <input type="number" id="fightBelts" class="form-input" min="0" placeholder="0">
-                        </div>
-                        <button type="submit" class="submit-button">Record Result</button>
-                    </form>
+            <style>
+                .rp-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:10px}
+                .rp-live-ind{display:flex;align-items:center;gap:8px;font-size:13px;color:#888;font-weight:600}
+                .rp-live-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;flex-shrink:0;animation:rpPulse 2s infinite}
+                @keyframes rpPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.4)}}
+                .rp-refresh{padding:7px 16px;background:#e63333;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+                .rp-refresh:hover{background:#cc2929}.rp-refresh:disabled{opacity:.6;cursor:not-allowed}
+                .rp-state{text-align:center;padding:60px 20px}
+                .rp-spinner{width:40px;height:40px;border:4px solid #f0f0f0;border-top-color:#e63333;border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 14px}
+                .rp-retry{padding:10px 24px;background:#e63333;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+                .rp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:40px}
+                .rp-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.07);border:2px solid transparent;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+                .rp-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.12)}
+                .rp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--tc)}
+                .rp-card.rk1{border-color:rgba(245,158,11,.4)}.rp-card.rk2{border-color:rgba(148,163,184,.35)}.rp-card.rk3{border-color:rgba(180,83,9,.25)}
+                .rp-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+                .rp-teamlbl{font-size:12px;font-weight:800;color:var(--tc);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+                .rp-pts{font-size:46px;font-weight:900;line-height:1;letter-spacing:-2px;color:#1a1a2e}
+                .rp-ptslbl{font-size:11px;font-weight:700;color:#bbb;text-transform:uppercase;margin-top:3px}
+                .rp-medal{font-size:28px}.rp-ranknum{font-size:14px;font-weight:800;color:#ccc}
+                .rp-divider{height:1px;background:#f0f0f0;margin:13px 0}
+                .rp-stats{display:flex}.rp-stat{flex:1;text-align:center}.rp-stat+.rp-stat{border-left:1px solid #f0f0f0}
+                .rp-sv{font-size:17px;font-weight:800;line-height:1;margin-bottom:3px}.rp-sl{font-size:10px;font-weight:700;color:#bbb;text-transform:uppercase}
+                .rp-filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+                .rp-fbtn{padding:6px 15px;border:2px solid #e5e7eb;background:#fff;border-radius:16px;font-size:13px;font-weight:700;cursor:pointer;transition:.18s;color:#888}
+                .rp-fbtn:hover{border-color:var(--tc);color:var(--tc)}.rp-fbtn.on{background:var(--tc);border-color:var(--tc);color:#fff}
+                .rp-twrap{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden}
+                .rp-tscroll{overflow-x:auto}
+                .rp-table{width:100%;border-collapse:collapse;min-width:700px}
+                .rp-table thead th{background:#1a1a2e;color:rgba(255,255,255,.5);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:13px 14px;text-align:left;cursor:pointer;white-space:nowrap;user-select:none;transition:color .15s}
+                .rp-table thead th:hover{color:rgba(255,255,255,.9)}.rp-table thead th.rp-sorted{color:#e63333}
+                .rp-table thead th.rp-sorted::after{content:' ↓'}.rp-table thead th.rp-sorted.rp-asc::after{content:' ↑'}
+                .rp-table tbody tr{border-bottom:1px solid #f5f5f7;transition:background .12s}
+                .rp-table tbody tr:last-child{border-bottom:none}.rp-table tbody tr:hover{background:#fafafa}
+                .rp-table td{padding:12px 14px;font-size:14px;color:#333;vertical-align:middle}
+                .rp-tc{text-align:center}.rp-tr{text-align:right}
+                .rp-fname{font-weight:700;color:#1a1a2e}
+                .rp-fmeta{margin-top:2px;display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+                .rp-draftag{font-size:11px;color:#bbb;font-weight:600}
+                .rp-uptag{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;background:#eff6ff;color:#2563eb;border-radius:4px;font-size:11px;font-weight:700}
+                .rp-pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:700;color:#fff}
+                .rp-dbadge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase}
+                .rp-snum{font-size:14px;font-weight:700;text-align:center}
+                .rp-snone{color:#ddd}.rp-swin{color:#16a34a}.rp-sko{color:#7c3aed}.rp-sloss{color:#dc2626}.rp-sdraw{color:#ea580c}
+                .rp-pnum{font-size:19px;font-weight:900;color:#1a1a2e;letter-spacing:-.5px}
+                .rp-pzero{font-size:14px;color:#ccc;font-weight:600}
+                .rp-src{font-size:12px;color:#bbb;text-align:center;margin-top:14px}
+                .rp-src a{color:#999;text-decoration:none}
+                @media(max-width:700px){.rp-grid{grid-template-columns:repeat(2,1fr)}}
+                @media(max-width:420px){.rp-grid{grid-template-columns:1fr}}
+            </style>
+
+            <div id="rpLoad" class="rp-state">
+                <div class="rp-spinner"></div>
+                <p style="color:#888;font-size:14px;font-weight:600;margin-top:8px">Loading 2026 season data…</p>
+            </div>
+
+            <div id="rpErr" class="rp-state" style="display:none">
+                <div style="font-size:40px;margin-bottom:12px">⚠️</div>
+                <p style="font-weight:700;font-size:16px;margin-bottom:8px">Couldn't load data</p>
+                <p style="color:#888;font-size:13px;max-width:320px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with the link can view"</p>
+                <button class="rp-retry" onclick="rpLoad()">Try Again</button>
+            </div>
+
+            <div id="rpMain" style="display:none">
+                <div class="rp-topbar">
+                    <div class="rp-live-ind">
+                        <span class="rp-live-dot"></span>
+                        <span>LIVE · Updated <strong id="rpUpdated">—</strong> · auto-refreshes every 5 min</span>
+                    </div>
+                    <button class="rp-refresh" id="rpRefreshBtn" onclick="rpLoad()">↻ Refresh</button>
                 </div>
-                <div class="results-history">
-                    <h2 class="results-history-title">Recent Results</h2>
-                    <div id="resultsHistoryList"></div>
+
+                <h1 class="home-section-title">🏆 Team Standings</h1>
+                <div class="rp-grid" id="rpGrid"></div>
+
+                <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:14px;margin-top:8px">
+                    <h2 class="home-section-title" style="margin:0">⚡ Fighter Leaderboard</h2>
+                    <span style="font-size:13px;color:#aaa;font-weight:600" id="rpCount"></span>
                 </div>
+                <div class="rp-filters" id="rpFilters"></div>
+                <div class="rp-twrap">
+                    <div class="rp-tscroll">
+                        <table class="rp-table">
+                            <thead><tr>
+                                <th class="rp-tc" onclick="rpSort('rank')" data-key="rank">#</th>
+                                <th onclick="rpSort('name')" data-key="name">Fighter</th>
+                                <th onclick="rpSort('team')" data-key="team">Team</th>
+                                <th onclick="rpSort('division')" data-key="division">Division</th>
+                                <th>Country</th>
+                                <th class="rp-tc" onclick="rpSort('f')" data-key="f" title="Fights">F</th>
+                                <th class="rp-tc" onclick="rpSort('w')" data-key="w" title="Wins">W</th>
+                                <th class="rp-tc" onclick="rpSort('ko')" data-key="ko" title="KO Wins">KO</th>
+                                <th class="rp-tc" onclick="rpSort('l')" data-key="l" title="Losses">L</th>
+                                <th class="rp-tc" onclick="rpSort('kod')" data-key="kod" title="KO Losses">KO'd</th>
+                                <th class="rp-tc" onclick="rpSort('d')" data-key="d" title="Draws">D</th>
+                                <th class="rp-tr" onclick="rpSort('pts')" data-key="pts" title="Total Points">Pts</th>
+                            </tr></thead>
+                            <tbody id="rpBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <p class="rp-src">Data sourced live from <a href="https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc" target="_blank" rel="noopener">Google Sheets</a></p>
             </div>
         </div>
 
@@ -3199,17 +3234,10 @@
         // ============ NAVIGATION ============
         function updateNavigation() {
             const navSetup = document.querySelector('.nav-setup');
-            const resultsFormSection = document.getElementById('resultsFormSection');
-
-            if (userRole === 'commissioner') {
-                navSetup.classList.remove('hidden');
-                resultsFormSection.style.display = 'block';
-            } else {
-                navSetup.classList.add('hidden');
-                resultsFormSection.style.display = 'none';
+            if (navSetup) {
+                if (userRole === 'commissioner') navSetup.classList.remove('hidden');
+                else navSetup.classList.add('hidden');
             }
-
-            updateUserMenu();
         }
 
         function toggleUserMenu() {
@@ -3247,7 +3275,7 @@
                 case 'ladder': renderLadder(); break;
                 case 'teams': renderTeams(); break;
                 case 'draft': renderDraft(); break;
-                case 'results': renderResults(); break;
+                case 'results': rpLoad(); break;
                 case 'setup':
                     if (userRole === 'commissioner') renderSetup();
                     else showPage('home');
@@ -3940,6 +3968,7 @@
 
         function renderResultsForm() {
             const fighterASelect = document.getElementById('fighterA');
+            if (!fighterASelect) return;
             const fighterBSelect = document.getElementById('fighterB');
             const winnerSelect = document.getElementById('fightWinner');
 
@@ -3956,6 +3985,7 @@
 
         function updateResultsUI() {
             const historyDiv = document.getElementById('resultsHistoryList');
+            if (!historyDiv) return;
             historyDiv.innerHTML = fightResults.slice(0, 10).map(result => `
                 <div class="result-item">
                     <div class="result-matchup">
@@ -4105,22 +4135,13 @@
 
         // ============ AUTH STATE LISTENER ============
         function setupAuthListener() {
-            if (typeof firebase === 'undefined') return;
-            firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                    currentUser = user;
-                    loadUserData().then(() => {
-                        showMainApp();
-                        updateNavigation();
-                        renderHome();
-                        startSheetsAutoRefresh();
-                    });
-                } else {
-                    currentUser = null;
-                    hideMainApp();
-                    showAuthScreen();
-                }
-            });
+            // Auth bypassed — app loads directly (re-enable by restoring Firebase auth check here)
+            currentUser = { email: 'admin', uid: 'guest' };
+            userRole = 'commissioner';
+            showMainApp();
+            updateNavigation();
+            renderHome();
+            startSheetsAutoRefresh();
         }
 
         // ============ LIVE BOXING NEWS FEED ============
@@ -4613,6 +4634,161 @@
             }
             initApp();
         });
+
+        // ============ 2026 RESULTS — GOOGLE SHEETS STANDINGS ============
+        const RP_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc/export?format=csv&gid=1081462908';
+        const RP_REFRESH_MS = 5 * 60 * 1000;
+        let rpFighters = [], rpFilter = 'All', rpSortKey = 'pts', rpSortAsc = false, rpLoaded = false, rpTimer = null;
+
+        const RP_TEAM_COLORS = {
+            'Tom':'#3b82f6','Pat':'#16a34a','Mort':'#ea580c','Kieran':'#7c3aed',
+            'Dom':'#dc2626','Elyse':'#db2777','Ash':'#0891b2','Brad':'#ca8a04','Rejects':'#6b7280'
+        };
+        const RP_DIV_STYLES = {
+            'Lights': {bg:'#fefce8',c:'#713f12'},'Welters':{bg:'#eff6ff',c:'#1e3a8a'},
+            'Smalls': {bg:'#f0fdf4',c:'#14532d'},'Middles':{bg:'#fff7ed',c:'#7c2d12'},
+            'Heavies':{bg:'#fdf2f8',c:'#831843'}
+        };
+        const RP_FLAGS = {
+            'Mexico':'🇲🇽','United Kingdom':'🇬🇧','USA':'🇺🇸','Dominican Republic':'🇩🇴',
+            'Puerto Rico':'🇵🇷','Australia':'🇦🇺','Cuba':'🇨🇺','Germany':'🇩🇪',
+            'Ireland':'🇮🇪','Japan':'🇯🇵','Croatia':'🇭🇷','Ukraine':'🇺🇦',
+            'Russia':'🇷🇺','New Zealand':'🇳🇿','Philippines':'🇵🇭','Uzbekistan':'🇺🇿',
+            'France':'🇫🇷','Canada':'🇨🇦','Nigeria':'🇳🇬','Guatemala':'🇬🇹','Congo':'🇨🇩'
+        };
+        const RP_MEDALS = {1:'🥇',2:'🥈',3:'🥉'};
+
+        function rpParseLine(line) {
+            const cols=[]; let cur='',inQ=false;
+            for(const ch of line){
+                if(ch==='"'){inQ=!inQ;}
+                else if(ch===','&&!inQ){cols.push(cur.trim());cur='';}
+                else{cur+=ch;}
+            }
+            cols.push(cur.trim()); return cols;
+        }
+        function rpParseCSV(text) {
+            return text.trim().split(/\r?\n/).slice(1).map(rpParseLine).filter(c=>c[1]&&c[2]).map(c=>({
+                draftRd: parseInt(c[0])||0, team:c[1].trim(), name:c[2].trim(),
+                division:c[3].trim(), country:c[4].trim(), upcoming:c[5].trim(),
+                f:parseInt(c[6])||0, w:parseInt(c[7])||0, ko:parseInt(c[8])||0,
+                l:parseInt(c[9])||0, kod:Math.abs(parseInt(c[10])||0), d:parseInt(c[11])||0,
+                pts:parseInt(c[15])||0
+            }));
+        }
+        function rpStandings(fighters) {
+            const m={};
+            fighters.forEach(f=>{
+                if(!m[f.team])m[f.team]={name:f.team,pts:0,w:0,ko:0,l:0,f:0,roster:0};
+                const t=m[f.team]; t.pts+=f.pts;t.w+=f.w;t.ko+=f.ko;t.l+=f.l;t.f+=f.f;t.roster++;
+            });
+            return Object.values(m).sort((a,b)=>b.pts-a.pts||a.name.localeCompare(b.name));
+        }
+        function rpEsc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
+
+        function rpRenderGrid(standings) {
+            document.getElementById('rpGrid').innerHTML = standings.map((t,i)=>{
+                const rank=i+1, color=RP_TEAM_COLORS[t.name]||'#6b7280';
+                const rkCls=rank<=3?`rk${rank}`:'';
+                const rankHtml=RP_MEDALS[rank]?`<span class="rp-medal">${RP_MEDALS[rank]}</span>`:`<span class="rp-ranknum">${rank}</span>`;
+                return `<div class="rp-card ${rkCls}" style="--tc:${color}">
+                    <div class="rp-card-top">
+                        <div><div class="rp-teamlbl">${rpEsc(t.name)}</div>
+                        <div class="rp-pts">${t.pts}</div>
+                        <div class="rp-ptslbl">Points</div></div>
+                        ${rankHtml}
+                    </div>
+                    <div class="rp-divider"></div>
+                    <div class="rp-stats">
+                        <div class="rp-stat"><div class="rp-sv" style="color:#16a34a">${t.w}</div><div class="rp-sl">Wins</div></div>
+                        <div class="rp-stat"><div class="rp-sv" style="color:#7c3aed">${t.ko}</div><div class="rp-sl">KOs</div></div>
+                        <div class="rp-stat"><div class="rp-sv" style="color:#dc2626">${t.l}</div><div class="rp-sl">Losses</div></div>
+                        <div class="rp-stat"><div class="rp-sv" style="color:#555">${t.f}</div><div class="rp-sl">Fights</div></div>
+                        <div class="rp-stat"><div class="rp-sv" style="color:#aaa">${t.roster}</div><div class="rp-sl">Roster</div></div>
+                    </div></div>`;
+            }).join('');
+        }
+        function rpRenderFilters() {
+            const teams=['All',...Object.keys(RP_TEAM_COLORS)];
+            document.getElementById('rpFilters').innerHTML=teams.map(t=>{
+                const c=RP_TEAM_COLORS[t]||'#e63333', on=t===rpFilter?'on':'';
+                return `<button class="rp-fbtn ${on}" style="--tc:${c}" onclick="rpSetFilter('${t}')">${rpEsc(t)}</button>`;
+            }).join('');
+        }
+        function rpRenderTable() {
+            const base=rpFilter==='All'?rpFighters:rpFighters.filter(f=>f.team===rpFilter);
+            const sorted=[...base].sort((a,b)=>{
+                let av=a[rpSortKey],bv=b[rpSortKey];
+                if(typeof av==='string'){const c=av.localeCompare(bv);return rpSortAsc?c:-c;}
+                if(av!==bv)return rpSortAsc?av-bv:bv-av;
+                return b.pts-a.pts||a.name.localeCompare(b.name);
+            });
+            document.getElementById('rpCount').textContent=`${sorted.length} fighters`;
+            let rank=1,prevPts=null;
+            sorted.forEach((f,i)=>{if(rpSortKey==='pts'&&f.pts!==prevPts){rank=i+1;prevPts=f.pts;}f._r=rpSortKey==='pts'?rank:i+1;});
+            document.querySelectorAll('.rp-table thead th[data-key]').forEach(th=>{
+                th.classList.remove('rp-sorted','rp-asc');
+                if(th.dataset.key===rpSortKey){th.classList.add('rp-sorted');if(rpSortAsc)th.classList.add('rp-asc');}
+            });
+            const sn=(v,cls)=>v?`<span class="rp-snum ${cls}">${v}</span>`:`<span class="rp-snum rp-snone">—</span>`;
+            document.getElementById('rpBody').innerHTML=sorted.map(f=>{
+                const c=RP_TEAM_COLORS[f.team]||'#6b7280';
+                const ds=RP_DIV_STYLES[f.division]||{bg:'#f5f5f5',c:'#666'};
+                const flag=RP_FLAGS[f.country]||'🌐';
+                const medal=RP_MEDALS[f._r];
+                const rankHtml=medal?`<span style="font-size:18px">${medal}</span>`:`<span style="font-size:13px;font-weight:700;color:#ccc">${f._r}</span>`;
+                const upHtml=f.upcoming?`<span class="rp-uptag">📅 ${rpEsc(f.upcoming)}</span>`:'';
+                return `<tr>
+                    <td class="rp-tc">${rankHtml}</td>
+                    <td><div class="rp-fname">${rpEsc(f.name)}</div>
+                        <div class="rp-fmeta"><span class="rp-draftag">Rd ${f.draftRd}</span>${upHtml}</div></td>
+                    <td><span class="rp-pill" style="background:${c}">${rpEsc(f.team)}</span></td>
+                    <td><span class="rp-dbadge" style="background:${ds.bg};color:${ds.c}">${rpEsc(f.division)}</span></td>
+                    <td style="font-size:13px;color:#555;white-space:nowrap">${flag} ${rpEsc(f.country)}</td>
+                    <td>${sn(f.f,'rp-snone'||'')}</td>
+                    <td>${sn(f.w,'rp-swin')}</td>
+                    <td>${sn(f.ko,'rp-sko')}</td>
+                    <td>${sn(f.l,'rp-sloss')}</td>
+                    <td>${sn(f.kod,'rp-sloss')}</td>
+                    <td>${sn(f.d,'rp-sdraw')}</td>
+                    <td class="rp-tr"><span class="${f.pts?'rp-pnum':'rp-pzero'}">${f.pts||'0'}</span></td>
+                </tr>`;
+            }).join('');
+        }
+        function rpSetFilter(team){rpFilter=team;rpRenderFilters();rpRenderTable();}
+        function rpSort(key){
+            if(rpSortKey===key){rpSortAsc=!rpSortAsc;}
+            else{rpSortKey=key;rpSortAsc=(key==='name'||key==='team'||key==='division'||key==='country');}
+            rpRenderTable();
+        }
+        async function rpLoad() {
+            const btn=document.getElementById('rpRefreshBtn');
+            if(btn)btn.disabled=true;
+            try {
+                const res=await fetch(RP_SHEET_URL+'&_cb='+Date.now());
+                if(!res.ok)throw new Error('HTTP '+res.status);
+                const text=await res.text();
+                if(text.trim().startsWith('<'))throw new Error('Sheet not public');
+                rpFighters=rpParseCSV(text);
+                rpRenderGrid(rpStandings(rpFighters));
+                rpRenderFilters();
+                rpRenderTable();
+                const el=document.getElementById('rpUpdated');
+                if(el)el.textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+                document.getElementById('rpLoad').style.display='none';
+                document.getElementById('rpErr').style.display='none';
+                document.getElementById('rpMain').style.display='block';
+                rpLoaded=true;
+                if(!rpTimer)rpTimer=setInterval(rpLoad,RP_REFRESH_MS);
+            } catch(e) {
+                console.error('[Results]',e);
+                document.getElementById('rpLoad').style.display='none';
+                document.getElementById('rpMain').style.display='none';
+                document.getElementById('rpErr').style.display='block';
+            } finally {
+                if(btn)btn.disabled=false;
+            }
+        }
     </script>
 </body>
 </html>
