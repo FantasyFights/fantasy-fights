@@ -2945,82 +2945,6 @@
             return m ? [m[1].trim(), m[2].trim()] : ['', ''];
         }
 
-        // ============ FIGHT STAR RATINGS (BoxRec-style) ============
-        // Keyed by lowercase fighter name — returns stars for any fight they're in
-        const FIGHTER_STARS = {
-            // ⭐⭐⭐⭐⭐
-            'naoya inoue': 5,
-            'junto nakatani': 5,
-            // ⭐⭐⭐⭐
-            'conor benn': 4,
-            'regis prograis': 4,
-            'david benavidez': 4,
-            'gilberto ramirez': 4,
-            'fabio wardley': 4,
-            'daniel dubois': 4,
-            'shakur stevenson': 4,
-            'devin haney': 4,
-            'gervonta davis': 4,
-            'canelo alvarez': 4,
-            'artur beterbiev': 4,
-            'dmitry bivol': 4,
-            'jaron ennis': 4,
-            'oleksandr usyk': 4,
-            'terence crawford': 4,
-            'ryan garcia': 4,
-            'jesse rodriguez': 4,
-            'manny pacquiao': 4,
-            // ⭐⭐⭐
-            'tyson fury': 3,
-            'sebastian fundora': 3,
-            'keith thurman': 3,
-            'carlos adames': 3,
-            'moses itauma': 3,
-            'errol spence': 3,
-            'vergil ortiz jr': 3,
-            'teofimo lopez': 3,
-            'katie taylor': 3,
-            'caroline dubois': 3,
-            'alycia baumgardner': 3,
-            'ellie scotney': 3,
-            'hamzah sheeraz': 3,
-            'ben whittaker': 3,
-            'chris eubank jr': 3,
-            'callum walsh': 3,
-            'xander zayas': 3,
-            'keyshawn davis': 3,
-            'andy cruz': 3,
-            'joe parker': 3,
-            'jai opetaia': 3,
-            'zhanibek alimkhanuly': 3,
-            'anthony joshua': 3,
-            // ⭐⭐
-            'deontay wilder': 2,
-            'derek chisora': 2,
-            'floyd mayweather': 2,
-            'arslanbek makhmudov': 2,
-            'justis huni': 2,
-            'frazer clarke': 2,
-            'bo mi re shin': 2,
-            'rico verhoeven': 2,
-        };
-
-        function getFightStars(fightStr) {
-            if (!fightStr) return 0;
-            const low = fightStr.toLowerCase();
-            let best = 0;
-            for (const [fighter, stars] of Object.entries(FIGHTER_STARS)) {
-                if (low.includes(fighter)) best = Math.max(best, stars);
-            }
-            return best;
-        }
-
-        function renderStars(count) {
-            if (!count) return '';
-            return `<span style="font-size:12px;letter-spacing:1px;" title="${count} star fight">` +
-                   '⭐'.repeat(count) + '</span>';
-        }
-
         // ============ PAGE RENDERERS ============
         function renderHome() {
             loadUpcomingFromSheets();
@@ -3803,8 +3727,6 @@
                 }
             }
             const [nameA, nameB] = parseFightNames(fightName || f.fight);
-            const stars = getFightStars(f.fight);
-            const starsHtml = renderStars(stars);
             return `
             <div class="h2h-card">
                 <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
@@ -3818,9 +3740,8 @@
                         <div class="h2h-team-name" style="background:${c1}">${f.team1}</div>
                     </div>
                     <div class="h2h-centre">
-                        <div style="display:flex;justify-content:center;align-items:center;gap:6px;">
+                        <div style="display:flex;justify-content:center;">
                             <div class="h2h-matchup-label">⚔️ Head-to-Head</div>
-                            ${starsHtml || ''}
                         </div>
                         <div class="h2h-vs-divider">— VS —</div>
                         <div class="h2h-fight-name">${fightName || f.fight}</div>
@@ -3845,8 +3766,6 @@
             const commaIdx = f.fight ? f.fight.indexOf(',') : -1;
             const fightName   = commaIdx > -1 ? f.fight.substring(0, commaIdx).trim() : f.fight;
             const fightDetail = commaIdx > -1 ? f.fight.substring(commaIdx + 1).trim() : '';
-            const stars = getFightStars(f.fight);
-            const starsHtml = renderStars(stars);
             return `
             <div class="fight-row">
                 <div class="fight-row-team" style="background:${color}">${f.team}</div>
@@ -3854,7 +3773,6 @@
                     <div class="fight-row-name">${fightName || '—'}</div>
                     ${fightDetail ? `<div class="fight-row-detail">${fightDetail}</div>` : ''}
                 </div>
-                ${starsHtml ? `<div style="flex-shrink:0;">${starsHtml}</div>` : ''}
                 ${belts ? `<div class="fight-row-belts">${belts}</div>` : ''}
             </div>`;
         }
@@ -4065,8 +3983,6 @@
                     const c2 = getTeamColor(t2);
                     const beltImgs = getBeltImages(fight);
                     const [nameA, nameB] = parseFightNames(fight);
-                    const stars = getFightStars(fight);
-                    const starsHtml = renderStars(stars);
                     return `
                         <div class="home-fight-card">
                             <div class="home-fight-header">
@@ -4097,10 +4013,7 @@
                                 </div>
                             </div>
                             <div class="home-fight-footer">
-                                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-                                    <div class="home-fight-detail">${fight}</div>
-                                    ${starsHtml ? `<div style="flex-shrink:0;">${starsHtml}</div>` : ''}
-                                </div>
+                                <div class="home-fight-detail">${fight}</div>
                                 ${beltImgs ? `<div style="margin-top:6px;">${beltImgs}</div>` : ''}
                             </div>
                         </div>`;
