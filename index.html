@@ -1097,6 +1097,28 @@
             font-size: 14px;
             margin-top: 4px;
         }
+        .h2h-stars {
+            font-size: 13px;
+            letter-spacing: 1px;
+            margin-top: 3px;
+            line-height: 1;
+            opacity: 0.9;
+        }
+        .fight-row-stars {
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .home-fight-stars {
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-align: center;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #f0f0f0;
+            color: #555;
+        }
 
         /* Regular fight row */
         .fight-row {
@@ -4306,9 +4328,16 @@
             return key ? TEAM_COLOR_MAP[key] : '#555';
         }
 
-        function parseScheduleRow(date, desc) {
+        function renderStars(n) {
+            const count = parseInt(n) || 0;
+            if (!count) return '';
+            return '⭐️'.repeat(count);
+        }
+
+        function parseScheduleRow(date, desc, stars) {
             const d = (desc || '').trim();
             if (!d) return null;
+            const starCount = parseInt(stars) || 0;
             const isH2H = /^H2H\s*-/i.test(d);
             if (isH2H) {
                 const body = d.replace(/^H2H\s*-\s*/i, '');
@@ -4318,13 +4347,13 @@
                 const vMatch  = matchup.match(/^(.+?)\s+[Vv]\s+(.+)$/);
                 const team1   = vMatch ? vMatch[1].trim().toUpperCase() : matchup.toUpperCase();
                 const team2   = vMatch ? vMatch[2].trim().toUpperCase() : '';
-                return { type: 'h2h', date, team1, team2, fight };
+                return { type: 'h2h', date, team1, team2, fight, stars: starCount };
             } else {
                 const dashIdx = d.indexOf(' - ');
-                if (dashIdx === -1) return { type: 'regular', date, team: d.toUpperCase(), fight: '' };
+                if (dashIdx === -1) return { type: 'regular', date, team: d.toUpperCase(), fight: '', stars: starCount };
                 const team  = d.substring(0, dashIdx).trim().toUpperCase();
                 const fight = d.substring(dashIdx + 3).trim();
-                return { type: 'regular', date, team, fight };
+                return { type: 'regular', date, team, fight, stars: starCount };
             }
         }
 
@@ -4343,6 +4372,7 @@
                 }
             }
             const [nameA, nameB] = parseFightNames(fightName || f.fight);
+            const starsHtml = f.stars ? `<div class="h2h-stars">${renderStars(f.stars)}</div>` : '';
             return `
             <div class="h2h-card">
                 <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
@@ -4363,6 +4393,7 @@
                         <div class="h2h-fight-name">${fightName || f.fight}</div>
                         ${fightDetail ? `<div class="h2h-fight-detail">${fightDetail}</div>` : ''}
                         ${belts ? `<div class="h2h-belt-row">${belts}</div>` : ''}
+                        ${starsHtml}
                     </div>
                     <div class="h2h-team-col">
                         ${nameB ? `
@@ -4383,6 +4414,7 @@
             const commaIdx = f.fight ? f.fight.indexOf(',') : -1;
             const fightName   = commaIdx > -1 ? f.fight.substring(0, commaIdx).trim() : f.fight;
             const fightDetail = commaIdx > -1 ? f.fight.substring(commaIdx + 1).trim() : '';
+            const starsHtml = f.stars ? `<div class="fight-row-stars">${renderStars(f.stars)}</div>` : '';
             return `
             <div class="fight-row">
                 <div class="fight-row-team" style="background:${color}">${f.team}</div>
@@ -4391,6 +4423,7 @@
                     ${fightDetail ? `<div class="fight-row-detail">${fightDetail}</div>` : ''}
                 </div>
                 ${belts ? `<div class="fight-row-belts">${belts}</div>` : ''}
+                ${starsHtml}
             </div>`;
         }
 
@@ -4407,9 +4440,10 @@
                     if (!row.c) return;
                     const dc = String(gvizCell(row, 0) || '').trim();
                     const fc = String(gvizCell(row, 1) || '').trim();
+                    const sc = String(gvizCell(row, 2) || '').trim();
                     if (dc) lastDate = dc;
                     if (!fc || !lastDate) return;
-                    const item = parseScheduleRow(lastDate, fc);
+                    const item = parseScheduleRow(lastDate, fc, sc);
                     if (item) parsed.push(item);
                 });
 
@@ -4573,6 +4607,7 @@
                     if (!row.c) return;
                     const dateCell = gvizCell(row, 0);
                     const descCell = gvizCell(row, 1);
+                    const starsCell = gvizCell(row, 2);
                     if (dateCell) lastDate = String(dateCell).trim();
                     if (!descCell || !lastDate) return;
                     if (!String(descCell).includes('H2H')) return;
@@ -4583,7 +4618,7 @@
                     if (isNaN(parsed)) return;
                     parsed.setHours(0,0,0,0);
                     if (parsed < today) return; // skip past fights
-                    upcoming.push({ date: parsed, dateStr: lastDate.replace(/,.*$/, '').trim(), desc: String(descCell).trim() });
+                    upcoming.push({ date: parsed, dateStr: lastDate.replace(/,.*$/, '').trim(), desc: String(descCell).trim(), stars: parseInt(starsCell) || 0 });
                 });
 
                 upcoming.sort((a, b) => a.date - b.date);
@@ -4604,6 +4639,7 @@
                     const c2 = getTeamColor(t2);
                     const beltImgs = getBeltImages(fight);
                     const [nameA, nameB] = parseFightNames(fight);
+                    const starsHtml = f.stars ? `<div class="home-fight-stars">${renderStars(f.stars)}</div>` : '';
                     return `
                         <div class="home-fight-card">
                             <div class="home-fight-header">
@@ -4636,6 +4672,7 @@
                             <div class="home-fight-footer">
                                 <div class="home-fight-detail">${fight}</div>
                                 ${beltImgs ? `<div style="margin-top:6px;">${beltImgs}</div>` : ''}
+                                ${starsHtml}
                             </div>
                         </div>`;
                 }).join('');
