@@ -1294,6 +1294,121 @@
             letter-spacing: 0.2px;
         }
 
+        /* ── FIGHTER AVATAR (Teams page) ── */
+        .fighter-avatar-wrap {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #f0f0f0;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+            border: 2px solid #e8e8e8;
+            transition: border-color 0.2s;
+        }
+        .fighter-row:hover .fighter-avatar-wrap { border-color: #ccc; }
+        .fighter-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .fighter-avatar-wrap .avatar-fallback { line-height: 1; }
+
+        /* ── FIGHTER PORTRAIT (H2H cards — schedule page) ── */
+        .h2h-fighter-photo-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #ccc;
+            background: #e8e8e8;
+            margin: 0 auto 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .h2h-fighter-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .h2h-fighter-photo-wrap .photo-fallback { font-size: 24px; line-height: 1; }
+
+        /* ── HOME PAGE H2H FIGHT CARD ── */
+        .home-fight-card {
+            background: white;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.09);
+            overflow: hidden;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .home-fight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+        }
+        .home-fight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 14px 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .home-fight-poster {
+            display: flex;
+            align-items: stretch;
+            background: linear-gradient(135deg, #111827 0%, #1f2937 50%, #111827 100%);
+        }
+        .home-fight-fighter {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 12px 14px;
+            gap: 8px;
+        }
+        .home-fight-portrait {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255,255,255,0.2);
+            background: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .home-fight-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .home-fight-portrait .portrait-fallback { font-size: 30px; line-height: 1; }
+        .home-fight-fighter-name {
+            color: white;
+            font-weight: 700;
+            font-size: 12.5px;
+            text-align: center;
+            line-height: 1.3;
+        }
+        .home-fight-vs-col {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+        }
+        .home-fight-vs-bubble {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(230,51,51,0.15);
+            border: 2px solid rgba(230,51,51,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e63333;
+            font-weight: 900;
+            font-size: 11px;
+        }
+        .home-fight-footer {
+            padding: 10px 14px;
+            background: white;
+        }
+        .home-fight-detail { font-size: 12.5px; color: #555; }
+
         /* keep old selectors alive so non-teams code doesn't break */
         .team-card { display: none; }
         .team-header { display: none; }
@@ -2750,6 +2865,52 @@
             return `<span class="fight-belts" title="${count} belt${count > 1 ? 's' : ''}">${'🏆'.repeat(count)}</span>`;
         }
 
+        // ============ FIGHTER IMAGE LOADING (Wikipedia) ============
+        const _fighterImgCache = {};
+        const _fighterImgInflight = {};
+
+        async function fetchFighterImg(name) {
+            if (_fighterImgCache[name] !== undefined) return _fighterImgCache[name];
+            if (_fighterImgInflight[name]) return _fighterImgInflight[name];
+
+            const encoded = encodeURIComponent(name.trim().replace(/ /g, '_'));
+            const promise = fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encoded}`, { cache: 'force-cache' })
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    const url = data?.thumbnail?.source || null;
+                    _fighterImgCache[name] = url;
+                    return url;
+                })
+                .catch(() => { _fighterImgCache[name] = null; return null; });
+
+            _fighterImgInflight[name] = promise;
+            return promise;
+        }
+
+        // After any render that uses data-fighter="Name" on <img> elements, call this.
+        function loadFighterImages(root) {
+            const scope = root || document;
+            scope.querySelectorAll('img[data-fighter]').forEach(img => {
+                const name = img.dataset.fighter;
+                if (!name || img.dataset.loaded) return;
+                img.dataset.loaded = '1';
+                fetchFighterImg(name).then(url => {
+                    if (url) {
+                        img.src = url;
+                        img.style.display = 'block';
+                        img.classList.add('loaded');
+                    }
+                });
+            });
+        }
+
+        // Parse "Fighter A vs Fighter B, weight class" → [nameA, nameB]
+        function parseFightNames(fightStr) {
+            if (!fightStr) return ['', ''];
+            const m = fightStr.match(/^(.+?)\s+vs\.?\s+(.+?)(?:,|$)/i);
+            return m ? [m[1].trim(), m[2].trim()] : ['', ''];
+        }
+
         // ============ PAGE RENDERERS ============
         function renderHome() {
             loadUpcomingFromSheets();
@@ -3033,7 +3194,10 @@
                         <div class="div-label">${DIV_LABEL[div]}</div>
                         ${rows.map(f => `
                         <div class="fighter-row">
-                            <span class="f-flag">${FLAG[f.country] || '🌍'}</span>
+                            <div class="fighter-avatar-wrap" style="border-color:${color}40">
+                                <img data-fighter="${f.name}" alt="${f.name}" style="display:none">
+                                <span class="avatar-fallback">${FLAG[f.country] || '🌍'}</span>
+                            </div>
                             <span class="f-name">${f.name}</span>
                             <span class="rd-badge">Rd ${f.rd}</span>
                         </div>`).join('')}
@@ -3048,6 +3212,7 @@
                     <div class="squad-body">${bodyHTML}</div>
                 </div>`;
             }).join('');
+            loadFighterImages(grid);
         }
 
         function renderDraft() {
@@ -3526,12 +3691,17 @@
                     fightDetail = f.fight.substring(commaIdx + 1).trim();
                 }
             }
+            const [nameA, nameB] = parseFightNames(fightName || f.fight);
             return `
             <div class="h2h-card">
                 <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
                 <div class="h2h-inner">
                     <div class="h2h-team-col">
-                        
+                        ${nameA ? `
+                        <div class="h2h-fighter-photo-wrap" style="border-color:${c1}">
+                            <img data-fighter="${nameA}" alt="${nameA}" style="display:none">
+                            <span class="photo-fallback">🥊</span>
+                        </div>` : ''}
                         <div class="h2h-team-name" style="background:${c1}">${f.team1}</div>
                     </div>
                     <div class="h2h-centre">
@@ -3544,7 +3714,11 @@
                         ${belts ? `<div class="h2h-belt-row">${belts}</div>` : ''}
                     </div>
                     <div class="h2h-team-col">
-                        
+                        ${nameB ? `
+                        <div class="h2h-fighter-photo-wrap" style="border-color:${c2}">
+                            <img data-fighter="${nameB}" alt="${nameB}" style="display:none">
+                            <span class="photo-fallback">🥊</span>
+                        </div>` : ''}
                         <div class="h2h-team-name" style="background:${c2}">${f.team2}</div>
                     </div>
                 </div>
@@ -3614,6 +3788,7 @@
                         ${fights.map(f => f.type === 'h2h' ? renderH2HCard(f) : renderFightRow(f)).join('')}
                     </div>`;
                 }).join('');
+                loadFighterImages(container);
 
             } catch (err) {
                 console.warn('Schedule load error:', err);
@@ -3762,20 +3937,43 @@
                     const c1 = getTeamColor(t1);
                     const c2 = getTeamColor(t2);
                     const beltImgs = getBeltImages(fight);
+                    const [nameA, nameB] = parseFightNames(fight);
                     return `
-                        <div class="upcoming-fight-card" style="background:white;border-radius:10px;padding:14px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-left:4px solid #e63333;">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                        <div class="home-fight-card">
+                            <div class="home-fight-header">
                                 <div style="display:flex;align-items:center;gap:8px;">
-                                    <span style="background:${c1};color:white;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;">${t1}</span>
-                                    <span style="font-weight:800;color:#e63333;">VS</span>
-                                    <span style="background:${c2};color:white;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;">${t2}</span>
+                                    <span style="background:${c1};color:white;padding:2px 9px;border-radius:5px;font-size:11.5px;font-weight:800;">${t1 || '?'}</span>
+                                    <span style="font-weight:900;color:#e63333;font-size:11px;">VS</span>
+                                    <span style="background:${c2};color:white;padding:2px 9px;border-radius:5px;font-size:11.5px;font-weight:800;">${t2 || '?'}</span>
                                 </div>
-                                <span style="font-size:12px;font-weight:600;color:#e63333;">${f.dateStr}</span>
+                                <span style="font-size:11.5px;font-weight:700;color:#e63333;background:#fff0f0;padding:3px 9px;border-radius:20px;">${f.dateStr}</span>
                             </div>
-                            <div style="font-size:13px;color:#555;">${fight}</div>
-                            ${beltImgs ? `<div style="margin-top:7px;">${beltImgs}</div>` : ''}
+                            <div class="home-fight-poster">
+                                <div class="home-fight-fighter">
+                                    <div class="home-fight-portrait" style="border-color:${c1}">
+                                        ${nameA ? `<img data-fighter="${nameA}" alt="${nameA}" style="display:none">` : ''}
+                                        <span class="portrait-fallback">🥊</span>
+                                    </div>
+                                    <div class="home-fight-fighter-name">${nameA || '—'}</div>
+                                </div>
+                                <div class="home-fight-vs-col">
+                                    <div class="home-fight-vs-bubble">VS</div>
+                                </div>
+                                <div class="home-fight-fighter">
+                                    <div class="home-fight-portrait" style="border-color:${c2}">
+                                        ${nameB ? `<img data-fighter="${nameB}" alt="${nameB}" style="display:none">` : ''}
+                                        <span class="portrait-fallback">🥊</span>
+                                    </div>
+                                    <div class="home-fight-fighter-name">${nameB || '—'}</div>
+                                </div>
+                            </div>
+                            <div class="home-fight-footer">
+                                <div class="home-fight-detail">${fight}</div>
+                                ${beltImgs ? `<div style="margin-top:6px;">${beltImgs}</div>` : ''}
+                            </div>
                         </div>`;
                 }).join('');
+                loadFighterImages(div);
             } catch (err) {
                 console.warn('Google Sheets schedule error:', err);
             }
