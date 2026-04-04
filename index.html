@@ -2015,6 +2015,179 @@
                 margin-bottom: 10px;
             }
         }
+        /* ── About / Our Story page ───────────────────────────────── */
+        #aboutPage { padding: 0; }
+        #aboutPage .about-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+        .about-hero-banner {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 50px 48px;
+            margin-bottom: 40px;
+            border-top: 4px solid #e63333;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: center;
+        }
+        .about-hero-banner h1 { font-size: 36px; font-weight: 800; color: #111; line-height: 1.15; margin-bottom: 16px; }
+        .about-hero-banner h1 span { color: #e63333; }
+        .about-hero-banner p { font-size: 16px; color: #555; line-height: 1.75; max-width: 640px; }
+        .about-hero-badge {
+            background: #fff3f3; border: 1px solid #ffd5d5; border-radius: 10px;
+            padding: 24px 28px; text-align: center; white-space: nowrap; flex-shrink: 0;
+        }
+        .about-hero-badge-number { font-size: 48px; font-weight: 800; color: #e63333; line-height: 1; }
+        .about-hero-badge-label { font-size: 12px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px; }
+        .about-stats-row {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 40px;
+        }
+        .about-stat-card {
+            background: white; border-radius: 8px; padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center;
+            border-top: 3px solid #e63333; transition: all 0.3s ease;
+        }
+        .about-stat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); transform: translateY(-3px); }
+        .about-stat-card-number { font-size: 30px; font-weight: 800; color: #222; line-height: 1.1; }
+        .about-stat-card-label { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+        .about-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e63333; margin-bottom: 8px; }
+        .about-section-title { font-size: 28px; font-weight: 700; color: #222; margin-bottom: 8px; }
+        .about-section-subtitle { font-size: 15px; color: #666; max-width: 600px; line-height: 1.65; }
+        .about-section-header { margin-bottom: 30px; }
+        .about-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+        .about-story-card {
+            background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 36px; border-left: 4px solid #e63333;
+        }
+        .about-story-card p { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 16px; }
+        .about-story-card p:last-child { margin-bottom: 0; }
+        .about-story-card p strong { color: #222; }
+        .about-story-bullets { display: flex; flex-direction: column; gap: 12px; }
+        .about-story-bullet {
+            display: flex; align-items: flex-start; gap: 14px;
+            background: #f8f8f8; border-radius: 8px; padding: 16px; transition: all 0.3s ease;
+        }
+        .about-story-bullet:hover { background: #fff3f3; transform: translateX(4px); }
+        .about-story-bullet-icon { font-size: 20px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+        .about-story-bullet h4 { font-size: 14px; font-weight: 700; color: #222; margin-bottom: 3px; }
+        .about-story-bullet p { font-size: 13px; color: #666; line-height: 1.55; margin: 0; }
+        .about-timeline-section { margin-bottom: 40px; }
+        .about-timeline { display: flex; flex-direction: column; gap: 16px; }
+        .about-timeline-card {
+            background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 24px 28px; display: grid; grid-template-columns: 72px 1fr auto;
+            gap: 24px; align-items: start; transition: all 0.3s ease; border-left: 4px solid #e63333;
+        }
+        .about-timeline-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); transform: translateY(-3px); }
+        .about-timeline-year-col { text-align: center; padding-top: 4px; }
+        .about-timeline-year { font-size: 22px; font-weight: 800; color: #e63333; line-height: 1; }
+        .about-timeline-season { font-size: 10px; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px; }
+        .about-timeline-body h3 { font-size: 16px; font-weight: 700; color: #222; margin-bottom: 8px; }
+        .about-timeline-body p { font-size: 14px; color: #666; line-height: 1.65; margin-bottom: 12px; }
+        .about-timeline-body p:last-child { margin-bottom: 0; }
+        .about-timeline-body p strong { color: #333; }
+        .about-timeline-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .about-tag { display: inline-block; background: #f0f0f0; color: #555; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.03em; }
+        .about-tag-red { background: #fff3f3; color: #e63333; }
+        .about-tag-blue { background: #f0f2ff; color: #667eea; }
+        .about-champion-box {
+            background: #fffbf0; border: 1px solid #fde68a; border-radius: 8px;
+            padding: 16px 18px; text-align: center; min-width: 130px; flex-shrink: 0;
+        }
+        .about-champion-trophy { font-size: 22px; margin-bottom: 6px; }
+        .about-champion-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #999; margin-bottom: 4px; }
+        .about-champion-name { font-size: 17px; font-weight: 800; color: #222; }
+        .about-champion-stat { font-size: 12px; color: #888; margin-top: 4px; }
+        .about-scoring-table { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+        .about-scoring-table-head {
+            background: #e63333; padding: 14px 20px; display: flex; align-items: center; gap: 8px;
+            font-size: 13px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.06em;
+        }
+        .about-scoring-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid #f0f0f0; transition: background 0.15s; }
+        .about-scoring-row:last-child { border-bottom: none; }
+        .about-scoring-row:hover { background: #f8f8f8; }
+        .about-scoring-row.featured { background: #fffbf0; border-bottom-color: #fde68a; }
+        .about-scoring-row.featured:hover { background: #fff8e1; }
+        .about-scoring-row-label { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #444; }
+        .about-scoring-row-icon { font-size: 16px; width: 22px; text-align: center; }
+        .about-scoring-row-pts { font-size: 15px; font-weight: 700; color: #e63333; }
+        .about-scoring-row.featured .about-scoring-row-pts { color: #d97706; font-size: 16px; }
+        .about-platform-info {
+            background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 32px 28px; border-left: 4px solid #667eea;
+        }
+        .about-platform-info p { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 16px; }
+        .about-platform-info p:last-child { margin-bottom: 0; }
+        .about-platform-info p strong { color: #222; }
+        .about-mini-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .about-mini-stat { background: #f8f8f8; border-radius: 8px; padding: 14px; text-align: center; }
+        .about-mini-stat-num { font-size: 22px; font-weight: 800; color: #667eea; }
+        .about-mini-stat-label { font-size: 11px; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px; }
+        .about-market-section { margin-bottom: 40px; }
+        .about-market-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .about-market-card {
+            background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 28px 24px; transition: all 0.3s ease; border-top: 3px solid #e63333;
+        }
+        .about-market-card:nth-child(2) { border-top-color: #667eea; }
+        .about-market-card:nth-child(3) { border-top-color: #10b981; }
+        .about-market-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); transform: translateY(-3px); }
+        .about-market-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #999; margin-bottom: 8px; }
+        .about-market-card-number { font-size: 36px; font-weight: 800; color: #222; line-height: 1.1; margin-bottom: 10px; }
+        .about-market-card:nth-child(1) .about-market-card-number { color: #e63333; }
+        .about-market-card:nth-child(2) .about-market-card-number { color: #667eea; }
+        .about-market-card:nth-child(3) .about-market-card-number { color: #10b981; }
+        .about-market-card p { font-size: 13px; color: #666; line-height: 1.65; }
+        .about-vision-section { margin-bottom: 40px; }
+        .about-vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .about-vision-text {
+            background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 36px; border-left: 4px solid #667eea;
+        }
+        .about-vision-text p { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 16px; }
+        .about-vision-text p:last-child { margin-bottom: 0; }
+        .about-vision-text p strong { color: #222; }
+        .about-vision-pillars { display: flex; flex-direction: column; gap: 12px; }
+        .about-pillar {
+            background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 18px 20px; display: flex; align-items: flex-start; gap: 14px; transition: all 0.3s ease;
+        }
+        .about-pillar:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); transform: translateX(4px); }
+        .about-pillar-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+        .about-pillar h4 { font-size: 14px; font-weight: 700; color: #222; margin-bottom: 3px; }
+        .about-pillar p { font-size: 13px; color: #666; line-height: 1.55; margin: 0; }
+        .about-cta-banner {
+            background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 40px 48px; text-align: center; border-top: 4px solid #e63333;
+        }
+        .about-cta-banner h2 { font-size: 26px; font-weight: 800; color: #222; margin-bottom: 10px; }
+        .about-cta-banner p { font-size: 15px; color: #666; margin-bottom: 28px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.65; }
+        .about-btn { display: inline-block; padding: 12px 28px; font-size: 14px; font-weight: 700; border-radius: 6px; cursor: pointer; border: none; transition: all 0.3s ease; text-decoration: none; }
+        .about-btn:hover { transform: translateY(-2px); }
+        .about-btn-red { background: #e63333; color: white; }
+        .about-btn-red:hover { background: #cc2222; box-shadow: 0 4px 12px rgba(230,51,51,0.3); }
+        .about-btn-outline { background: transparent; color: #667eea; border: 2px solid #667eea; }
+        .about-btn-outline:hover { background: #667eea; color: white; }
+        .about-cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        @media (max-width: 1000px) {
+            .about-stats-row { grid-template-columns: repeat(3, 1fr); }
+            .about-two-col, .about-vision-grid { grid-template-columns: 1fr; }
+            .about-hero-banner { grid-template-columns: 1fr; }
+            .about-hero-badge { display: none; }
+            .about-market-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+            .about-stats-row { grid-template-columns: repeat(2, 1fr); }
+            .about-market-grid { grid-template-columns: 1fr; }
+            .about-timeline-card { grid-template-columns: 60px 1fr; }
+            .about-champion-box { display: none; }
+            .about-hero-banner { padding: 28px 24px; }
+            .about-hero-banner h1 { font-size: 26px; }
+        }
     </style>
 </head>
 <body>
@@ -2085,7 +2258,7 @@
                 <a onclick="showPage('draft')" class="nav-draft">Draft</a>
                 <a onclick="showPage('results')" class="nav-results">Results</a>
                 <a onclick="showPage('setup')" class="nav-setup">Setup</a>
-                <a href="about.html" class="nav-about">Our Story</a>
+                <a onclick="showPage('about')" class="nav-about">Our Story</a>
             </nav>
         </div>
     </header>
@@ -2290,6 +2463,349 @@
                     <div class="teams-assignment" id="teamsAssignmentContainer"></div>
                 </div>
             </div>
+        </div>
+        <!-- OUR STORY PAGE -->
+        <div class="page" id="aboutPage">
+          <div class="about-inner">
+
+            <!-- Hero -->
+            <div class="about-hero-banner">
+              <div>
+                <div class="about-section-label">Est. Bondi Beach, 2021</div>
+                <h1>Born From a <span>Love of Boxing</span></h1>
+                <p>What started as a printed draft sheet and four friends in Bondi has grown into the world's first dedicated fantasy boxing platform — five seasons, eight managers, one clear vision: bring fantasy sports to the sport that deserves it most.</p>
+              </div>
+              <div class="about-hero-badge">
+                <div class="about-hero-badge-number">#1</div>
+                <div class="about-hero-badge-label">In the World</div>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="about-stats-row">
+              <div class="about-stat-card">
+                <div class="about-stat-card-number">5</div>
+                <div class="about-stat-card-label">Seasons Played</div>
+              </div>
+              <div class="about-stat-card">
+                <div class="about-stat-card-number">2021</div>
+                <div class="about-stat-card-label">Year Founded</div>
+              </div>
+              <div class="about-stat-card">
+                <div class="about-stat-card-number">8</div>
+                <div class="about-stat-card-label">Active Managers</div>
+              </div>
+              <div class="about-stat-card">
+                <div class="about-stat-card-number">0</div>
+                <div class="about-stat-card-label">Competitors Worldwide</div>
+              </div>
+              <div class="about-stat-card">
+                <div class="about-stat-card-number">$20B</div>
+                <div class="about-stat-card-label">Market Opportunity</div>
+              </div>
+            </div>
+
+            <!-- Origin Story -->
+            <div class="about-section-header">
+              <div class="about-section-label">Origin Story</div>
+              <div class="about-section-title">A Living Room Changed Everything</div>
+              <div class="about-section-subtitle">How one printed draft sheet became the world's first fantasy boxing platform.</div>
+            </div>
+            <div class="about-two-col" style="margin-bottom:40px;">
+              <div class="about-story-card">
+                <p>It was 2021. Four friends gathered in Bondi to watch boxing. One of them — an avid fantasy sports player — had spent years watching fantasy leagues transform fan engagement across football, basketball, and baseball.</p>
+                <p>After realising that <strong>no fantasy sports platform existed for boxing anywhere in the world</strong>, he saw a gap too obvious to ignore. Just an hour before fight night, armed with a printed list of fighters and a hastily sketched draft sheet, he pitched the idea. His friends were in.</p>
+                <p>By the end of the night, four teams had been drafted and Fantasy Fights — without knowing it yet — had been born. What followed was four years of iteration: Excel spreadsheets, then Facebook tracking, then a dedicated website, and now a full platform.</p>
+                <p><strong>The game we built for ourselves turned out to be the game the world was waiting for.</strong></p>
+              </div>
+              <div class="about-story-bullets">
+                <div class="about-story-bullet">
+                  <div class="about-story-bullet-icon">📋</div>
+                  <div>
+                    <h4>The Original Draft Sheet</h4>
+                    <p>A printed list of fighters and a snake draft that took less than an hour. Season 1 had 19 fighters per team across six divisions — tracked entirely in Excel.</p>
+                  </div>
+                </div>
+                <div class="about-story-bullet">
+                  <div class="about-story-bullet-icon">🌐</div>
+                  <div>
+                    <h4>World's First</h4>
+                    <p>After extensive research, the founders confirmed what they suspected: no dedicated fantasy boxing platform existed anywhere in the world. They were building from scratch.</p>
+                  </div>
+                </div>
+                <div class="about-story-bullet">
+                  <div class="about-story-bullet-icon">🥊</div>
+                  <div>
+                    <h4>Built by Fans, for Fans</h4>
+                    <p>Every feature — H2H matchups, the star rating system, weight divisions, the draft — was designed by people who love boxing, not by an algorithm.</p>
+                  </div>
+                </div>
+                <div class="about-story-bullet">
+                  <div class="about-story-bullet-icon">🚀</div>
+                  <div>
+                    <h4>Five Seasons of Proof</h4>
+                    <p>The concept has been battle-tested every year since 2021, with the mechanics, scoring balance, and league structure refined through real competition.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="about-timeline-section">
+              <div class="about-section-header">
+                <div class="about-section-label">Season History</div>
+                <div class="about-section-title">Five Years of Fantasy Fights</div>
+                <div class="about-section-subtitle">Every season brought new managers, new features, and a bigger champion.</div>
+              </div>
+              <div class="about-timeline">
+                <div class="about-timeline-card">
+                  <div class="about-timeline-year-col">
+                    <div class="about-timeline-year">2021</div>
+                    <div class="about-timeline-season">Season 1</div>
+                  </div>
+                  <div class="about-timeline-body">
+                    <h3>The Foundation Year</h3>
+                    <p>Four friends, one draft sheet. Each manager drafted 19 fighters across six divisions plus an "X-Factor" pick. Tracked via Excel and Facebook, the season covered Kambosos over Lopez, Usyk over Joshua, and the wars between Charlo–Castaño and Chocolatito–Estrada.</p>
+                    <div class="about-timeline-tags">
+                      <span class="about-tag">4 Managers</span>
+                      <span class="about-tag">19 Fighters/Team</span>
+                      <span class="about-tag">6 Divisions</span>
+                      <span class="about-tag">Excel + Facebook</span>
+                    </div>
+                  </div>
+                  <div class="about-champion-box">
+                    <div class="about-champion-trophy">🏆</div>
+                    <div class="about-champion-label">Champion</div>
+                    <div class="about-champion-name">Dom</div>
+                    <div class="about-champion-stat">32–2 · 244 pts</div>
+                  </div>
+                </div>
+                <div class="about-timeline-card">
+                  <div class="about-timeline-year-col">
+                    <div class="about-timeline-year">2022</div>
+                    <div class="about-timeline-season">Season 2</div>
+                  </div>
+                  <div class="about-timeline-body">
+                    <h3>Innovation &amp; Expansion</h3>
+                    <p>The league grew to seven teams and introduced the <strong>Head-to-Head scoring system</strong> — when two managers' fighters meet in the ring, both earn double points. This one mechanic transformed strategy overnight. Featured Charlo–Castaño II, Joshua–Usyk II, and the historic Taylor vs. Serrano.</p>
+                    <div class="about-timeline-tags">
+                      <span class="about-tag">7 Managers</span>
+                      <span class="about-tag">21 Fighters/Team</span>
+                      <span class="about-tag about-tag-red">H2H Introduced</span>
+                      <span class="about-tag">Women's Slot Added</span>
+                    </div>
+                  </div>
+                  <div class="about-champion-box">
+                    <div class="about-champion-trophy">🏆</div>
+                    <div class="about-champion-label">Champion</div>
+                    <div class="about-champion-name">Gus</div>
+                    <div class="about-champion-stat">31–5 · 315 pts</div>
+                  </div>
+                </div>
+                <div class="about-timeline-card">
+                  <div class="about-timeline-year-col">
+                    <div class="about-timeline-year">2023</div>
+                    <div class="about-timeline-season">Season 3</div>
+                  </div>
+                  <div class="about-timeline-body">
+                    <h3>Digital Transformation</h3>
+                    <p>Fantasy Fights went online with the launch of <strong>fantasyfights.live</strong>, replacing Excel and Facebook for good. The league hit eight teams with 20 fighters each, women's boxing integrated across all divisions. Spence–Crawford, Tank vs. Garcia, and Usyk–Dubois headlined a stacked year. The season's first physical trophy — a personalised stubby holder — was awarded.</p>
+                    <div class="about-timeline-tags">
+                      <span class="about-tag">8 Managers</span>
+                      <span class="about-tag">20 Fighters/Team</span>
+                      <span class="about-tag about-tag-blue">Website Launched</span>
+                      <span class="about-tag about-tag-blue">First Trophy</span>
+                    </div>
+                  </div>
+                  <div class="about-champion-box">
+                    <div class="about-champion-trophy">🏆</div>
+                    <div class="about-champion-label">Champion</div>
+                    <div class="about-champion-name">Ash</div>
+                    <div class="about-champion-stat">8–1 H2H · 337 pts</div>
+                  </div>
+                </div>
+                <div class="about-timeline-card">
+                  <div class="about-timeline-year-col">
+                    <div class="about-timeline-year">2024</div>
+                    <div class="about-timeline-season">Season 4</div>
+                  </div>
+                  <div class="about-timeline-body">
+                    <h3>The H2H Record</h3>
+                    <p>The league tightened to six managers — and with a smaller fighter pool, every H2H became even more decisive. The champion delivered a historic <strong>10 Head-to-Head wins</strong> across the season, a record made even more impressive by the compressed format.</p>
+                    <div class="about-timeline-tags">
+                      <span class="about-tag">6 Managers</span>
+                      <span class="about-tag about-tag-red">Record 10 H2H Wins</span>
+                    </div>
+                  </div>
+                  <div class="about-champion-box">
+                    <div class="about-champion-trophy">🏆</div>
+                    <div class="about-champion-label">Champion</div>
+                    <div class="about-champion-name">Pat</div>
+                    <div class="about-champion-stat">10 H2Hs · Record</div>
+                  </div>
+                </div>
+                <div class="about-timeline-card">
+                  <div class="about-timeline-year-col">
+                    <div class="about-timeline-year">2025</div>
+                    <div class="about-timeline-season">Season 5</div>
+                  </div>
+                  <div class="about-timeline-body">
+                    <h3>Back to Eight</h3>
+                    <p>Two new managers — Kieran and Elyse — joined, expanding the league back to eight. H2H matchups proved the decisive factor once more, with the champion securing the year-high nine H2H wins in a masterclass of draft strategy and fight selection.</p>
+                    <div class="about-timeline-tags">
+                      <span class="about-tag">8 Managers</span>
+                      <span class="about-tag about-tag-blue">Kieran &amp; Elyse Join</span>
+                      <span class="about-tag about-tag-red">9 H2H Wins</span>
+                    </div>
+                  </div>
+                  <div class="about-champion-box">
+                    <div class="about-champion-trophy">🏆</div>
+                    <div class="about-champion-label">Champion</div>
+                    <div class="about-champion-name">Dom</div>
+                    <div class="about-champion-stat">9 H2Hs · Year High</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Platform / Scoring -->
+            <div class="about-section-header">
+              <div class="about-section-label">The Platform</div>
+              <div class="about-section-title">Scoring That Rewards Real Boxing Knowledge</div>
+              <div class="about-section-subtitle">Five seasons of refinement have produced a points system that separates genuine expertise from guesswork.</div>
+            </div>
+            <div class="about-two-col" style="margin-bottom:40px;">
+              <div class="about-scoring-table">
+                <div class="about-scoring-table-head">🥊 Points Breakdown</div>
+                <div class="about-scoring-row">
+                  <div class="about-scoring-row-label"><span class="about-scoring-row-icon">✅</span> Win</div>
+                  <div class="about-scoring-row-pts">+3 pts</div>
+                </div>
+                <div class="about-scoring-row">
+                  <div class="about-scoring-row-label"><span class="about-scoring-row-icon">💥</span> KO Victory</div>
+                  <div class="about-scoring-row-pts">+1 bonus</div>
+                </div>
+                <div class="about-scoring-row">
+                  <div class="about-scoring-row-label"><span class="about-scoring-row-icon">❌</span> KO Loss</div>
+                  <div class="about-scoring-row-pts">−1 pt</div>
+                </div>
+                <div class="about-scoring-row">
+                  <div class="about-scoring-row-label"><span class="about-scoring-row-icon">🏅</span> Major Belt (WBA / WBC / IBF / WBO)</div>
+                  <div class="about-scoring-row-pts">+1 per belt</div>
+                </div>
+                <div class="about-scoring-row">
+                  <div class="about-scoring-row-label"><span class="about-scoring-row-icon">⭐</span> BoxRec Star Rating</div>
+                  <div class="about-scoring-row-pts">+1 per star</div>
+                </div>
+                <div class="about-scoring-row featured">
+                  <div class="about-scoring-row-label"><span class="about-scoring-row-icon">⚡</span> Head-to-Head Matchup</div>
+                  <div class="about-scoring-row-pts">2× all points</div>
+                </div>
+              </div>
+              <div class="about-platform-info">
+                <p>Fantasy Fights isn't about luck. <strong>Draft 20 fighters</strong> across five weight divisions using a snake draft. Your roster earns points every time a fighter competes, based entirely on real-world outcomes.</p>
+                <p>The <strong>H2H bonus</strong> is the game's masterstroke — when two managers' fighters meet in the ring, both earn double points. Drafting the sport's most active, elite fighters isn't just smart, it's essential to winning.</p>
+                <p>Bigger belts, bigger fights, bigger stars — the scoring mirrors what actually matters in boxing, rewarding the managers who know the sport best.</p>
+                <div class="about-mini-stats">
+                  <div class="about-mini-stat">
+                    <div class="about-mini-stat-num">20</div>
+                    <div class="about-mini-stat-label">Fighters/Team</div>
+                  </div>
+                  <div class="about-mini-stat">
+                    <div class="about-mini-stat-num">5</div>
+                    <div class="about-mini-stat-label">Weight Divisions</div>
+                  </div>
+                  <div class="about-mini-stat">
+                    <div class="about-mini-stat-num">2×</div>
+                    <div class="about-mini-stat-label">H2H Multiplier</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Market -->
+            <div class="about-market-section">
+              <div class="about-section-header">
+                <div class="about-section-label">The Opportunity</div>
+                <div class="about-section-title">A $20B Market With Zero Competition</div>
+                <div class="about-section-subtitle">Fantasy sports is one of the fastest-growing entertainment categories on the planet. Boxing has 500 million fans. No one had ever combined them — until now.</div>
+              </div>
+              <div class="about-market-grid">
+                <div class="about-market-card">
+                  <div class="about-market-card-label">Global Fantasy Sports Market</div>
+                  <div class="about-market-card-number">$20.3B</div>
+                  <p>Total market value, projected to grow at 14.1% CAGR through 2030. Fantasy sports is mainstream entertainment, not a niche.</p>
+                </div>
+                <div class="about-market-card">
+                  <div class="about-market-card-label">Existing Fantasy Players (US)</div>
+                  <div class="about-market-card-number">60M+</div>
+                  <p>Active fantasy sports players who already understand how the game works — and currently have no boxing option to play.</p>
+                </div>
+                <div class="about-market-card">
+                  <div class="about-market-card-label">Direct Competitors Worldwide</div>
+                  <div class="about-market-card-number">Zero</div>
+                  <p>No dedicated fantasy boxing platform exists anywhere in the world. Fantasy Fights has a five-year head start in an untouched market.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vision -->
+            <div class="about-vision-section">
+              <div class="about-section-header">
+                <div class="about-section-label">Where We're Going</div>
+                <div class="about-section-title">From Private League to Global Platform</div>
+                <div class="about-section-subtitle">Five seasons of proof. One clear direction.</div>
+              </div>
+              <div class="about-vision-grid">
+                <div class="about-vision-text">
+                  <p>Five seasons of gameplay have produced something rare: <strong>a product that has been tested, refined, and validated by real users</strong> before a single line of investor-grade code was written. The mechanics work. The engagement is high. The community is passionate.</p>
+                  <p>The next phase is scale. We're building the infrastructure to take Fantasy Fights from a cult favourite among serious boxing fans to the platform of record for the sport's growing global audience — riding boxing's resurgence through Canelo, Crawford, Fury, and the next generation of stars.</p>
+                  <p><strong>Our goal: become the ESPN Fantasy of boxing</strong> — the default destination where boxing fans bring their knowledge, their stakes, and their community.</p>
+                </div>
+                <div class="about-vision-pillars">
+                  <div class="about-pillar">
+                    <div class="about-pillar-icon">🎯</div>
+                    <div>
+                      <h4>First-Mover Advantage</h4>
+                      <p>Five years of operation before any competitor has entered the space. The brand, the domain, and the community are already established.</p>
+                    </div>
+                  </div>
+                  <div class="about-pillar">
+                    <div class="about-pillar-icon">⚙️</div>
+                    <div>
+                      <h4>Proven Gameplay Engine</h4>
+                      <p>The scoring system and H2H mechanic have been iterated through five real seasons with real players. It's not theoretical — it works.</p>
+                    </div>
+                  </div>
+                  <div class="about-pillar">
+                    <div class="about-pillar-icon">📱</div>
+                    <div>
+                      <h4>Platform Ready to Scale</h4>
+                      <p>The website is live. A mobile app is in development. Built from day one for public leagues, global users, and monetisation.</p>
+                    </div>
+                  </div>
+                  <div class="about-pillar">
+                    <div class="about-pillar-icon">💰</div>
+                    <div>
+                      <h4>Clear Monetisation Path</h4>
+                      <p>Freemium subscriptions, paid tournaments with cash prizes, and brand partnerships — multiple revenue streams from a high-intent audience.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="about-cta-banner">
+              <h2>🥊 Ready to Build Your Team?</h2>
+              <p>Whether you're a boxing obsessive who's been waiting for this or a fantasy sports veteran after a new sport — Fantasy Fights is free to play.</p>
+              <div class="about-cta-actions">
+                <a onclick="showPage('home')" class="about-btn about-btn-red" style="cursor:pointer;">Go to Home</a>
+                <a href="mailto:contact@fantasyfights.live" class="about-btn about-btn-outline">Get in Touch</a>
+              </div>
+            </div>
+
+          </div>
         </div>
     </main>
 
@@ -2852,6 +3368,7 @@
                     if (userRole === 'commissioner') renderSetup();
                     else showPage('home');
                     break;
+                case 'about': break;
             }
         }
 
