@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Results – Fantasy Fights</title>
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #f2f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* ══════════════════ HEADER ══════════════════ */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .header-logo img {
+            height: 42px;
+            width: auto;
+        }
+        .header-nav {
+            display: flex;
+            gap: 4px;
+        }
+        .header-nav a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .header-nav a:hover { color: #e63333; background: #fef2f2; }
+        .header-nav a.active { color: #e63333; background: #fef2f2; }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #999;
+            font-weight: 600;
+        }
+        .refresh-btn {
+            padding: 7px 14px;
+            background: #e63333;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .refresh-btn:hover { background: #cc2929; transform: translateY(-1px); }
+        .refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* ══════════════════ HERO ══════════════════ */
+        .hero {
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a30 45%, #12233a 100%);
+            padding: 64px 24px 56px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(230,51,51,0.15) 0%, transparent 70%);
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -80px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(102,126,234,0.12) 0%, transparent 70%);
+        }
+        .hero-inner { position: relative; z-index: 1; }
+        .hero-eyebrow {
+            display: inline-block;
+            background: rgba(230,51,51,0.15);
+            border: 1px solid rgba(230,51,51,0.3);
+            color: #e63333;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 5px 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1.5px;
+            line-height: 1.05;
+            margin-bottom: 12px;
+        }
+        .hero h1 span { color: #e63333; }
+        .hero-sub {
+            font-size: 16px;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+        .hero-badges {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+        }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            flex-shrink: 0;
+            animation: livePulse 2s infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+            50% { opacity: 0.8; transform: scale(1.2); box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+        }
+
+        /* ══════════════════ LAYOUT ══════════════════ */
+        .content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 44px 24px 60px;
+        }
+        .section-hd {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a2e;
+            letter-spacing: -0.3px;
+        }
+        .section-sub {
+            font-size: 13px;
+            color: #aaa;
+            font-weight: 600;
+        }
+
+        /* ══════════════════ STANDINGS GRID ══════════════════ */
+        .standings-wrap { margin-bottom: 52px; }
+        .standings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 16px;
+        }
+
+        .team-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 22px 22px 18px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.22s, box-shadow 0.22s;
+            cursor: default;
+        }
+        .team-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+        }
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: var(--tc);
+            border-radius: 18px 18px 0 0;
+        }
+        .team-card.rank-1 { border-color: rgba(245,158,11,0.4); background: linear-gradient(160deg, #fffbeb 0%, #fff 60%); }
+        .team-card.rank-2 { border-color: rgba(148,163,184,0.35); }
+        .team-card.rank-3 { border-color: rgba(180,83,9,0.25); }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .card-rank {
+            font-size: 30px;
+            line-height: 1;
+        }
+        .card-rank-num {
+            font-size: 14px;
+            font-weight: 800;
+            color: #ccc;
+            line-height: 1;
+            margin-top: 4px;
+        }
+        .card-team-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--tc);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
+        }
+        .card-pts {
+            font-size: 52px;
+            font-weight: 900;
+            color: #1a1a2e;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+        .card-pts-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #bbb;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        .card-divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 16px 0;
+        }
+        .card-stats {
+            display: flex;
+            gap: 0;
+        }
+        .card-stat {
+            flex: 1;
+            text-align: center;
+        }
+        .card-stat + .card-stat {
+            border-left: 1px solid #f0f0f0;
+        }
+        .cs-value {
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .cs-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #bbb;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ══════════════════ FIGHTER TABLE ══════════════════ */
+        .fighters-wrap {}
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .filter-btn {
+            padding: 7px 18px;
+            border: 2px solid #e5e7eb;
+            background: #fff;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s;
+            color: #888;
+            white-space: nowrap;
+        }
+        .filter-btn:hover {
+            border-color: var(--tc);
+            color: var(--tc);
+            background: #fff;
+        }
+        .filter-btn.active {
+            background: var(--tc);
+            border-color: var(--tc);
+            color: #fff;
+            box-shadow: 0 3px 10px color-mix(in srgb, var(--tc) 35%, transparent);
+        }
+
+        .table-wrap {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .table-scroll { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 780px;
+        }
+        thead th {
+            background: #1a1a2e;
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 14px 16px;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: color 0.15s;
+        }
+        thead th:hover { color: rgba(255,255,255,0.9); }
+        thead th.sorted { color: #e63333; }
+        thead th.sorted::after { content: ' ↓'; }
+        thead th.sorted.asc::after { content: ' ↑'; }
+        thead th.center { text-align: center; }
+
+        tbody tr {
+            border-bottom: 1px solid #f5f5f7;
+            transition: background 0.12s;
+        }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #fafafa; }
+
+        td {
+            padding: 13px 16px;
+            font-size: 14px;
+            color: #333;
+            vertical-align: middle;
+        }
+        td.center { text-align: center; }
+        td.right { text-align: right; }
+
+        .rank-cell {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ccc;
+            min-width: 36px;
+            text-align: center;
+        }
+        .rank-medal { font-size: 20px; }
+
+        .fighter-name {
+            font-weight: 700;
+            color: #1a1a2e;
+            white-space: nowrap;
+        }
+        .fighter-meta {
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .draft-tag {
+            font-size: 11px;
+            color: #bbb;
+            font-weight: 600;
+        }
+        .upcoming-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            background: #eff6ff;
+            color: #2563eb;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .team-pill {
+            display: inline-block;
+            padding: 3px 11px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            background: var(--tc);
+        }
+
+        .div-badge {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+        }
+        .country-cell {
+            font-size: 13px;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .stat-num {
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .stat-none { color: #ddd; }
+        .stat-win  { color: #16a34a; }
+        .stat-ko   { color: #7c3aed; }
+        .stat-loss { color: #dc2626; }
+        .stat-draw { color: #ea580c; }
+        .stat-norm { color: #555; }
+
+        .pts-cell {
+            font-size: 20px;
+            font-weight: 900;
+            color: #1a1a2e;
+            text-align: right;
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+        .pts-zero { color: #ddd; font-size: 14px; font-weight: 600; }
+
+        /* ══════════════════ STATES ══════════════════ */
+        .state-center {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid #f0f0f0;
+            border-top-color: #e63333;
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+            margin: 0 auto 18px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .state-icon { font-size: 48px; margin-bottom: 16px; }
+        .state-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #1a1a2e; }
+        .state-body { font-size: 14px; color: #888; max-width: 380px; margin: 0 auto 24px; line-height: 1.6; }
+        .btn-retry {
+            padding: 12px 28px;
+            background: #e63333;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-retry:hover { background: #cc2929; }
+
+        /* ══════════════════ FOOTER ══════════════════ */
+        footer {
+            text-align: center;
+            padding: 28px 24px;
+            font-size: 13px;
+            color: #bbb;
+            font-weight: 500;
+            border-top: 1px solid #e8e8ea;
+        }
+        footer a { color: #999; text-decoration: none; }
+        footer a:hover { color: #e63333; }
+
+        /* ══════════════════ RESPONSIVE ══════════════════ */
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 34px; }
+            .standings-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 560px) {
+            .hero h1 { font-size: 26px; letter-spacing: -0.5px; }
+            .hero { padding: 44px 16px 36px; }
+            .content { padding: 28px 16px 48px; }
+            .standings-grid { grid-template-columns: 1fr; }
+            .header-nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="header-logo">
+            <img src="Fantasy Fights Logo.png" alt="Fantasy Fights">
+        </a>
+        <nav class="header-nav">
+            <a href="index.html">App</a>
+            <a href="results.html" class="active">2026 Results</a>
+            <a href="about.html">Our Story</a>
+        </nav>
+        <div class="header-right">
+            <span id="lastUpdatedLabel" style="display:none;">Updated <span id="lastUpdated">—</span></span>
+            <button class="refresh-btn" onclick="loadData()" id="refreshBtn">
+                <span id="refreshIcon">↻</span> Refresh
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+    <div class="hero-inner">
+        <div class="hero-eyebrow">Fantasy Boxing League</div>
+        <h1>2026 <span>Season</span> Standings</h1>
+        <p class="hero-sub">Real fights · Real points · Live from Google Sheets</p>
+        <div class="hero-badges">
+            <div class="live-badge">
+                <div class="live-dot"></div>
+                <span>LIVE DATA · Auto-refreshes every 5 min</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ LOADING ══════════ -->
+<div id="loadingState" class="state-center">
+    <div class="spinner"></div>
+    <p style="color:#888;font-size:15px;font-weight:600;">Loading 2026 season data…</p>
+</div>
+
+<!-- ══════════ ERROR ══════════ -->
+<div id="errorState" style="display:none;" class="state-center">
+    <div class="state-icon">⚠️</div>
+    <h2 class="state-title">Couldn't load data</h2>
+    <p class="state-body">
+        Make sure the Google Sheet is shared as <strong>"Anyone with the link can view"</strong>,
+        then try again.
+    </p>
+    <button class="btn-retry" onclick="loadData()">Try Again</button>
+</div>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<div id="mainContent" style="display:none;">
+    <div class="content">
+
+        <!-- STANDINGS -->
+        <div class="standings-wrap">
+            <div class="section-hd">
+                <h2 class="section-title">🏆 Team Standings</h2>
+                <span class="section-sub" id="standingsSub"></span>
+            </div>
+            <div class="standings-grid" id="standingsGrid"></div>
+        </div>
+
+        <!-- FIGHTER TABLE -->
+        <div class="fighters-wrap">
+            <div class="section-hd" style="margin-bottom:12px;">
+                <h2 class="section-title">⚡ Fighter Leaderboard</h2>
+                <span class="section-sub" id="fighterCountLabel"></span>
+            </div>
+            <div class="filter-bar" id="filterBar"></div>
+            <div class="table-wrap">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="center" onclick="sortTable('rank')" data-key="rank">#</th>
+                                <th onclick="sortTable('name')" data-key="name">Fighter</th>
+                                <th onclick="sortTable('team')" data-key="team">Team</th>
+                                <th onclick="sortTable('division')" data-key="division">Division</th>
+                                <th>Country</th>
+                                <th class="center" onclick="sortTable('f')" data-key="f" title="Total Fights">F</th>
+                                <th class="center" onclick="sortTable('w')" data-key="w" title="Wins">W</th>
+                                <th class="center" onclick="sortTable('ko')" data-key="ko" title="KO Wins">KO</th>
+                                <th class="center" onclick="sortTable('l')" data-key="l" title="Losses">L</th>
+                                <th class="center" onclick="sortTable('kod')" data-key="kod" title="KO Losses">KO'd</th>
+                                <th class="center" onclick="sortTable('d')" data-key="d" title="Draws">D</th>
+                                <th onclick="sortTable('pts')" data-key="pts" style="text-align:right" title="Total Points">Pts</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fighterBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+    Data sourced live from <a href="https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc" target="_blank" rel="noopener">Google Sheets</a>
+    &nbsp;·&nbsp; <a href="index.html">Fantasy Fights App</a>
+    &nbsp;·&nbsp; © 2026 Fantasy Fights
+</footer>
+
+<script>
+// ──────────────────────────────────────────────────────────────────────
+// CONFIG
+// ──────────────────────────────────────────────────────────────────────
+const SHEET_URL =
+    'https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc/export?format=csv&gid=1081462908';
+
+const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+const TEAM_COLORS = {
+    'Tom':     '#3b82f6',
+    'Pat':     '#16a34a',
+    'Mort':    '#ea580c',
+    'Kieran':  '#7c3aed',
+    'Dom':     '#dc2626',
+    'Elyse':   '#db2777',
+    'Ash':     '#0891b2',
+    'Brad':    '#ca8a04',
+    'Rejects': '#6b7280'
+};
+
+const DIV_STYLES = {
+    'Lights':  { bg: '#fefce8', color: '#713f12' },
+    'Welters': { bg: '#eff6ff', color: '#1e3a8a' },
+    'Smalls':  { bg: '#f0fdf4', color: '#14532d' },
+    'Middles': { bg: '#fff7ed', color: '#7c2d12' },
+    'Heavies': { bg: '#fdf2f8', color: '#831843' }
+};
+
+const FLAGS = {
+    'Mexico':              '🇲🇽', 'United Kingdom':   '🇬🇧',
+    'USA':                 '🇺🇸', 'Dominican Republic':'🇩🇴',
+    'Puerto Rico':         '🇵🇷', 'Australia':        '🇦🇺',
+    'Cuba':                '🇨🇺', 'Germany':          '🇩🇪',
+    'Ireland':             '🇮🇪', 'Japan':            '🇯🇵',
+    'Croatia':             '🇭🇷', 'Ukraine':          '🇺🇦',
+    'Russia':              '🇷🇺', 'New Zealand':      '🇳🇿',
+    'Philippines':         '🇵🇭', 'Uzbekistan':       '🇺🇿',
+    'France':              '🇫🇷', 'Canada':           '🇨🇦',
+    'Nigeria':             '🇳🇬', 'Guatemala':        '🇬🇹',
+    'Congo':               '🇨🇩', 'Kazakhstan':       '🇰🇿'
+};
+
+const MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' };
+
+// ──────────────────────────────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────────────────────────────
+let allFighters   = [];
+let activeFilter  = 'All';
+let sortKey       = 'pts';
+let sortAsc       = false; // false = descending
+
+// ──────────────────────────────────────────────────────────────────────
+// CSV PARSER  (handles quoted fields with commas)
+// ──────────────────────────────────────────────────────────────────────
+function parseCSVLine(line) {
+    const cols = [];
+    let cur = '', inQ = false;
+    for (const ch of line) {
+        if (ch === '"')       { inQ = !inQ; }
+        else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else                  { cur += ch; }
+    }
+    cols.push(cur.trim());
+    return cols;
+}
+
+function parseCSV(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const fighters = [];
+    for (let i = 1; i < lines.length; i++) {
+        const c = parseCSVLine(lines[i]);
+        if (!c[1] || !c[2]) continue;
+        const team = c[1].trim();
+        if (!team) continue;
+        fighters.push({
+            draftRd:  parseInt(c[0])  || 0,
+            team,
+            name:     c[2].trim(),
+            division: c[3].trim(),
+            country:  c[4].trim(),
+            upcoming: c[5].trim(),
+            f:        parseInt(c[6])  || 0,
+            w:        parseInt(c[7])  || 0,
+            ko:       parseInt(c[8])  || 0,
+            l:        parseInt(c[9])  || 0,
+            kod:      Math.abs(parseInt(c[10]) || 0),  // stored as negative; we show absolute
+            d:        parseInt(c[11]) || 0,
+            pts:      parseInt(c[15]) || 0
+        });
+    }
+    return fighters;
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// COMPUTE TEAM STANDINGS
+// ──────────────────────────────────────────────────────────────────────
+function computeStandings(fighters) {
+    const map = {};
+    fighters.forEach(f => {
+        if (!map[f.team]) {
+            map[f.team] = { name: f.team, pts: 0, w: 0, ko: 0, l: 0, f: 0, roster: 0 };
+        }
+        const t = map[f.team];
+        t.pts    += f.pts;
+        t.w      += f.w;
+        t.ko     += f.ko;
+        t.l      += f.l;
+        t.f      += f.f;
+        t.roster += 1;
+    });
+    return Object.values(map).sort((a, b) => b.pts - a.pts || a.name.localeCompare(b.name));
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// RENDER — STANDINGS
+// ──────────────────────────────────────────────────────────────────────
+function renderStandings(standings) {
+    const grid = document.getElementById('standingsGrid');
+    const sub  = document.getElementById('standingsSub');
+    sub.textContent = `${standings.length} teams`;
+
+    grid.innerHTML = standings.map((t, i) => {
+        const rank = i + 1;
+        const color = TEAM_COLORS[t.name] || '#6b7280';
+        const medal = MEDALS[rank] || '';
+        const rankClass = rank <= 3 ? `rank-${rank}` : '';
+        const rankDisplay = medal
+            ? `<span class="card-rank">${medal}</span>`
+            : `<span class="card-rank-num">${rank}</span>`;
+
+        return `
+<div class="team-card ${rankClass}" style="--tc:${color}">
+    <div class="card-top">
+        <div>
+            <div class="card-team-name">${escHtml(t.name)}</div>
+            <div class="card-pts">${t.pts}</div>
+            <div class="card-pts-label">Points</div>
+        </div>
+        ${rankDisplay}
+    </div>
+    <div class="card-divider"></div>
+    <div class="card-stats">
+        <div class="card-stat">
+            <div class="cs-value" style="color:#16a34a">${t.w}</div>
+            <div class="cs-label">Wins</div>
+        </div>
+        <div class="card-stat">
+            <div class="cs-value" style="color:#7c3aed">${t.ko}</div>
+            <div class="cs-label">KOs</div>
+        </div>
+        <div class="card-stat">
+            <div class="cs-value" style="color:#dc2626">${t.l}</div>
+            <div class="cs-label">Losses</div>
+        </div>
+        <div class="card-stat">
+            <div class="cs-value" style="color:#555">${t.f}</div>
+            <div class="cs-label">Fights</div>
+        </div>
+        <div class="card-stat">
+            <div class="cs-value" style="color:#aaa">${t.roster}</div>
+            <div class="cs-label">Roster</div>
+        </div>
+    </div>
+</div>`;
+    }).join('');
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// RENDER — FILTER BAR
+// ──────────────────────────────────────────────────────────────────────
+function renderFilterBar() {
+    const bar = document.getElementById('filterBar');
+    const teams = ['All', ...Object.keys(TEAM_COLORS)];
+    bar.innerHTML = teams.map(team => {
+        const color = TEAM_COLORS[team] || '#e63333';
+        const active = team === activeFilter ? 'active' : '';
+        return `<button class="filter-btn ${active}" style="--tc:${color}" onclick="setFilter('${team}')">${escHtml(team)}</button>`;
+    }).join('');
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// RENDER — TABLE
+// ──────────────────────────────────────────────────────────────────────
+function renderTable() {
+    // Filter
+    const base = activeFilter === 'All'
+        ? allFighters
+        : allFighters.filter(f => f.team === activeFilter);
+
+    // Sort
+    const sorted = [...base].sort((a, b) => {
+        let av = a[sortKey], bv = b[sortKey];
+        if (typeof av === 'string') {
+            const cmp = av.localeCompare(bv);
+            return sortAsc ? cmp : -cmp;
+        }
+        // For numeric, tie-break by pts then name
+        if (av !== bv) return sortAsc ? av - bv : bv - av;
+        if (a.pts !== b.pts) return b.pts - a.pts;
+        return a.name.localeCompare(b.name);
+    });
+
+    document.getElementById('fighterCountLabel').textContent =
+        `${sorted.length} fighter${sorted.length !== 1 ? 's' : ''}`;
+
+    // Assign display ranks based on pts (dense ranking)
+    let rank = 1, prevPts = null;
+    sorted.forEach((f, i) => {
+        if (sortKey === 'pts') {
+            if (f.pts !== prevPts) { rank = i + 1; prevPts = f.pts; }
+            f._rank = rank;
+        } else {
+            f._rank = i + 1;
+        }
+    });
+
+    // Update sorted header highlights
+    document.querySelectorAll('thead th[data-key]').forEach(th => {
+        th.classList.remove('sorted', 'asc');
+        if (th.dataset.key === sortKey) {
+            th.classList.add('sorted');
+            if (sortAsc) th.classList.add('asc');
+        }
+    });
+
+    const body = document.getElementById('fighterBody');
+    body.innerHTML = sorted.map(f => {
+        const color  = TEAM_COLORS[f.team] || '#6b7280';
+        const ds     = DIV_STYLES[f.division] || { bg: '#f5f5f5', color: '#666' };
+        const flag   = FLAGS[f.country] || '🌐';
+        const medal  = MEDALS[f._rank];
+        const rankHtml = medal
+            ? `<span class="rank-medal">${medal}</span>`
+            : `<span>${f._rank}</span>`;
+
+        const upcomingHtml = f.upcoming
+            ? `<span class="upcoming-tag">📅 ${escHtml(f.upcoming)}</span>`
+            : '';
+
+        const stat = (val, cls) =>
+            val
+                ? `<span class="stat-num ${cls}">${val}</span>`
+                : `<span class="stat-num stat-none">—</span>`;
+
+        return `
+<tr>
+    <td class="rank-cell">${rankHtml}</td>
+    <td>
+        <div class="fighter-name">${escHtml(f.name)}</div>
+        <div class="fighter-meta">
+            <span class="draft-tag">Rd ${f.draftRd}</span>
+            ${upcomingHtml}
+        </div>
+    </td>
+    <td><span class="team-pill" style="--tc:${color}">${escHtml(f.team)}</span></td>
+    <td><span class="div-badge" style="background:${ds.bg};color:${ds.color}">${escHtml(f.division)}</span></td>
+    <td class="country-cell">${flag} ${escHtml(f.country)}</td>
+    <td class="center">${stat(f.f,  'stat-norm')}</td>
+    <td class="center">${stat(f.w,  'stat-win')}</td>
+    <td class="center">${stat(f.ko, 'stat-ko')}</td>
+    <td class="center">${stat(f.l,  'stat-loss')}</td>
+    <td class="center">${stat(f.kod,'stat-loss')}</td>
+    <td class="center">${stat(f.d,  'stat-draw')}</td>
+    <td class="${f.pts ? 'pts-cell' : 'pts-cell pts-zero'}">${f.pts || '0'}</td>
+</tr>`;
+    }).join('');
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// INTERACTIONS
+// ──────────────────────────────────────────────────────────────────────
+function setFilter(team) {
+    activeFilter = team;
+    renderFilterBar();
+    renderTable();
+}
+
+function sortTable(key) {
+    if (sortKey === key) {
+        sortAsc = !sortAsc;
+    } else {
+        sortKey = key;
+        // Default: strings ascending, numbers descending
+        sortAsc = (key === 'name' || key === 'team' || key === 'division' || key === 'country');
+    }
+    renderTable();
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// DATA FETCH
+// ──────────────────────────────────────────────────────────────────────
+async function loadData() {
+    const btn  = document.getElementById('refreshBtn');
+    const icon = document.getElementById('refreshIcon');
+
+    btn.disabled = true;
+    icon.style.display = 'inline-block';
+    icon.style.animation = 'spin 0.75s linear infinite';
+
+    try {
+        const res = await fetch(SHEET_URL + '&_cb=' + Date.now()); // cache-bust
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text = await res.text();
+
+        // If Google returned a login page instead of CSV
+        if (text.trim().startsWith('<')) {
+            throw new Error('Sheet not public — got HTML instead of CSV');
+        }
+
+        allFighters = parseCSV(text);
+
+        const standings = computeStandings(allFighters);
+        renderStandings(standings);
+        renderFilterBar();
+        renderTable();
+
+        // Show timestamp
+        const now = new Date();
+        document.getElementById('lastUpdated').textContent =
+            now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('lastUpdatedLabel').style.display = 'inline';
+
+        // Show content, hide states
+        document.getElementById('loadingState').style.display  = 'none';
+        document.getElementById('errorState').style.display    = 'none';
+        document.getElementById('mainContent').style.display   = 'block';
+
+    } catch (err) {
+        console.error('[Fantasy Fights] Failed to load data:', err);
+        document.getElementById('loadingState').style.display  = 'none';
+        document.getElementById('mainContent').style.display   = 'none';
+        document.getElementById('errorState').style.display    = 'block';
+    } finally {
+        btn.disabled = false;
+        icon.style.animation = '';
+    }
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// UTILS
+// ──────────────────────────────────────────────────────────────────────
+function escHtml(s) {
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+// ──────────────────────────────────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────────────────────────────────
+loadData();
+setInterval(loadData, REFRESH_INTERVAL);
+</script>
+</body>
+</html>
