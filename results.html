@@ -533,7 +533,6 @@
             <a href="index.html">Our Story</a>
         </nav>
         <div class="header-right">
-            <span id="lastUpdatedLabel" style="display:none;">Updated <span id="lastUpdated">—</span></span>
             <button class="refresh-btn" onclick="loadData()" id="refreshBtn">
                 <span id="refreshIcon">↻</span> Refresh
             </button>
@@ -546,7 +545,7 @@
     <div class="hero-inner">
         <div class="hero-eyebrow">Fantasy Boxing League</div>
         <h1>2026 <span>Season</span> Standings</h1>
-        <p class="hero-sub">Real fights · Real points · Live from Google Sheets</p>
+        <p class="hero-sub">Real fights · Real points</p>
         <div class="hero-badges">
             <div class="live-badge">
                 <div class="live-dot"></div>
@@ -566,10 +565,7 @@
 <div id="errorState" style="display:none;" class="state-center">
     <div class="state-icon">⚠️</div>
     <h2 class="state-title">Couldn't load data</h2>
-    <p class="state-body">
-        Make sure the Google Sheet is shared as <strong>"Anyone with the link can view"</strong>,
-        then try again.
-    </p>
+    <p class="state-body">There was a problem loading the data. Please try again.</p>
     <button class="btn-retry" onclick="loadData()">Try Again</button>
 </div>
 
@@ -623,8 +619,7 @@
 
 <!-- ══════════ FOOTER ══════════ -->
 <footer>
-    Data sourced live from <a href="https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc" target="_blank" rel="noopener">Google Sheets</a>
-    &nbsp;·&nbsp; <a href="index.html">Fantasy Fights App</a>
+    <a href="index.html">Fantasy Fights App</a>
     &nbsp;·&nbsp; © 2026 Fantasy Fights
 </footer>
 

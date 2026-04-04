@@ -2295,10 +2295,6 @@
             <div class="schedule-page">
                 <div class="schedule-top-bar">
                     <h2>📅 Full Schedule</h2>
-                    <div class="schedule-live-badge">
-                        <div class="schedule-live-dot"></div>
-                        Live from Google Sheets
-                    </div>
                 </div>
                 <div id="scheduleContainer">
                     <div style="text-align:center;padding:40px;color:#999;">
@@ -2314,7 +2310,6 @@
             <div class="ladder-section">
                 <div class="ladder-header" style="display:flex;align-items:center;justify-content:space-between;">
                     <span>League Ladder</span>
-                    <span id="ladderLastUpdated" style="font-size:11px;font-weight:400;color:rgba(255,255,255,0.65);"></span>
                 </div>
                 <div class="ladder-table-wrap">
                 <table class="ladder-table">
@@ -2443,16 +2438,12 @@
             <div id="rpErr" class="rp-state" style="display:none">
                 <div style="font-size:40px;margin-bottom:12px">⚠️</div>
                 <p style="font-weight:700;font-size:16px;margin-bottom:8px">Couldn't load data</p>
-                <p style="color:#888;font-size:13px;max-width:320px;margin:0 auto 16px">Make sure the Google Sheet is shared as "Anyone with the link can view"</p>
+                <p style="color:#888;font-size:13px;max-width:320px;margin:0 auto 16px">There was a problem loading the data. Please try again.</p>
                 <button class="rp-retry" onclick="rpLoad()">Try Again</button>
             </div>
 
             <div id="rpMain" style="display:none">
                 <div class="rp-topbar">
-                    <div class="rp-live-ind">
-                        <span class="rp-live-dot"></span>
-                        <span>LIVE · Updated <strong id="rpUpdated">—</strong> · auto-refreshes every 5 min</span>
-                    </div>
                     <button class="rp-refresh" id="rpRefreshBtn" onclick="rpLoad()">↻ Refresh</button>
                 </div>
 
@@ -2482,7 +2473,6 @@
                         </table>
                     </div>
                 </div>
-                <p class="rp-src">Data sourced live from <a href="https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc" target="_blank" rel="noopener">Google Sheets</a></p>
             </div>
         </div>
 
