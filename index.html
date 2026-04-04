@@ -2451,7 +2451,10 @@
                 .rp-fbtn:hover{border-color:var(--tc);color:var(--tc)}.rp-fbtn.on{background:var(--tc);border-color:var(--tc);color:#fff}
                 .rp-twrap{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden}
                 .rp-tscroll{overflow-x:auto}
-                .rp-table{width:100%;border-collapse:collapse;min-width:700px}
+                .rp-table{width:100%;border-collapse:collapse;min-width:900px}
+                .rp-sbelt{color:#b45309}
+                .rp-sstar{color:#a16207}
+                .rp-sh2h{color:#1d4ed8}
                 .rp-table thead th{background:#1a1a2e;color:rgba(255,255,255,.5);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:13px 14px;text-align:left;cursor:pointer;white-space:nowrap;user-select:none;transition:color .15s}
                 .rp-table thead th:hover{color:rgba(255,255,255,.9)}.rp-table thead th.rp-sorted{color:#e63333}
                 .rp-table thead th.rp-sorted::after{content:' ↓'}.rp-table thead th.rp-sorted.rp-asc::after{content:' ↑'}
@@ -2512,6 +2515,9 @@
                                 <th class="rp-tc" onclick="rpSort('l')" data-key="l" title="Losses">L</th>
                                 <th class="rp-tc" onclick="rpSort('kod')" data-key="kod" title="KO Losses">KO'd</th>
                                 <th class="rp-tc" onclick="rpSort('d')" data-key="d" title="Draws">D</th>
+                                <th class="rp-tc" onclick="rpSort('b')" data-key="b" title="Belts">🏆</th>
+                                <th class="rp-tc" onclick="rpSort('s')" data-key="s" title="Stars">⭐️</th>
+                                <th class="rp-tc" onclick="rpSort('h2h')" data-key="h2h" title="Head-to-Head">H2H</th>
                                 <th class="rp-tr" onclick="rpSort('pts')" data-key="pts" title="Total Points">Pts</th>
                             </tr></thead>
                             <tbody id="rpBody"></tbody>
@@ -4760,6 +4766,7 @@
                 division:c[3].trim(), country:c[4].trim(), upcoming:c[5].trim(),
                 f:parseInt(c[6])||0, w:parseInt(c[7])||0, ko:parseInt(c[8])||0,
                 l:parseInt(c[9])||0, kod:Math.abs(parseInt(c[10])||0), d:parseInt(c[11])||0,
+                b:parseInt(c[12])||0, s:parseInt(c[13])||0, h2h:parseInt(c[14])||0,
                 pts:parseInt(c[15])||0
             }));
         }
@@ -4840,6 +4847,9 @@
                     <td>${sn(f.l,'rp-sloss')}</td>
                     <td>${sn(f.kod,'rp-sloss')}</td>
                     <td>${sn(f.d,'rp-sdraw')}</td>
+                    <td>${sn(f.b,'rp-sbelt')}</td>
+                    <td>${sn(f.s,'rp-sstar')}</td>
+                    <td>${sn(f.h2h,'rp-sh2h')}</td>
                     <td class="rp-tr"><span class="${f.pts?'rp-pnum':'rp-pzero'}">${f.pts||'0'}</span></td>
                 </tr>`;
             }).join('');
