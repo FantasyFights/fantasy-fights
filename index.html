@@ -4485,6 +4485,12 @@
             return '⭐️'.repeat(count);
         }
 
+        function escHtml(s) {
+            const d = document.createElement('div');
+            d.textContent = String(s == null ? '' : s);
+            return d.innerHTML;
+        }
+
         function parseScheduleRow(date, desc, stars, preview) {
             const d = (desc || '').trim();
             if (!d) return null;
