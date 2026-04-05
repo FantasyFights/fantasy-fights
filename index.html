@@ -4946,14 +4946,19 @@
                 }
 
                 container.innerHTML = rows.map(row => {
-                    const name   = String(gvizCell(row, 0) || '').trim();
-                    const team   = String(gvizCell(row, 1) || '').trim();
-                    const h2hRaw = String(gvizCell(row, 2) || '').toLowerCase();
+                    // Sheet columns: A=Team, B=H2H flag, C=Fighter name, D=Result, E=Pts, F=Review
+                    const team   = String(gvizCell(row, 0) || '').trim();
+                    const h2hRaw = String(gvizCell(row, 1) || '').toLowerCase();
+                    const name   = String(gvizCell(row, 2) || '').trim();
                     const result = String(gvizCell(row, 3) || '').trim();
                     const pts    = String(gvizCell(row, 4) || '').trim();
                     const review = String(gvizCell(row, 5) || '').trim();
 
-                    const color  = TEAM_COLOR_MAP[team] || '#6b7280';
+                    // Case-insensitive team colour lookup (sheet uses DOM, ASH, REJECT etc.)
+                    const teamKey = Object.keys(TEAM_COLOR_MAP).find(k => k.toLowerCase() === team.toLowerCase())
+                                 || Object.keys(TEAM_COLOR_MAP).find(k => team.toLowerCase().startsWith(k.toLowerCase()))
+                                 || Object.keys(TEAM_COLOR_MAP).find(k => k.toLowerCase().startsWith(team.toLowerCase()));
+                    const color  = teamKey ? TEAM_COLOR_MAP[teamKey] : '#6b7280';
                     const isH2H  = h2hRaw === 'yes' || h2hRaw === 'h2h' || h2hRaw === 'true' || h2hRaw === 'y';
                     // Determine win/loss/draw from the result string
                     const resultLower = result.toLowerCase();
