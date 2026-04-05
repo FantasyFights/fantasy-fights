@@ -512,6 +512,75 @@
             .standings-grid { grid-template-columns: 1fr; }
             .header-nav { display: none; }
         }
+
+        /* ══════════════ FIGHT PREVIEW / REVIEW MODAL ══════════════ */
+        .ff-modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(10,10,20,0.65); z-index: 9999;
+            align-items: center; justify-content: center; padding: 20px;
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+        }
+        .ff-modal-overlay.open { display: flex; }
+        .ff-modal {
+            background: #fff; border-radius: 20px; padding: 32px 28px 28px;
+            max-width: 500px; width: 100%; position: relative;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+            animation: ffModalIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes ffModalIn {
+            from { opacity:0; transform:scale(0.88) translateY(12px); }
+            to   { opacity:1; transform:scale(1)    translateY(0); }
+        }
+        .ff-modal-close {
+            position:absolute; top:14px; right:16px;
+            background:#f3f4f6; border:none; width:28px; height:28px;
+            border-radius:50%; font-size:14px; cursor:pointer; color:#666;
+            display:flex; align-items:center; justify-content:center;
+            transition:background .15s,color .15s;
+        }
+        .ff-modal-close:hover { background:#e5e7eb; color:#111; }
+        .ff-modal-eyebrow {
+            display:inline-flex; align-items:center; gap:6px;
+            font-size:10px; font-weight:800; letter-spacing:0.14em;
+            text-transform:uppercase; color:#e63333;
+            background:#fff0f0; padding:4px 10px; border-radius:20px; margin-bottom:12px;
+        }
+        .ff-modal-title { font-size:18px; font-weight:800; color:#111; margin-bottom:14px; line-height:1.35; }
+        .ff-modal-body  { font-size:14.5px; color:#444; line-height:1.75; border-top:1px solid #f0f0f0; padding-top:14px; }
+
+        /* ══════════════ RECENT RESULTS CARDS ══════════════ */
+        .rr-section { margin-bottom: 40px; }
+        .rr-section-hd { display:flex; align-items:baseline; gap:12px; margin-bottom:16px; }
+        .rr-section-title { font-size:22px; font-weight:800; color:#1a1a2e; letter-spacing:-0.3px; }
+        .rr-grid {
+            display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:12px;
+        }
+        .rr-card {
+            background:#fff; border-radius:16px; padding:16px 12px 14px;
+            box-shadow:0 2px 12px rgba(0,0,0,.07); border:2px solid transparent;
+            position:relative; overflow:hidden;
+            transition:transform .18s,box-shadow .18s; text-align:center;
+        }
+        .rr-card:hover { transform:translateY(-3px); box-shadow:0 8px 28px rgba(0,0,0,.12); }
+        .rr-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:var(--tc); }
+        .rr-team-lbl { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--tc); margin-bottom:10px; }
+        .rr-portrait {
+            width:62px; height:62px; border-radius:50%; border:2.5px solid var(--tc);
+            overflow:hidden; margin:0 auto 9px; background:#f0f0f0;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .rr-portrait img { width:100%; height:100%; object-fit:cover; object-position:top center; display:none; }
+        .rr-portrait .rr-fallback { font-size:24px; line-height:1; }
+        .rr-fighter-name { font-size:12px; font-weight:700; color:#111; margin-bottom:5px; line-height:1.3; }
+        .rr-h2h-badge { display:inline-block; padding:1px 7px; background:#eff6ff; color:#2563eb; border-radius:4px; font-size:10px; font-weight:700; margin-bottom:5px; }
+        .rr-result { font-size:12.5px; font-weight:700; margin-bottom:4px; line-height:1.3; }
+        .rr-result.win  { color:#16a34a; }
+        .rr-result.loss { color:#dc2626; }
+        .rr-result.draw { color:#ea580c; }
+        .rr-pts { font-size:15px; font-weight:900; color:#16a34a; letter-spacing:-.3px; margin-bottom:6px; }
+        .rr-review-btn { background:none; border:none; font-size:20px; cursor:pointer; line-height:1; padding:2px; transition:transform .15s; display:inline-block; }
+        .rr-review-btn:hover { transform:scale(1.25); }
+        @media (max-width:480px) { .rr-grid { grid-template-columns:repeat(2,1fr); } }
     </style>
 </head>
 <body>
@@ -573,6 +642,16 @@
 <div id="mainContent" style="display:none;">
     <div class="content">
 
+        <!-- RECENT RESULTS -->
+        <div class="rr-section">
+            <div class="rr-section-hd">
+                <h2 class="rr-section-title">🥊 Recent Results</h2>
+            </div>
+            <div class="rr-grid" id="rrContainer">
+                <div style="grid-column:1/-1;text-align:center;padding:24px;color:#aaa;font-size:13px;font-weight:600;">Loading recent results…</div>
+            </div>
+        </div>
+
         <!-- STANDINGS -->
         <div class="standings-wrap">
             <div class="section-hd">
@@ -629,6 +708,120 @@
 // ──────────────────────────────────────────────────────────────────────
 const SHEET_URL =
     'https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc/export?format=csv&gid=1081462908';
+
+const GS_SHEET_ID_RR = '1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc';
+
+// ── Preview / Review Modal ──────────────────────────────────────────────
+(function() {
+    const overlay = document.createElement('div');
+    overlay.id = 'ffModal';
+    overlay.className = 'ff-modal-overlay';
+    overlay.innerHTML = `
+        <div class="ff-modal">
+            <button class="ff-modal-close" id="ffModalClose">✕</button>
+            <div class="ff-modal-eyebrow" id="ffModalEyebrow">🗣️ Performance Review</div>
+            <div class="ff-modal-title"   id="ffModalTitle"></div>
+            <div class="ff-modal-body"    id="ffModalBody"></div>
+        </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) ffCloseModal(); });
+    document.getElementById('ffModalClose').addEventListener('click', ffCloseModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') ffCloseModal(); });
+})();
+function ffCloseModal() { document.getElementById('ffModal').classList.remove('open'); }
+function ffOpenReview(btn) {
+    document.getElementById('ffModalEyebrow').textContent = '🗣️ Performance Review';
+    document.getElementById('ffModalTitle').textContent   = btn.dataset.title;
+    document.getElementById('ffModalBody').textContent    = btn.dataset.review;
+    document.getElementById('ffModal').classList.add('open');
+}
+
+// ── Local Fighter Images ────────────────────────────────────────────────
+const _LOCAL_IMG_OVERRIDES_RR = { 'Willy Hutchinson': 'Willy hutchinson' };
+function getLocalFighterImg(name) {
+    const filename = _LOCAL_IMG_OVERRIDES_RR[name] || name;
+    return 'FF2026Figthers/' + encodeURIComponent(filename) + '.png';
+}
+function loadFighterImagesRR(root) {
+    (root || document).querySelectorAll('img[data-fighter]').forEach(img => {
+        const name = img.dataset.fighter;
+        if (!name || img.dataset.loaded) return;
+        img.dataset.loaded = '1';
+        const fallback = img.nextElementSibling;
+        img.src = getLocalFighterImg(name);
+        img.onload = () => { img.style.display = 'block'; if (fallback) fallback.style.display = 'none'; };
+        img.onerror = () => { img.style.display = 'none'; if (fallback) fallback.style.display = ''; };
+    });
+}
+
+// ── Recent Results ─────────────────────────────────────────────────────
+function rrEsc(s) { const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
+
+async function loadRecentResults() {
+    const container = document.getElementById('rrContainer');
+    if (!container) return;
+    try {
+        const url = `https://docs.google.com/spreadsheets/d/${GS_SHEET_ID_RR}/gviz/tq?tqx=out:json&sheet=RECENT%20RESULTS&_cb=${Date.now()}`;
+        const resp = await fetch(url, { cache: 'no-store' });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const text = await resp.text();
+        const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);?\s*$/);
+        if (!match) throw new Error('Bad format');
+        const data = JSON.parse(match[1]);
+
+        function gCell(row, col) {
+            const c = row.c?.[col];
+            if (!c || c.v === null || c.v === undefined) return '';
+            return c.f || c.v;
+        }
+
+        const rows = (data.table?.rows || []).filter(r => r.c && String(gCell(r, 0) || '').trim());
+        if (!rows.length) {
+            container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#aaa;">No recent results yet.</div>';
+            return;
+        }
+
+        const TEAM_CLR = {
+            'Dom':'#e63333','Tom':'#16a34a','Elyse':'#ec4899','Pat':'#f97316',
+            'Mort':'#eab308','Ash':'#0ea5e9','Brad':'#1d4ed8','Kieran':'#b45309','Rejects':'#6b7280'
+        };
+
+        container.innerHTML = rows.map(row => {
+            const name   = String(gCell(row, 0) || '').trim();
+            const team   = String(gCell(row, 1) || '').trim();
+            const h2hRaw = String(gCell(row, 2) || '').toLowerCase();
+            const result = String(gCell(row, 3) || '').trim();
+            const pts    = String(gCell(row, 4) || '').trim();
+            const review = String(gCell(row, 5) || '').trim();
+            const color  = TEAM_CLR[team] || '#6b7280';
+            const isH2H  = ['yes','h2h','true','y'].includes(h2hRaw);
+            const isWin  = /^w\b|^win|^won/i.test(result) || result.toLowerCase().startsWith('w ');
+            const isLoss = /^l\b|^loss|^lost/i.test(result) || result.toLowerCase().startsWith('l ');
+            const rCls   = isWin ? 'win' : isLoss ? 'loss' : 'draw';
+            const ptsStr = pts ? (pts.startsWith('+') ? pts : '+' + pts) : '';
+            const h2hBadge  = isH2H ? `<div class="rr-h2h-badge">⚔️ H2H</div>` : '';
+            const reviewBtn = review
+                ? `<button class="rr-review-btn" onclick="ffOpenReview(this)" data-title="${rrEsc(name)}" data-review="${rrEsc(review)}" title="Performance Review">🗣️</button>`
+                : '';
+            return `<div class="rr-card" style="--tc:${color}">
+                <div class="rr-team-lbl">${rrEsc(team)}</div>
+                <div class="rr-portrait">
+                    <img data-fighter="${rrEsc(name)}" alt="${rrEsc(name)}" style="display:none">
+                    <span class="rr-fallback">🥊</span>
+                </div>
+                <div class="rr-fighter-name">${rrEsc(name)}</div>
+                ${h2hBadge}
+                <div class="rr-result ${rCls}">${rrEsc(result)}</div>
+                ${ptsStr ? `<div class="rr-pts">${rrEsc(ptsStr)} pts</div>` : ''}
+                ${reviewBtn}
+            </div>`;
+        }).join('');
+        loadFighterImagesRR(container);
+    } catch(err) {
+        console.warn('[Recent Results]', err);
+        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:#bbb;font-size:12px;">Could not load recent results.</div>';
+    }
+}
 
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
@@ -923,6 +1116,9 @@ async function loadData() {
     btn.disabled = true;
     icon.style.display = 'inline-block';
     icon.style.animation = 'spin 0.75s linear infinite';
+
+    // Always refresh recent results
+    loadRecentResults();
 
     try {
         const res = await fetch(SHEET_URL + '&_cb=' + Date.now()); // cache-bust

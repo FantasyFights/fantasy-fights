@@ -1325,8 +1325,8 @@
 
         /* ── FIGHTER AVATAR (Teams page) ── */
         .fighter-avatar-wrap {
-            width: 34px;
-            height: 34px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             overflow: hidden;
             background: #f0f0f0;
@@ -1334,7 +1334,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 17px;
+            font-size: 20px;
             border: 2px solid #e8e8e8;
             transition: border-color 0.2s;
         }
@@ -1344,8 +1344,8 @@
 
         /* ── FIGHTER PORTRAIT (H2H cards — schedule page) ── */
         .h2h-fighter-photo-wrap {
-            width: 64px;
-            height: 64px;
+            width: 78px;
+            height: 78px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid #ccc;
@@ -1357,7 +1357,7 @@
             flex-shrink: 0;
         }
         .h2h-fighter-photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-        .h2h-fighter-photo-wrap .photo-fallback { font-size: 24px; line-height: 1; }
+        .h2h-fighter-photo-wrap .photo-fallback { font-size: 30px; line-height: 1; }
 
         /* ── HOME PAGE H2H FIGHT CARD ── */
         .home-fight-card {
@@ -1395,8 +1395,8 @@
             gap: 7px;
         }
         .home-fight-portrait {
-            width: 72px;
-            height: 72px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid #e0e0e0;
@@ -1407,7 +1407,7 @@
             flex-shrink: 0;
         }
         .home-fight-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-        .home-fight-portrait .portrait-fallback { font-size: 30px; line-height: 1; }
+        .home-fight-portrait .portrait-fallback { font-size: 36px; line-height: 1; }
         .home-fight-fighter-name {
             color: #1a1a1a;
             font-weight: 700;
@@ -2251,6 +2251,129 @@
             .about-hero { padding: 26px 20px; }
             .about-hero h1 { font-size: 26px; }
         }
+
+        /* ══════════════ FIGHT PREVIEW MODAL ══════════════ */
+        .ff-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(10,10,20,0.65);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .ff-modal-overlay.open { display: flex; }
+        .ff-modal {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px 28px 28px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+            animation: ffModalIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes ffModalIn {
+            from { opacity: 0; transform: scale(0.88) translateY(12px); }
+            to   { opacity: 1; transform: scale(1)    translateY(0); }
+        }
+        .ff-modal-close {
+            position: absolute; top: 14px; right: 16px;
+            background: #f3f4f6; border: none;
+            width: 28px; height: 28px; border-radius: 50%;
+            font-size: 14px; cursor: pointer; color: #666;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.15s, color 0.15s;
+        }
+        .ff-modal-close:hover { background: #e5e7eb; color: #111; }
+        .ff-modal-eyebrow {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 10px; font-weight: 800; letter-spacing: 0.14em;
+            text-transform: uppercase; color: #e63333;
+            background: #fff0f0; padding: 4px 10px; border-radius: 20px;
+            margin-bottom: 12px;
+        }
+        .ff-modal-title {
+            font-size: 18px; font-weight: 800; color: #111;
+            margin-bottom: 14px; line-height: 1.35;
+        }
+        .ff-modal-body {
+            font-size: 14.5px; color: #444; line-height: 1.75;
+            border-top: 1px solid #f0f0f0; padding-top: 14px;
+        }
+
+        /* ══════════════ PREVIEW BUTTON ══════════════ */
+        .ff-preview-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 11px; border: none;
+            background: linear-gradient(135deg, #fff0f0 0%, #ffeaea 100%);
+            border: 1px solid #fdd;
+            border-radius: 20px; font-size: 12px; font-weight: 700;
+            color: #c0392b; cursor: pointer;
+            transition: all 0.18s; white-space: nowrap;
+        }
+        .ff-preview-btn:hover {
+            background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(230,51,51,0.2);
+        }
+
+        /* ══════════════ RECENT RESULTS CARDS ══════════════ */
+        .rr-section-hd {
+            display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px;
+        }
+        .rr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+        .rr-card {
+            background: #fff; border-radius: 16px; padding: 16px 12px 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            border: 2px solid transparent; position: relative; overflow: hidden;
+            transition: transform 0.18s, box-shadow 0.18s; text-align: center;
+        }
+        .rr-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+        .rr-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 4px; background: var(--tc);
+        }
+        .rr-team-lbl {
+            font-size: 10px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.09em; color: var(--tc); margin-bottom: 10px;
+        }
+        .rr-portrait {
+            width: 62px; height: 62px; border-radius: 50%;
+            border: 2.5px solid var(--tc); overflow: hidden; margin: 0 auto 9px;
+            background: #f0f0f0; display: flex; align-items: center; justify-content: center;
+        }
+        .rr-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: none; }
+        .rr-portrait .rr-fallback { font-size: 24px; line-height: 1; }
+        .rr-fighter-name { font-size: 12px; font-weight: 700; color: #111; margin-bottom: 5px; line-height: 1.3; }
+        .rr-h2h-badge {
+            display: inline-block; padding: 1px 7px;
+            background: #eff6ff; color: #2563eb; border-radius: 4px;
+            font-size: 10px; font-weight: 700; margin-bottom: 5px;
+        }
+        .rr-result { font-size: 12.5px; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
+        .rr-result.win  { color: #16a34a; }
+        .rr-result.loss { color: #dc2626; }
+        .rr-result.draw { color: #ea580c; }
+        .rr-pts {
+            font-size: 15px; font-weight: 900; color: #16a34a;
+            letter-spacing: -0.3px; margin-bottom: 6px;
+        }
+        .rr-review-btn {
+            background: none; border: none; font-size: 20px; cursor: pointer;
+            line-height: 1; padding: 2px; transition: transform 0.15s;
+            display: inline-block;
+        }
+        .rr-review-btn:hover { transform: scale(1.25); }
+        @media (max-width: 480px) { .rr-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -2477,6 +2600,14 @@
                 @media(max-width:700px){.rp-grid{grid-template-columns:repeat(2,1fr)}}
                 @media(max-width:420px){.rp-grid{grid-template-columns:1fr}}
             </style>
+
+            <!-- RECENT RESULTS — top of Results page -->
+            <div class="rr-section-hd" style="margin-top:4px;">
+                <h2 class="home-section-title" style="margin:0;font-size:22px;">🥊 Recent Results</h2>
+            </div>
+            <div class="rr-grid" id="rrContainer">
+                <div style="grid-column:1/-1;text-align:center;padding:24px;color:#aaa;font-size:13px;font-weight:600;">Loading recent results…</div>
+            </div>
 
             <div id="rpLoad" class="rp-state">
                 <div class="rp-spinner"></div>
@@ -3403,11 +3534,43 @@
             return `<span class="fight-belts" title="${count} belt${count > 1 ? 's' : ''}">${'🏆'.repeat(count)}</span>`;
         }
 
-        // ============ FIGHTER IMAGE LOADING ============
+        // ============ FIGHTER IMAGE LOADING — local folder ============
+        // Images live in FF2026Figthers/<Name>.png (exact fighter name)
+        const _LOCAL_IMG_OVERRIDES = {
+            'Willy Hutchinson': 'Willy hutchinson',
+        };
+
+        function getLocalFighterImg(name) {
+            const filename = _LOCAL_IMG_OVERRIDES[name] || name;
+            // Encode each path segment but keep the slash
+            return 'FF2026Figthers/' + encodeURIComponent(filename) + '.png';
+        }
+
+        function loadFighterImages(root) {
+            const scope = root || document;
+            scope.querySelectorAll('img[data-fighter]').forEach(img => {
+                const name = img.dataset.fighter;
+                if (!name || img.dataset.loaded) return;
+                img.dataset.loaded = '1';
+                const fallback = img.nextElementSibling;
+                img.src = getLocalFighterImg(name);
+                img.onload = () => {
+                    img.style.display = 'block';
+                    img.classList.add('loaded');
+                    if (fallback) fallback.style.display = 'none';
+                };
+                img.onerror = () => {
+                    img.style.display = 'none';
+                    if (fallback) fallback.style.display = '';
+                };
+            });
+        }
+
+        // ── Legacy stubs (no longer needed but kept so nothing breaks) ──
         const _fighterImgCache = {};
         const _fighterImgInflight = {};
 
-        // Ring name → correct Wikipedia article title for fighters whose names don't match
+        // (WIKI_NAME_MAP no longer used — images served locally)
         const WIKI_NAME_MAP = {
             "Chocolatito":           "Román González (boxer)",
             "Andy Ruiz":             "Andy Ruiz Jr.",
@@ -3515,7 +3678,9 @@
             "Gabriela Fundora":      "Gabriela Fundora",
         };
 
+        // fetchFighterImg no longer used — replaced by getLocalFighterImg above
         async function fetchFighterImg(name) {
+            return getLocalFighterImg(name);
             if (_fighterImgCache[name] !== undefined) return _fighterImgCache[name];
             if (_fighterImgInflight[name]) return _fighterImgInflight[name];
 
@@ -3604,26 +3769,6 @@
 
             _fighterImgInflight[name] = promise;
             return promise;
-        }
-
-        // After any render that uses data-fighter="Name" on <img> elements, call this.
-        function loadFighterImages(root) {
-            const scope = root || document;
-            scope.querySelectorAll('img[data-fighter]').forEach(img => {
-                const name = img.dataset.fighter;
-                if (!name || img.dataset.loaded) return;
-                img.dataset.loaded = '1';
-                fetchFighterImg(name).then(url => {
-                    if (url) {
-                        img.src = url;
-                        img.style.display = 'block';
-                        img.classList.add('loaded');
-                        // Hide the fallback span that sits next to this img
-                        const fallback = img.nextElementSibling;
-                        if (fallback) fallback.style.display = 'none';
-                    }
-                });
-            });
         }
 
         // Parse "Fighter A vs Fighter B, weight class" → [nameA, nameB]
@@ -4340,10 +4485,11 @@
             return '⭐️'.repeat(count);
         }
 
-        function parseScheduleRow(date, desc, stars) {
+        function parseScheduleRow(date, desc, stars, preview) {
             const d = (desc || '').trim();
             if (!d) return null;
-            const starCount = parseInt(stars) || 0;
+            const starCount  = parseInt(stars) || 0;
+            const previewTxt = (preview || '').trim();
             const isH2H = /^H2H\s*-/i.test(d);
             if (isH2H) {
                 const body = d.replace(/^H2H\s*-\s*/i, '');
@@ -4353,13 +4499,13 @@
                 const vMatch  = matchup.match(/^(.+?)\s+[Vv]\s+(.+)$/);
                 const team1   = vMatch ? vMatch[1].trim().toUpperCase() : matchup.toUpperCase();
                 const team2   = vMatch ? vMatch[2].trim().toUpperCase() : '';
-                return { type: 'h2h', date, team1, team2, fight, stars: starCount };
+                return { type: 'h2h', date, team1, team2, fight, stars: starCount, preview: previewTxt };
             } else {
                 const dashIdx = d.indexOf(' - ');
-                if (dashIdx === -1) return { type: 'regular', date, team: d.toUpperCase(), fight: '', stars: starCount };
+                if (dashIdx === -1) return { type: 'regular', date, team: d.toUpperCase(), fight: '', stars: starCount, preview: previewTxt };
                 const team  = d.substring(0, dashIdx).trim().toUpperCase();
                 const fight = d.substring(dashIdx + 3).trim();
-                return { type: 'regular', date, team, fight, stars: starCount };
+                return { type: 'regular', date, team, fight, stars: starCount, preview: previewTxt };
             }
         }
 
@@ -4379,6 +4525,9 @@
             }
             const [nameA, nameB] = parseFightNames(fightName || f.fight);
             const starsHtml = f.stars ? `<div class="h2h-stars">${renderStars(f.stars)}</div>` : '';
+            const previewTitle   = escHtml(fightName || f.fight);
+            const previewContent = escHtml(f.preview || '');
+            const previewBtn = f.preview ? `<button class="ff-preview-btn" onclick="ffOpenPreview(this)" data-title="${previewTitle}" data-preview="${previewContent}" style="margin-top:8px;">💬 Preview</button>` : '';
             return `
             <div class="h2h-card">
                 <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
@@ -4400,6 +4549,7 @@
                         ${fightDetail ? `<div class="h2h-fight-detail">${fightDetail}</div>` : ''}
                         ${belts ? `<div class="h2h-belt-row">${belts}</div>` : ''}
                         ${starsHtml}
+                        ${previewBtn}
                     </div>
                     <div class="h2h-team-col">
                         ${nameB ? `
@@ -4421,6 +4571,7 @@
             const fightName   = commaIdx > -1 ? f.fight.substring(0, commaIdx).trim() : f.fight;
             const fightDetail = commaIdx > -1 ? f.fight.substring(commaIdx + 1).trim() : '';
             const starsHtml = f.stars ? `<div class="fight-row-stars">${renderStars(f.stars)}</div>` : '';
+            const previewBtn = f.preview ? `<button class="ff-preview-btn" onclick="ffOpenPreview(this)" data-title="${escHtml(fightName || f.fight)}" data-preview="${escHtml(f.preview)}">💬 Preview</button>` : '';
             return `
             <div class="fight-row">
                 <div class="fight-row-team" style="background:${color}">${f.team}</div>
@@ -4430,6 +4581,7 @@
                 </div>
                 ${belts ? `<div class="fight-row-belts">${belts}</div>` : ''}
                 ${starsHtml}
+                ${previewBtn}
             </div>`;
         }
 
@@ -4447,9 +4599,10 @@
                     const dc = String(gvizCell(row, 0) || '').trim();
                     const fc = String(gvizCell(row, 1) || '').trim();
                     const sc = String(gvizCell(row, 2) || '').trim();
+                    const pc = String(gvizCell(row, 3) || '').trim(); // column D — fight preview
                     if (dc) lastDate = dc;
                     if (!fc || !lastDate) return;
-                    const item = parseScheduleRow(lastDate, fc, sc);
+                    const item = parseScheduleRow(lastDate, fc, sc, pc);
                     if (item) parsed.push(item);
                 });
 
@@ -4611,9 +4764,10 @@
                 let lastDate = '';
                 rows.forEach(row => {
                     if (!row.c) return;
-                    const dateCell = gvizCell(row, 0);
-                    const descCell = gvizCell(row, 1);
-                    const starsCell = gvizCell(row, 2);
+                    const dateCell    = gvizCell(row, 0);
+                    const descCell    = gvizCell(row, 1);
+                    const starsCell   = gvizCell(row, 2);
+                    const previewCell = gvizCell(row, 3); // column D — fight preview
                     if (dateCell) lastDate = String(dateCell).trim();
                     if (!descCell || !lastDate) return;
                     if (!String(descCell).includes('H2H')) return;
@@ -4624,7 +4778,7 @@
                     if (isNaN(parsed)) return;
                     parsed.setHours(0,0,0,0);
                     if (parsed < today) return; // skip past fights
-                    upcoming.push({ date: parsed, dateStr: lastDate.replace(/,.*$/, '').trim(), desc: String(descCell).trim(), stars: parseInt(starsCell) || 0 });
+                    upcoming.push({ date: parsed, dateStr: lastDate.replace(/,.*$/, '').trim(), desc: String(descCell).trim(), stars: parseInt(starsCell) || 0, preview: String(previewCell || '').trim() });
                 });
 
                 upcoming.sort((a, b) => a.date - b.date);
@@ -4646,6 +4800,8 @@
                     const beltImgs = getBeltImages(fight);
                     const [nameA, nameB] = parseFightNames(fight);
                     const starsHtml = f.stars ? `<div class="home-fight-stars">${renderStars(f.stars)}</div>` : '';
+                    const previewLabel = escHtml(nameA && nameB ? nameA + ' vs ' + nameB : fight);
+                    const previewBtn   = f.preview ? `<button class="ff-preview-btn" onclick="ffOpenPreview(this)" data-title="${previewLabel}" data-preview="${escHtml(f.preview)}" style="margin-top:8px;width:100%;justify-content:center;">💬 Fight Preview</button>` : '';
                     return `
                         <div class="home-fight-card">
                             <div class="home-fight-header">
@@ -4679,6 +4835,7 @@
                                 <div class="home-fight-detail">${fight}</div>
                                 ${beltImgs ? `<div style="margin-top:6px;">${beltImgs}</div>` : ''}
                                 ${starsHtml}
+                                ${previewBtn}
                             </div>
                         </div>`;
                 }).join('');
@@ -4706,6 +4863,41 @@
             }
         });
 
+        // ══════════════ PREVIEW / REVIEW MODAL ══════════════
+        (function() {
+            const overlay = document.createElement('div');
+            overlay.id = 'ffModal';
+            overlay.className = 'ff-modal-overlay';
+            overlay.innerHTML = `
+                <div class="ff-modal" id="ffModalBox">
+                    <button class="ff-modal-close" id="ffModalClose" aria-label="Close">✕</button>
+                    <div class="ff-modal-eyebrow" id="ffModalEyebrow">⚡ Fight Preview</div>
+                    <div class="ff-modal-title"  id="ffModalTitle"></div>
+                    <div class="ff-modal-body"   id="ffModalBody"></div>
+                </div>`;
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', e => { if (e.target === overlay) ffCloseModal(); });
+            document.getElementById('ffModalClose').addEventListener('click', ffCloseModal);
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') ffCloseModal(); });
+        })();
+
+        function ffOpenModal(eyebrow, title, body) {
+            document.getElementById('ffModalEyebrow').textContent = eyebrow;
+            document.getElementById('ffModalTitle').textContent   = title;
+            document.getElementById('ffModalBody').textContent    = body;
+            document.getElementById('ffModal').classList.add('open');
+        }
+        function ffCloseModal() {
+            document.getElementById('ffModal').classList.remove('open');
+        }
+        // Called via data-attributes from inline onclick
+        function ffOpenPreview(btn) {
+            ffOpenModal('⚡ Fight Preview', btn.dataset.title, btn.dataset.preview);
+        }
+        function ffOpenReview(btn) {
+            ffOpenModal('🗣️ Performance Review', btn.dataset.title, btn.dataset.review);
+        }
+
         window.addEventListener('load', () => {
             if (typeof firebase === 'undefined') {
                 // Firebase SDK didn't load (file:// protocol or no internet)
@@ -4720,6 +4912,73 @@
             }
             initApp();
         });
+
+        // ════════════════════════════════════════════════════
+        // RECENT RESULTS — pulled from 'RECENT RESULTS' sheet tab
+        // Expected columns: A=Fighter, B=Team, C=H2H (yes/H2H/blank),
+        //                   D=Result text, E=Points, F=Performance Review
+        // ════════════════════════════════════════════════════
+        async function loadRecentResultsFromSheets() {
+            const container = document.getElementById('rrContainer');
+            if (!container) return;
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${GS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=RECENT%20RESULTS&_cb=${Date.now()}`;
+                const resp = await fetch(url, { cache: 'no-store' });
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const text = await resp.text();
+                const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);?\s*$/);
+                if (!match) throw new Error('Unexpected format');
+                const data = JSON.parse(match[1]);
+                const rows = (data.table?.rows || []).filter(r => r.c && gvizCell(r, 0));
+
+                if (!rows.length) {
+                    container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#aaa;font-size:13px;">No recent results yet.</div>';
+                    return;
+                }
+
+                container.innerHTML = rows.map(row => {
+                    const name   = String(gvizCell(row, 0) || '').trim();
+                    const team   = String(gvizCell(row, 1) || '').trim();
+                    const h2hRaw = String(gvizCell(row, 2) || '').toLowerCase();
+                    const result = String(gvizCell(row, 3) || '').trim();
+                    const pts    = String(gvizCell(row, 4) || '').trim();
+                    const review = String(gvizCell(row, 5) || '').trim();
+
+                    const color  = TEAM_COLOR_MAP[team] || '#6b7280';
+                    const isH2H  = h2hRaw === 'yes' || h2hRaw === 'h2h' || h2hRaw === 'true' || h2hRaw === 'y';
+                    // Determine win/loss/draw from the result string
+                    const resultLower = result.toLowerCase();
+                    const isWin  = /^\+|^w\b|^win|^won/i.test(result) || resultLower.startsWith('w ');
+                    const isLoss = /^l\b|^loss|^lost/i.test(result) || resultLower.startsWith('l ');
+                    const rCls   = isWin ? 'win' : isLoss ? 'loss' : 'draw';
+                    const ptsNum = pts.replace(/^\+/, '');
+                    const ptsStr = ptsNum ? `+${ptsNum}` : '';
+
+                    const h2hBadge   = isH2H ? `<div class="rr-h2h-badge">⚔️ H2H</div>` : '';
+                    const reviewBtn  = review
+                        ? `<button class="rr-review-btn" onclick="ffOpenReview(this)" data-title="${rpEsc(name)}" data-review="${rpEsc(review)}" title="Performance Review">🗣️</button>`
+                        : '';
+
+                    return `<div class="rr-card" style="--tc:${color}">
+                        <div class="rr-team-lbl">${rpEsc(team)}</div>
+                        <div class="rr-portrait">
+                            <img data-fighter="${rpEsc(name)}" alt="${rpEsc(name)}" style="display:none">
+                            <span class="rr-fallback">🥊</span>
+                        </div>
+                        <div class="rr-fighter-name">${rpEsc(name)}</div>
+                        ${h2hBadge}
+                        <div class="rr-result ${rCls}">${rpEsc(result)}</div>
+                        ${ptsStr ? `<div class="rr-pts">${rpEsc(ptsStr)} pts</div>` : ''}
+                        ${reviewBtn}
+                    </div>`;
+                }).join('');
+
+                loadFighterImages(container);
+            } catch(err) {
+                console.warn('[Recent Results]', err);
+                container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:#bbb;font-size:12px;">Could not load recent results — check sheet is public.</div>';
+            }
+        }
 
         // ============ 2026 RESULTS — GOOGLE SHEETS STANDINGS ============
         const RP_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1oEg0M9nHUc3Us6RWMyqOg5YO78ASBqQ8WpSxcpA3YEc/export?format=csv&gid=1081462908';
@@ -4863,6 +5122,8 @@
         async function rpLoad() {
             const btn=document.getElementById('rpRefreshBtn');
             if(btn)btn.disabled=true;
+            // Always refresh recent results when this page loads
+            loadRecentResultsFromSheets();
             try {
                 const res=await fetch(RP_SHEET_URL+'&_cb='+Date.now());
                 if(!res.ok)throw new Error('HTTP '+res.status);
