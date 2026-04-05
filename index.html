@@ -2306,6 +2306,25 @@
         }
 
         /* ══════════════ PREVIEW BUTTON ══════════════ */
+        /* Preview button footer — sits at the bottom of both H2H cards and fight rows */
+        .card-preview-footer {
+            padding: 0 14px 12px;
+            display: flex;
+        }
+        .h2h-card .card-preview-footer { justify-content: center; }
+        .fight-row .card-preview-footer { justify-content: flex-start; padding-left: 16px; }
+
+        /* fight-row inner row keeps the existing horizontal layout */
+        .fight-row-main {
+            display: flex; align-items: center; gap: 14px;
+        }
+
+        /* fight-row becomes a column when it has a preview footer */
+        .fight-row--has-preview {
+            flex-direction: column; align-items: stretch; gap: 0;
+        }
+        .fight-row--has-preview .fight-row-main { padding-bottom: 6px; }
+
         .ff-preview-btn {
             display: inline-flex; align-items: center; gap: 5px;
             padding: 4px 11px; border: none;
@@ -4536,7 +4555,7 @@
             const starsHtml = f.stars ? `<div class="h2h-stars">${renderStars(f.stars)}</div>` : '';
             const previewTitle   = escHtml(fightName || f.fight);
             const previewContent = escHtml(f.preview || '');
-            const previewBtn = f.preview ? `<button class="ff-preview-btn" onclick="ffOpenPreview(this)" data-title="${previewTitle}" data-preview="${previewContent}" style="margin-top:8px;">💬 Preview</button>` : '';
+            const previewFooter = f.preview ? `<div class="card-preview-footer"><button class="ff-preview-btn" onclick="ffOpenPreview(this)" data-title="${previewTitle}" data-preview="${previewContent}">💬 Fight Preview</button></div>` : '';
             return `
             <div class="h2h-card">
                 <div class="h2h-top-bar" style="background:linear-gradient(to right,${c1} 50%,${c2} 50%)"></div>
@@ -4558,7 +4577,6 @@
                         ${fightDetail ? `<div class="h2h-fight-detail">${fightDetail}</div>` : ''}
                         ${belts ? `<div class="h2h-belt-row">${belts}</div>` : ''}
                         ${starsHtml}
-                        ${previewBtn}
                     </div>
                     <div class="h2h-team-col">
                         ${nameB ? `
@@ -4570,6 +4588,7 @@
                     </div>
                     <div class="h2h-vs-mobile">— VS —</div>
                 </div>
+                ${previewFooter}
             </div>`;
         }
 
@@ -4580,17 +4599,19 @@
             const fightName   = commaIdx > -1 ? f.fight.substring(0, commaIdx).trim() : f.fight;
             const fightDetail = commaIdx > -1 ? f.fight.substring(commaIdx + 1).trim() : '';
             const starsHtml = f.stars ? `<div class="fight-row-stars">${renderStars(f.stars)}</div>` : '';
-            const previewBtn = f.preview ? `<button class="ff-preview-btn" onclick="ffOpenPreview(this)" data-title="${escHtml(fightName || f.fight)}" data-preview="${escHtml(f.preview)}">💬 Preview</button>` : '';
+            const previewFooter = f.preview ? `<div class="card-preview-footer"><button class="ff-preview-btn" onclick="ffOpenPreview(this)" data-title="${escHtml(fightName || f.fight)}" data-preview="${escHtml(f.preview)}">💬 Fight Preview</button></div>` : '';
             return `
-            <div class="fight-row">
-                <div class="fight-row-team" style="background:${color}">${f.team}</div>
-                <div class="fight-row-info">
-                    <div class="fight-row-name">${fightName || '—'}</div>
-                    ${fightDetail ? `<div class="fight-row-detail">${fightDetail}</div>` : ''}
+            <div class="fight-row${f.preview ? ' fight-row--has-preview' : ''}">
+                <div class="fight-row-main">
+                    <div class="fight-row-team" style="background:${color}">${f.team}</div>
+                    <div class="fight-row-info">
+                        <div class="fight-row-name">${fightName || '—'}</div>
+                        ${fightDetail ? `<div class="fight-row-detail">${fightDetail}</div>` : ''}
+                    </div>
+                    ${belts ? `<div class="fight-row-belts">${belts}</div>` : ''}
+                    ${starsHtml}
                 </div>
-                ${belts ? `<div class="fight-row-belts">${belts}</div>` : ''}
-                ${starsHtml}
-                ${previewBtn}
+                ${previewFooter}
             </div>`;
         }
 
