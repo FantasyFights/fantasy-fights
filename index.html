@@ -2343,8 +2343,11 @@
             height: 4px; background: var(--tc);
         }
         .rr-team-lbl {
+            display: inline-block;
             font-size: 10px; font-weight: 800; text-transform: uppercase;
-            letter-spacing: 0.09em; color: var(--tc); margin-bottom: 10px;
+            letter-spacing: 0.07em; color: #fff;
+            background: var(--tc); border-radius: 20px;
+            padding: 2px 10px; margin-bottom: 8px;
         }
         .rr-portrait {
             width: 62px; height: 62px; border-radius: 50%;
@@ -4966,12 +4969,12 @@
                         : '';
 
                     return `<div class="rr-card" style="--tc:${color}">
-                        <div class="rr-team-lbl">${rpEsc(team)}</div>
                         <div class="rr-portrait">
                             <img data-fighter="${rpEsc(name)}" alt="${rpEsc(name)}" style="display:none">
                             <span class="rr-fallback">🥊</span>
                         </div>
                         <div class="rr-fighter-name">${rpEsc(name)}</div>
+                        <div class="rr-team-lbl">${rpEsc(team)}</div>
                         ${h2hBadge}
                         <div class="rr-result ${rCls}">${rpEsc(result)}</div>
                         ${ptsStr ? `<div class="rr-pts">${rpEsc(ptsStr)} pts</div>` : ''}
