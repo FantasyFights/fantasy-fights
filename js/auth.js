@@ -141,6 +141,136 @@
             }
         }
 
+        // ── Join League Screen ──
+        function showJoinLeagueScreen() {
+            document.getElementById('joinLeagueScreen').classList.add('active');
+            setTimeout(() => document.getElementById('inviteCodeInput').focus(), 200);
+        }
+        function hideJoinLeagueScreen() {
+            document.getElementById('joinLeagueScreen').classList.remove('active');
+        }
+        function clearJoinError() {
+            document.getElementById('joinLeagueError').textContent = '';
+        }
+
+        async function submitInviteCode() {
+            const input = document.getElementById('inviteCodeInput');
+            const errorEl = document.getElementById('joinLeagueError');
+            const btn = document.getElementById('joinLeagueBtn');
+            const code = input.value.trim().toUpperCase();
+
+            errorEl.textContent = '';
+            if (!code) { errorEl.textContent = 'Please enter an invite code.'; return; }
+
+            btn.disabled = true;
+            btn.textContent = 'Checking...';
+
+            try {
+                const db = firebase.firestore();
+                const inviteDoc = await db.collection('invites').doc(code).get();
+
+                if (!inviteDoc.exists || !inviteDoc.data().active) {
+                    errorEl.textContent = 'Invalid or expired invite code. Check with your commissioner.';
+                    btn.disabled = false; btn.textContent = 'Join League →';
+                    return;
+                }
+
+                const invite = inviteDoc.data();
+                if (invite.maxUses && (invite.uses || 0) >= invite.maxUses) {
+                    errorEl.textContent = 'This invite code has already been used.';
+                    btn.disabled = false; btn.textContent = 'Join League →';
+                    return;
+                }
+
+                await db.collection('users').doc(currentUser.uid).update({ leagueId: invite.leagueId });
+                await db.collection('invites').doc(code).update({ uses: (invite.uses || 0) + 1 });
+                if (!userData) userData = {};
+                userData.leagueId = invite.leagueId;
+
+                hideJoinLeagueScreen();
+                _doEnterApp();
+            } catch(e) {
+                errorEl.textContent = 'Something went wrong. Please try again.';
+                btn.disabled = false; btn.textContent = 'Join League →';
+            }
+        }
+
+        // ── Profile Settings Modal ──
+        function showProfileSettings() {
+            const nameInput = document.getElementById('settingsNameInput');
+            if (nameInput) nameInput.value = (userData && userData.displayName) || '';
+            document.getElementById('settingsNameMsg').textContent = '';
+            document.getElementById('settingsPasswordMsg').textContent = '';
+            document.getElementById('settingsDeleteMsg').textContent = '';
+            document.getElementById('profileSettingsOverlay').classList.add('active');
+            // Close the user menu dropdown
+            document.getElementById('userMenuDropdown').classList.remove('active');
+        }
+
+        function hideProfileSettings() {
+            document.getElementById('profileSettingsOverlay').classList.remove('active');
+        }
+
+        function closeProfileSettingsOnBackdrop(event) {
+            if (event.target === document.getElementById('profileSettingsOverlay')) hideProfileSettings();
+        }
+
+        async function updateDisplayName() {
+            const input = document.getElementById('settingsNameInput');
+            const msgEl = document.getElementById('settingsNameMsg');
+            const name = input.value.trim();
+
+            msgEl.className = 'profile-settings-message';
+            msgEl.textContent = '';
+            if (!name || name.length < 2) { msgEl.className += ' error'; msgEl.textContent = 'Name must be at least 2 characters.'; return; }
+            if (name.length > 30) { msgEl.className += ' error'; msgEl.textContent = 'Name must be 30 characters or less.'; return; }
+
+            try {
+                await firebase.firestore().collection('users').doc(currentUser.uid).update({ displayName: name });
+                if (!userData) userData = {};
+                userData.displayName = name;
+                updateUserMenu();
+                msgEl.className = 'profile-settings-message success';
+                msgEl.textContent = '✓ Display name updated.';
+            } catch(e) {
+                msgEl.className = 'profile-settings-message error';
+                msgEl.textContent = 'Could not update. Please try again.';
+            }
+        }
+
+        async function sendPasswordResetFromSettings() {
+            const msgEl = document.getElementById('settingsPasswordMsg');
+            msgEl.className = 'profile-settings-message';
+            msgEl.textContent = '';
+            try {
+                await firebase.auth().sendPasswordResetEmail(currentUser.email);
+                msgEl.className = 'profile-settings-message success';
+                msgEl.textContent = '✓ Reset email sent to ' + currentUser.email;
+            } catch(e) {
+                msgEl.className = 'profile-settings-message error';
+                msgEl.textContent = 'Could not send. Try again.';
+            }
+        }
+
+        async function confirmDeleteAccount() {
+            const msgEl = document.getElementById('settingsDeleteMsg');
+            msgEl.className = 'profile-settings-message';
+            msgEl.textContent = '';
+            if (!confirm('Are you sure you want to permanently delete your account? This cannot be undone.')) return;
+            try {
+                await firebase.firestore().collection('users').doc(currentUser.uid).delete();
+                await currentUser.delete();
+                // onAuthStateChanged will fire and call showPublicSite()
+            } catch(e) {
+                msgEl.className = 'profile-settings-message error';
+                if (e.code === 'auth/requires-recent-login') {
+                    msgEl.textContent = 'Please sign out and sign back in first, then try again.';
+                } else {
+                    msgEl.textContent = 'Could not delete account. Please try again.';
+                }
+            }
+        }
+
         // ── App entry points ──
         function showPublicSite() {
             // Show header + content with limited nav (no league pages)
@@ -154,8 +284,27 @@
             showPage('about');
         }
 
-        function enterApp() {
-            // Restore full nav and enter the league
+        async function enterApp() {
+            if (!userData) { showPublicSite(); return; }
+
+            // Commissioner auto-joins leagueVI if not yet assigned
+            if (userRole === 'commissioner' && !userData.leagueId) {
+                try {
+                    await firebase.firestore().collection('users').doc(currentUser.uid).update({ leagueId: 'leagueVI' });
+                    userData.leagueId = 'leagueVI';
+                } catch(e) {}
+            }
+
+            // Regular users without a league go to join screen
+            if (!userData.leagueId) {
+                showJoinLeagueScreen();
+                return;
+            }
+
+            _doEnterApp();
+        }
+
+        function _doEnterApp() {
             document.getElementById('leagueBtn').style.display = '';
             document.getElementById('draftDropdown').style.display = '';
             document.getElementById('headerAuthBtns').classList.remove('active');
@@ -221,6 +370,7 @@
                         teamId: null,
                         displayName: null,
                         profileComplete: false,
+                        leagueId: role === 'commissioner' ? 'leagueVI' : null,
                         createdAt: new Date().toISOString(),
                     });
 
@@ -228,6 +378,16 @@
                         await db.collection('league').doc('config').set(leagueData);
                         await db.collection('league').doc('draftState').set(draftState);
                         await db.collection('league').doc('rosters').set({});
+                        // Create default invite codes for commissioner to share
+                        const codes = ['FF2026A','FF2026B','FF2026C','FF2026D','FF2026E','FF2026F','FF2026G','FF2026H'];
+                        const batch = db.batch();
+                        codes.forEach(code => {
+                            batch.set(db.collection('invites').doc(code), {
+                                leagueId: 'leagueVI', active: true, uses: 0, maxUses: 1,
+                                createdAt: new Date().toISOString(),
+                            });
+                        });
+                        await batch.commit();
                     }
 
                     // Send verification email

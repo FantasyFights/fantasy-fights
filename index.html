@@ -113,6 +113,48 @@
         </div>
     </div>
 
+    <!-- Join League Screen -->
+    <div class="join-league-screen" id="joinLeagueScreen">
+        <div class="join-league-card">
+            <div class="join-league-eyebrow">🥊 Fantasy Fights</div>
+            <div class="join-league-title">Join a League</div>
+            <div class="join-league-sub">Enter the invite code your commissioner shared with you to get access to your league.</div>
+            <label class="profile-setup-label" for="inviteCodeInput">Invite Code</label>
+            <input class="profile-setup-input" id="inviteCodeInput" type="text" placeholder="e.g. FF2026A" maxlength="20" oninput="clearJoinError()" style="text-transform:uppercase;letter-spacing:2px;">
+            <div class="profile-setup-error" id="joinLeagueError"></div>
+            <button class="profile-setup-submit" id="joinLeagueBtn" onclick="submitInviteCode()">Join League →</button>
+            <button style="background:none;border:none;color:#aaa;font-size:12px;cursor:pointer;margin-top:16px;display:block;width:100%;text-align:center;font-family:inherit;" onclick="handleSignOut()">Use a different account</button>
+        </div>
+    </div>
+
+    <!-- Profile Settings Modal -->
+    <div class="profile-settings-overlay" id="profileSettingsOverlay" onclick="closeProfileSettingsOnBackdrop(event)">
+        <div class="profile-settings-card">
+            <div class="profile-settings-header">
+                <div class="profile-settings-title">Profile Settings</div>
+                <button class="profile-settings-close" onclick="hideProfileSettings()">✕</button>
+            </div>
+            <div class="profile-settings-section">
+                <div class="profile-settings-label">Display Name</div>
+                <div class="profile-settings-row">
+                    <input class="profile-setup-input" id="settingsNameInput" type="text" maxlength="30" placeholder="Your display name" style="margin-bottom:0;">
+                    <button class="profile-settings-save-btn" onclick="updateDisplayName()">Save</button>
+                </div>
+                <div class="profile-settings-message" id="settingsNameMsg"></div>
+            </div>
+            <div class="profile-settings-section">
+                <div class="profile-settings-label">Password</div>
+                <button class="profile-settings-outline-btn" onclick="sendPasswordResetFromSettings()">Send Password Reset Email</button>
+                <div class="profile-settings-message" id="settingsPasswordMsg"></div>
+            </div>
+            <div class="profile-settings-section" style="border-bottom:none;margin-bottom:0;padding-bottom:0;">
+                <div class="profile-settings-label" style="color:#e63333;">Danger Zone</div>
+                <button class="profile-settings-danger-btn" onclick="confirmDeleteAccount()">Delete Account</button>
+                <div class="profile-settings-message" id="settingsDeleteMsg"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main App -->
     <header id="mainHeader">
         <div class="header-container">
@@ -133,7 +175,8 @@
                     </button>
                     <div class="user-menu-dropdown" id="userMenuDropdown">
                         <div class="user-menu-item info" id="userMenuEmail" style="font-size:13px;color:#888;">—</div>
-                        <div class="user-menu-item action" onclick="handleSignOut()">Sign Out</div>
+                        <div class="user-menu-item action" onclick="showProfileSettings()">Profile Settings</div>
+                        <div class="user-menu-item action" style="color:#e63333;" onclick="handleSignOut()">Sign Out</div>
                     </div>
                 </div>
             </div>
