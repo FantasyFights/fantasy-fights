@@ -1,0 +1,204 @@
+        /* ============ DRAFT PAGE ============ */
+        .draft-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .draft-main {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .draft-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .draft-status {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .draft-status-title {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .draft-status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .draft-status-item:last-child {
+            border-bottom: none;
+        }
+
+        .draft-status-label {
+            color: #666;
+        }
+
+        .draft-status-value {
+            font-weight: 600;
+            color: #222;
+        }
+
+        .draft-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        .draft-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .draft-button {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .draft-button:hover:not(:disabled) {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .draft-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .draft-button.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .draft-button.secondary:hover:not(:disabled) {
+            background: #e0e0e0;
+        }
+
+        .fighters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .fighter-card {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .fighter-card:hover:not(.drafted) {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .fighter-card.drafted {
+            background: #f0f0f0;
+            border-color: #ccc;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .fighter-card.selected {
+            background: #e3f2fd;
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .fighter-card.your-turn {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        .fighter-name-draft {
+            font-weight: 600;
+            font-size: 13px;
+            color: #222;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fighter-division {
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .fighter-flag-draft {
+            font-size: 16px;
+            margin: 4px 0;
+        }
+
+        .fighter-belt-badge {
+            font-size: 9px;
+            color: #e63333;
+            font-weight: 700;
+            background: #ffe3e3;
+            padding: 2px 4px;
+            border-radius: 2px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .draft-picks {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .draft-picks-title {
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .draft-pick-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .draft-pick-team {
+            font-weight: 600;
+            color: #222;
+        }
+
+        .draft-pick-fighter {
+            color: #666;
+        }

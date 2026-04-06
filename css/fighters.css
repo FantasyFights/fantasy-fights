@@ -1,0 +1,351 @@
+        /* ============ FIGHTERS DATABASE PAGE ============ */
+        .fd-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 28px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .fd-hero-title {
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            line-height: 1.1;
+        }
+        .fd-hero-title span { color: #e63333; }
+        .fd-hero-sub {
+            font-size: 15px;
+            opacity: 0.7;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+        .fd-hero-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .fd-hero-pill {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 14px 22px;
+            text-align: center;
+            min-width: 90px;
+        }
+        .fd-hero-pill-num {
+            font-size: 26px;
+            font-weight: 800;
+            color: #e63333;
+            display: block;
+            line-height: 1;
+        }
+        .fd-hero-pill-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.6;
+            display: block;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .fd-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .fd-search-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 10px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            background: white;
+        }
+        .fd-search-input:focus {
+            border-color: #e63333;
+            box-shadow: 0 0 0 3px rgba(230,51,51,0.08);
+        }
+        .fd-count {
+            font-size: 13px;
+            color: #aaa;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .fd-div-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .fd-div-btn {
+            padding: 7px 16px;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.18s;
+            font-family: inherit;
+        }
+        .fd-div-btn:hover { border-color: #e63333; color: #e63333; }
+        .fd-div-btn.active { background: #e63333; border-color: #e63333; color: white; }
+        .fd-table-wrap {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            overflow-x: auto;
+        }
+        .fd-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .fd-table thead th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #bbb;
+            font-weight: 700;
+            border-bottom: 2px solid #f0f0f0;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: color 0.15s;
+        }
+        .fd-table thead th:hover { color: #e63333; }
+        .fd-table thead th.fd-sorted { color: #e63333; }
+        .fd-table thead th.fd-sorted::after { content: ' ↓'; font-size: 10px; }
+        .fd-table thead th.fd-sorted.fd-asc::after { content: ' ↑'; font-size: 10px; }
+        .fd-table thead th.fd-no-sort { cursor: default; }
+        .fd-table thead th.fd-no-sort:hover { color: #bbb; }
+        .fd-table tbody tr {
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+        .fd-table tbody tr:last-child { border-bottom: none; }
+        .fd-table tbody tr:hover { background: #fafafa; }
+        .fd-table tbody tr.fd-rk1 { background: linear-gradient(90deg, rgba(255,215,0,0.07), transparent 60%); }
+        .fd-table tbody tr.fd-rk2 { background: linear-gradient(90deg, rgba(192,192,192,0.07), transparent 60%); }
+        .fd-table tbody tr.fd-rk3 { background: linear-gradient(90deg, rgba(205,127,50,0.07), transparent 60%); }
+        .fd-table tbody tr.fd-rk1:hover { background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(250,250,250,0.5) 60%); }
+        .fd-table tbody tr.fd-rk2:hover { background: linear-gradient(90deg, rgba(192,192,192,0.12), rgba(250,250,250,0.5) 60%); }
+        .fd-table tbody tr.fd-rk3:hover { background: linear-gradient(90deg, rgba(205,127,50,0.12), rgba(250,250,250,0.5) 60%); }
+        .fd-table tbody td { padding: 11px 12px; vertical-align: middle; }
+        .fd-rank-cell { width: 44px; text-align: center; }
+        .fd-fighter-name { font-weight: 700; color: #222; line-height: 1.3; }
+        .fd-fighter-meta { font-size: 11px; color: #bbb; margin-top: 2px; display: flex; align-items: center; gap: 3px; }
+        .fd-div-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .fd-stat-num {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            text-align: center;
+        }
+        .fd-stat-none { color: #ddd !important; }
+        .fd-yr-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 2px;
+            background: #e63333;
+            opacity: 0.7;
+        }
+        .fd-pts-cell { text-align: right; padding-right: 20px !important; }
+        .fd-pts-num {
+            font-size: 16px;
+            font-weight: 800;
+            color: #e63333;
+        }
+        .fd-pts-zero { color: #ccc; }
+
+        /* Fighter modal */
+        .fd-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .fd-modal-overlay.open { display: flex; animation: fdFadeIn 0.18s ease; }
+        @keyframes fdFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fd-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 680px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+            animation: fdSlideUp 0.22s ease;
+        }
+        @keyframes fdSlideUp {
+            from { transform: translateY(16px); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+        .fd-modal-top {
+            padding: 26px 28px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            border-radius: 16px 16px 0 0;
+        }
+        .fd-modal-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+        .fd-modal-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #222;
+            line-height: 1.2;
+        }
+        .fd-modal-close {
+            background: #f0f0f0;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s;
+            line-height: 1;
+        }
+        .fd-modal-close:hover { background: #ddd; }
+        .fd-modal-totals-row {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .fd-modal-stat {
+            text-align: center;
+        }
+        .fd-modal-stat-num {
+            font-size: 20px;
+            font-weight: 800;
+            display: block;
+            line-height: 1;
+        }
+        .fd-modal-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #bbb;
+            font-weight: 700;
+            margin-top: 3px;
+            display: block;
+        }
+        .fd-modal-body {
+            padding: 22px 28px 28px;
+        }
+        .fd-modal-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #bbb;
+            margin-bottom: 14px;
+        }
+        .fd-season-card {
+            border: 1.5px solid #eeeeee;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .fd-season-card:hover { border-color: #e63333; box-shadow: 0 2px 10px rgba(230,51,51,0.08); }
+        .fd-season-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .fd-season-year-badge {
+            font-size: 13px;
+            font-weight: 800;
+            color: #222;
+            background: #f5f5f5;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .fd-season-team-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #444;
+        }
+        .fd-season-team-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        .fd-season-pts {
+            font-size: 22px;
+            font-weight: 800;
+            color: #e63333;
+        }
+        .fd-season-stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .fd-ss-item { text-align: center; min-width: 34px; }
+        .fd-ss-num { font-size: 15px; font-weight: 700; color: #444; display: block; line-height: 1.2; }
+        .fd-ss-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; color: #bbb; font-weight: 600; }
+        .fd-modal-empty {
+            text-align: center;
+            padding: 40px;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .fd-hero { padding: 24px 20px; }
+            .fd-hero-title { font-size: 26px; }
+            .fd-table { font-size: 12px; }
+            .fd-table thead th, .fd-table tbody td { padding: 9px 8px; }
+            .fd-modal-top { padding: 20px 20px 16px; }
+            .fd-modal-body { padding: 18px 20px 24px; }
+            .fd-modal-name { font-size: 18px; }
+        }

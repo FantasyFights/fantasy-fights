@@ -1,0 +1,258 @@
+
+        /* ============ AUTH SCREENS ============ */
+        .auth-container {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container.active {
+            display: flex;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            color: #222;
+        }
+
+        .auth-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #f0f0f0;
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .auth-toggle button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #999;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-toggle button.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .auth-error {
+            padding: 12px;
+            background: #fee;
+            color: #c33;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .auth-error.show {
+            display: block;
+        }
+
+        .auth-button {
+            padding: 12px;
+            border: none;
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .auth-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .auth-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============ FIREBASE SETUP SCREEN ============ */
+        /* Setup screen removed - Firebase config is hardcoded */
+
+        /* ============ LOADING SCREEN ============ */
+        .loading-screen {
+            display: none; position: fixed; inset: 0;
+            background: #0d0d1a; z-index: 9999;
+            align-items: center; justify-content: center; flex-direction: column; gap: 20px;
+        }
+        .loading-screen.active { display: flex; }
+        .loading-logo-text { font-size: 26px; font-weight: 900; color: white; letter-spacing: -0.5px; }
+        .loading-logo-text span { color: #e63333; }
+        .loading-spinner {
+            width: 34px; height: 34px;
+            border: 3px solid rgba(255,255,255,0.10);
+            border-top-color: #e63333;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* ============ VERIFY EMAIL SCREEN ============ */
+        .verify-screen {
+            display: none; min-height: 100vh;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .verify-screen.active { display: flex; }
+        .verify-card {
+            background: white; border-radius: 16px; padding: 48px 40px;
+            width: 100%; max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.30); text-align: center;
+        }
+        .verify-icon { font-size: 50px; margin-bottom: 16px; line-height: 1; }
+        .verify-title { font-size: 22px; font-weight: 800; color: #111; margin-bottom: 10px; }
+        .verify-email-addr { font-weight: 700; color: #e63333; }
+        .verify-body { font-size: 14px; color: #666; line-height: 1.75; margin-bottom: 28px; }
+        .verify-primary-btn {
+            display: block; width: 100%; padding: 14px;
+            background: #e63333; color: white;
+            font-size: 15px; font-weight: 700; border: none; border-radius: 8px;
+            cursor: pointer; margin-bottom: 10px; transition: all 0.2s ease; font-family: inherit;
+        }
+        .verify-primary-btn:hover { background: #cc1f1f; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(230,51,51,0.3); }
+        .verify-secondary-btn {
+            background: none; border: none; color: #667eea;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            padding: 8px; display: block; width: 100%; margin-bottom: 6px; font-family: inherit;
+        }
+        .verify-secondary-btn:hover { text-decoration: underline; }
+        .verify-divider { border: none; border-top: 1px solid #f0f0f0; margin: 12px 0; }
+        .verify-signout-btn {
+            background: none; border: none; color: #bbb;
+            font-size: 12px; cursor: pointer; padding: 4px; font-family: inherit;
+        }
+        .verify-signout-btn:hover { color: #666; text-decoration: underline; }
+        .verify-message { font-size: 13px; margin-top: 12px; min-height: 18px; font-weight: 600; }
+        .verify-message.success { color: #16a34a; }
+        .verify-message.error { color: #e63333; }
+
+        /* ============ PROFILE SETUP SCREEN ============ */
+        .profile-setup-screen {
+            display: none; min-height: 100vh;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .profile-setup-screen.active { display: flex; }
+        .profile-setup-card {
+            background: white; border-radius: 16px; padding: 48px 40px;
+            width: 100%; max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+        }
+        .profile-setup-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #e63333; margin-bottom: 10px; }
+        .profile-setup-title { font-size: 24px; font-weight: 900; color: #111; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .profile-setup-sub { font-size: 14px; color: #888; line-height: 1.65; margin-bottom: 28px; }
+        .profile-setup-label { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px; display: block; }
+        .profile-setup-input {
+            width: 100%; padding: 13px 16px; border: 2px solid #eee;
+            border-radius: 8px; font-size: 16px; font-family: inherit;
+            outline: none; transition: border-color 0.2s;
+            margin-bottom: 8px; color: #111; box-sizing: border-box;
+        }
+        .profile-setup-input:focus { border-color: #e63333; }
+        .profile-setup-hint { font-size: 12px; color: #bbb; margin-bottom: 20px; }
+        .profile-setup-submit {
+            width: 100%; padding: 15px; background: #e63333; color: white;
+            font-size: 15px; font-weight: 800; border: none; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s ease; letter-spacing: 0.01em; font-family: inherit;
+        }
+        .profile-setup-submit:hover { background: #cc1f1f; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(230,51,51,0.35); }
+        .profile-setup-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .profile-setup-error { font-size: 13px; color: #e63333; margin-bottom: 12px; min-height: 16px; }
+
+        /* ============ FORGOT PASSWORD PANEL ============ */
+        .forgot-password-panel { display: none; }
+        .forgot-password-panel.active { display: block; }
+        .forgot-back-link {
+            background: none; border: none; color: #667eea;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            padding: 0 0 18px 0; display: flex; align-items: center; gap: 4px;
+            font-family: inherit;
+        }
+        .forgot-back-link:hover { text-decoration: underline; }
+        .forgot-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 8px; }
+        .forgot-sub { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 20px; }
+        .forgot-success {
+            background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+            padding: 14px 16px; font-size: 13px; color: #16a34a;
+            font-weight: 600; line-height: 1.55; display: none; margin-top: 12px;
+        }
+        .forgot-success.show { display: block; }
+
+        /* ============ HEADER AUTH BUTTONS (logged-out) ============ */
+        .header-auth-btns { display: none; gap: 8px; align-items: center; }
+        .header-auth-btns.active { display: flex; }
+        .header-sign-in-btn {
+            padding: 8px 18px; background: none;
+            border: 1.5px solid #ddd; border-radius: 6px;
+            font-size: 13px; font-weight: 600; color: #555;
+            cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .header-sign-in-btn:hover { border-color: #aaa; color: #333; }
+        .header-register-btn {
+            padding: 8px 18px; background: #e63333; border: none;
+            border-radius: 6px; font-size: 13px; font-weight: 700;
+            color: white; cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .header-register-btn:hover { background: #cc1f1f; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(230,51,51,0.3); }
+    
