@@ -2265,20 +2265,138 @@
             padding: 40px 20px 80px;
         }
         /* hero */
+        /* ── Hero — full dark redesign for public launch ── */
         .about-hero {
-            background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            padding: 48px; margin-bottom: 24px; border-top: 4px solid #e63333;
-            display: grid; grid-template-columns: 1fr 300px; gap: 48px; align-items: center;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 45%, #0f2044 100%);
+            border-radius: 16px;
+            padding: 64px 52px;
+            margin-bottom: 24px;
+            border-top: none;
+            display: grid;
+            grid-template-columns: 1fr 310px;
+            gap: 52px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.22);
         }
-        .about-hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #e63333; margin-bottom: 14px; }
-        .about-hero h1 { font-size: 36px; font-weight: 800; color: #111; line-height: 1.15; margin-bottom: 16px; }
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 380px; height: 380px;
+            background: radial-gradient(circle, rgba(230,51,51,0.10) 0%, transparent 68%);
+            pointer-events: none;
+        }
+        .about-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: 30%;
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, rgba(102,126,234,0.07) 0%, transparent 68%);
+            pointer-events: none;
+        }
+        .about-hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(230,51,51,0.15);
+            border: 1px solid rgba(230,51,51,0.30);
+            color: #ff8080;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-bottom: 22px;
+        }
+        .about-hero h1 {
+            font-size: 56px;
+            font-weight: 900;
+            color: white;
+            line-height: 1.04;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
         .about-hero h1 span { color: #e63333; }
-        .about-hero-body { font-size: 15px; color: #555; line-height: 1.75; margin-bottom: 24px; max-width: 540px; }
-        .about-hero-stats { display: flex; flex-direction: column; gap: 0; background: white; border-radius: 10px; border: 1px solid #eee; overflow: hidden; }
-        .about-hero-spec { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 13px 18px; border-bottom: 1px solid #f0f0f0; }
+        .about-hero-body {
+            font-size: 16px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.75;
+            margin-bottom: 32px;
+            max-width: 520px;
+        }
+        .about-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+        .about-hero-cta-primary {
+            padding: 15px 34px;
+            background: #e63333;
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 0.01em;
+        }
+        .about-hero-cta-primary:hover {
+            background: #cc1f1f;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(230,51,51,0.45);
+        }
+        .about-hero-cta-secondary {
+            padding: 15px 26px;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.80);
+            font-size: 15px;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .about-hero-cta-secondary:hover {
+            background: rgba(255,255,255,0.14);
+            border-color: rgba(255,255,255,0.32);
+            color: white;
+        }
+        .about-hero-proof { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .about-hero-proof-item { font-size: 12px; color: rgba(255,255,255,0.38); font-weight: 500; }
+        .about-hero-proof-item strong { color: rgba(255,255,255,0.72); font-weight: 700; }
+        .about-hero-proof-divider { color: rgba(255,255,255,0.18); font-size: 14px; }
+        /* Stats panel on dark background */
+        .about-hero-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.10);
+            overflow: hidden;
+        }
+        .about-hero-spec {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 13px 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
         .about-hero-spec:last-child { border-bottom: none; }
-        .about-hero-spec-label { font-size: 12px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
-        .about-hero-spec-value { font-size: 13px; font-weight: 700; color: #222; text-align: right; }
+        .about-hero-spec-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.38); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+        .about-hero-spec-value { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.85); text-align: right; }
+        .about-hero-spec-value.highlight {
+            color: #4ade80;
+            font-size: 12px;
+            background: rgba(74,222,128,0.12);
+            border: 1px solid rgba(74,222,128,0.25);
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
         /* shared labels */
         .about-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #e63333; margin-bottom: 8px; }
         .about-section-title { font-size: 26px; font-weight: 700; color: #222; margin-bottom: 8px; }
@@ -2382,6 +2500,135 @@
             font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
             padding: 5px 12px; border-radius: 4px;
         }
+        /* ── Public launch announcement strip ── */
+        .about-launch-strip {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: linear-gradient(135deg, #fff8f8 0%, #fff3f3 100%);
+            border: 1px solid #fcd5d5;
+            border-left: 4px solid #e63333;
+            border-radius: 10px;
+            padding: 18px 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .about-launch-icon { font-size: 24px; flex-shrink: 0; line-height: 1; }
+        .about-launch-text { flex: 1; font-size: 14px; color: #444; line-height: 1.6; min-width: 180px; }
+        .about-launch-text strong { color: #b91c1c; font-weight: 700; }
+        .about-launch-btn {
+            padding: 10px 22px;
+            background: #e63333;
+            color: white;
+            font-size: 13px;
+            font-weight: 800;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+            letter-spacing: 0.01em;
+        }
+        .about-launch-btn:hover {
+            background: #cc1f1f;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(230,51,51,0.35);
+        }
+
+        /* ── Join / Register section ── */
+        .about-join-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 48px 52px;
+            margin-bottom: 40px;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 52px;
+            align-items: center;
+            border-top: 4px solid #e63333;
+        }
+        .about-join-headline {
+            font-size: 30px;
+            font-weight: 900;
+            color: #111;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        .about-join-sub {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.70;
+            margin-bottom: 28px;
+            max-width: 440px;
+        }
+        .about-join-checks { display: flex; flex-direction: column; gap: 10px; }
+        .about-join-check {
+            font-size: 14px;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.4;
+        }
+        .about-join-check::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: 900;
+            font-size: 13px;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+        .about-join-card {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 30px 24px;
+            text-align: center;
+        }
+        .about-join-card-title { font-size: 19px; font-weight: 900; color: #111; margin-bottom: 4px; letter-spacing: -0.3px; }
+        .about-join-card-sub { font-size: 13px; color: #aaa; margin-bottom: 22px; }
+        .about-join-card-cta {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #e63333;
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-bottom: 12px;
+            letter-spacing: 0.01em;
+        }
+        .about-join-card-cta:hover {
+            background: #cc1f1f;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(230,51,51,0.38);
+        }
+        .about-join-signin {
+            background: none;
+            border: none;
+            color: #667eea;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            margin-bottom: 22px;
+            display: block;
+            width: 100%;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .about-join-signin:hover { text-decoration: underline; }
+        .about-join-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .about-join-badge { font-size: 11px; color: #888; background: #efefef; padding: 4px 11px; border-radius: 20px; font-weight: 600; }
+
         /* why different */
         .about-diff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
         .about-diff-card {
@@ -2399,9 +2646,14 @@
             .about-features-grid { grid-template-columns: repeat(2, 1fr); }
             .about-how-grid { grid-template-columns: repeat(2, 1fr); }
         }
+        @media (max-width: 1100px) {
+            .about-join-section { grid-template-columns: 1fr 290px; gap: 36px; }
+        }
         @media (max-width: 900px) {
-            .about-hero { grid-template-columns: 1fr; }
+            .about-hero { grid-template-columns: 1fr; padding: 44px 36px; }
             .about-hero-stats { display: none; }
+            .about-hero h1 { font-size: 44px; }
+            .about-join-section { grid-template-columns: 1fr; padding: 36px 28px; }
             .about-scoring-wrapper { grid-template-columns: 1fr; }
             .about-origin-strip { grid-template-columns: 1fr; }
             .about-market-grid { grid-template-columns: 1fr 1fr; }
@@ -2410,8 +2662,13 @@
             .about-features-grid { grid-template-columns: 1fr; }
             .about-how-grid { grid-template-columns: 1fr; }
             .about-market-grid { grid-template-columns: 1fr; }
-            .about-hero { padding: 26px 20px; }
-            .about-hero h1 { font-size: 26px; }
+            .about-hero { padding: 36px 22px; }
+            .about-hero h1 { font-size: 34px; letter-spacing: -1px; }
+            .about-hero-actions { gap: 10px; }
+            .about-hero-cta-primary, .about-hero-cta-secondary { width: 100%; text-align: center; }
+            .about-launch-strip { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .about-join-section { padding: 28px 20px; }
+            .about-join-headline { font-size: 22px; }
         }
 
         /* ══════════════ FIGHT PREVIEW MODAL ══════════════ */
@@ -2962,7 +3219,7 @@
                 <div class="user-menu" style="display:none"></div>
             </div>
             <nav id="mainNav">
-                <a onclick="showPage('about')" class="nav-about">Our Story</a>
+                <a onclick="showPage('about')" class="nav-about">Home</a>
                 <a onclick="showPage('fighters')" class="nav-fighters">Fighters</a>
                 <button class="nav-dropdown-btn" id="leagueBtn" onclick="showPage('home')">League VI</button>
                 <div class="nav-dropdown" id="draftDropdown">
@@ -3247,34 +3504,47 @@
             <!-- Hero -->
             <div class="about-hero">
               <div>
-                <div class="about-hero-eyebrow">The World's First Fantasy Boxing Platform</div>
+                <div class="about-hero-eyebrow">🌍 World's First Fantasy Boxing Platform · Now Open to the Public</div>
                 <h1>Fantasy Sports.<br><span>For Boxing.</span></h1>
-                <p class="about-hero-body">Draft a stable of elite professional boxers. Score points from their real fights. Compete against friends in a season-long league. Fantasy Fights brings the world's most exciting sport into a format built for competition, strategy, and bragging rights.</p>
-                <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                  <a onclick="showPage('home')" class="about-btn about-btn-red" style="cursor:pointer;">Get Early Access — Free</a>
-                  <a href="mailto:dominic.pirrello@gmail.com" class="about-btn about-btn-outline">Get in Touch</a>
+                <p class="about-hero-body">Draft a stable of elite professional boxers. Score points from real fights. Compete in season-long leagues with fans worldwide. Five seasons of proven gameplay — now open to everyone, free.</p>
+                <div class="about-hero-actions">
+                  <button onclick="goToSignup()" class="about-hero-cta-primary">Register Free →</button>
+                  <button onclick="showAuthScreen()" class="about-hero-cta-secondary">Sign In</button>
+                </div>
+                <div class="about-hero-proof">
+                  <div class="about-hero-proof-item"><strong>5</strong> Seasons Played</div>
+                  <div class="about-hero-proof-divider">·</div>
+                  <div class="about-hero-proof-item"><strong>Founded</strong> 2021</div>
+                  <div class="about-hero-proof-divider">·</div>
+                  <div class="about-hero-proof-item"><strong>Free</strong> Always</div>
+                  <div class="about-hero-proof-divider">·</div>
+                  <div class="about-hero-proof-item"><strong>No</strong> Credit Card</div>
                 </div>
               </div>
               <div class="about-hero-stats">
                 <div class="about-hero-spec">
+                  <span class="about-hero-spec-label">Status</span>
+                  <span class="about-hero-spec-value highlight">🟢 Open — Join Now</span>
+                </div>
+                <div class="about-hero-spec">
                   <span class="about-hero-spec-label">Founded</span>
-                  <span class="about-hero-spec-value">2021</span>
+                  <span class="about-hero-spec-value">2021 · Bondi, Australia</span>
                 </div>
                 <div class="about-hero-spec">
                   <span class="about-hero-spec-label">Seasons Completed</span>
-                  <span class="about-hero-spec-value">5</span>
-                </div>
-                <div class="about-hero-spec">
-                  <span class="about-hero-spec-label">Scoring</span>
-                  <span class="about-hero-spec-value">Based on Real Fight Results</span>
+                  <span class="about-hero-spec-value">5 Seasons</span>
                 </div>
                 <div class="about-hero-spec">
                   <span class="about-hero-spec-label">Game Format</span>
                   <span class="about-hero-spec-value">Season-Long Draft Leagues</span>
                 </div>
                 <div class="about-hero-spec">
+                  <span class="about-hero-spec-label">Scoring</span>
+                  <span class="about-hero-spec-value">Real Fight Results</span>
+                </div>
+                <div class="about-hero-spec">
                   <span class="about-hero-spec-label">Pricing</span>
-                  <span class="about-hero-spec-value">Free to Play</span>
+                  <span class="about-hero-spec-value">Free — Always</span>
                 </div>
               </div>
             </div>
@@ -3284,6 +3554,15 @@
               <div class="about-clarity-headline">Draft fighters. Keep them. Score points across real fight nights. Win your league.</div>
               <div class="about-clarity-sub">No weekly picks. No resets. Your stable competes across the entire boxing calendar — every fight counts toward your season total.</div>
               <span class="about-clarity-tag">Season-Long Fantasy Boxing</span>
+            </div>
+
+            <!-- Public Launch Strip -->
+            <div class="about-launch-strip">
+              <div class="about-launch-icon">🚀</div>
+              <div class="about-launch-text">
+                <strong>Fantasy Fights is now open to the public.</strong> Create your own league, invite friends, or join a public league with boxing fans worldwide. Season VI drafts are open — be a founding member.
+              </div>
+              <button onclick="goToSignup()" class="about-launch-btn">Join Free →</button>
             </div>
 
             <!-- Features -->
@@ -3351,6 +3630,34 @@
                 <div class="about-diff-icon">🔄</div>
                 <h4>Timing and Selection Decide Winners.</h4>
                 <p>Who you draft, when you draft them, and which fights they&#x2019;re in — that&#x2019;s what separates champions from also-rans.</p>
+              </div>
+            </div>
+
+            <!-- Join / Register Section -->
+            <div class="about-join-section">
+              <div>
+                <div class="about-section-label">Get Started Free</div>
+                <div class="about-join-headline">Join a league in under 2 minutes.</div>
+                <div class="about-join-sub">Free forever. No credit card. Just boxing knowledge and the willingness to back yourself in a draft against fans who think they know better.</div>
+                <div class="about-join-checks">
+                  <div class="about-join-check">Create your account — takes 30 seconds</div>
+                  <div class="about-join-check">Browse public leagues or create your own</div>
+                  <div class="about-join-check">Draft your stable of elite fighters</div>
+                  <div class="about-join-check">Score points across the entire boxing calendar</div>
+                </div>
+              </div>
+              <div>
+                <div class="about-join-card">
+                  <div class="about-join-card-title">Get Started — Free</div>
+                  <div class="about-join-card-sub">Takes less than 2 minutes · No credit card</div>
+                  <button onclick="goToSignup()" class="about-join-card-cta">Register Free →</button>
+                  <button onclick="showAuthScreen()" class="about-join-signin">Already have an account? Sign in</button>
+                  <div class="about-join-badges">
+                    <span class="about-join-badge">🔒 Secure</span>
+                    <span class="about-join-badge">🆓 Free Forever</span>
+                    <span class="about-join-badge">🥊 Boxing Only</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -3463,7 +3770,7 @@
             <!-- Origin Strip -->
             <div class="about-origin-strip">
               <div>
-                <div class="about-section-label" style="margin-bottom:10px;">Our Story</div>
+                <div class="about-section-label" style="margin-bottom:10px;">The Origin</div>
                 <p style="font-size:15px;font-weight:600;color:#222;line-height:1.6;margin-bottom:14px;">Boxing has always been about debate. Who beats who. Who's overrated. Who's next. Fantasy Fights turns those debates into competition.</p>
                 <p>In 2021, four friends in Bondi sat down to do a boxing fantasy draft — and discovered that <strong>no platform existed anywhere in the world to run one</strong>. So they printed a draft sheet, built a spreadsheet, and did it themselves.</p>
                 <p style="margin-top:14px;">Five seasons later, the league has grown, the game has been refined through real competition, and what started as a private experiment is now the foundation of the world's first public fantasy boxing platform. Everything you see here was built by fans, tested in real seasons, and shaped by the sport itself.</p>
@@ -3506,7 +3813,7 @@
               <h2>🥊 The Draft Starts Here</h2>
               <p>Join Fantasy Fights and build the world's best fantasy boxing stable. Free to play, built by fans, backed by five seasons of the real thing.</p>
               <div class="about-cta-actions">
-                <a onclick="showPage('home')" class="about-btn about-btn-red" style="cursor:pointer;">Go to Home</a>
+                <button onclick="goToSignup()" class="about-btn about-btn-red" style="cursor:pointer;">Register Free — Join Now</button>
                 <a href="mailto:dominic.pirrello@gmail.com" class="about-btn about-btn-outline">Investor &amp; Partner Enquiries</a>
               </div>
             </div>
@@ -3995,6 +4302,11 @@
         // ============ AUTH ============
         function showAuthScreen() {
             document.getElementById('authContainer').classList.add('active');
+        }
+
+        function goToSignup() {
+            showAuthScreen();
+            setTimeout(() => switchAuthMode('signup'), 60);
         }
 
         function hideAuthScreen() {
