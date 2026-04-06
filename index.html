@@ -3173,39 +3173,224 @@
             .fd-modal-body { padding: 18px 20px 24px; }
             .fd-modal-name { font-size: 18px; }
         }
+
+        /* ============ LOADING SCREEN ============ */
+        .loading-screen {
+            display: none; position: fixed; inset: 0;
+            background: #0d0d1a; z-index: 9999;
+            align-items: center; justify-content: center; flex-direction: column; gap: 20px;
+        }
+        .loading-screen.active { display: flex; }
+        .loading-logo-text { font-size: 26px; font-weight: 900; color: white; letter-spacing: -0.5px; }
+        .loading-logo-text span { color: #e63333; }
+        .loading-spinner {
+            width: 34px; height: 34px;
+            border: 3px solid rgba(255,255,255,0.10);
+            border-top-color: #e63333;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* ============ VERIFY EMAIL SCREEN ============ */
+        .verify-screen {
+            display: none; min-height: 100vh;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .verify-screen.active { display: flex; }
+        .verify-card {
+            background: white; border-radius: 16px; padding: 48px 40px;
+            width: 100%; max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.30); text-align: center;
+        }
+        .verify-icon { font-size: 50px; margin-bottom: 16px; line-height: 1; }
+        .verify-title { font-size: 22px; font-weight: 800; color: #111; margin-bottom: 10px; }
+        .verify-email-addr { font-weight: 700; color: #e63333; }
+        .verify-body { font-size: 14px; color: #666; line-height: 1.75; margin-bottom: 28px; }
+        .verify-primary-btn {
+            display: block; width: 100%; padding: 14px;
+            background: #e63333; color: white;
+            font-size: 15px; font-weight: 700; border: none; border-radius: 8px;
+            cursor: pointer; margin-bottom: 10px; transition: all 0.2s ease; font-family: inherit;
+        }
+        .verify-primary-btn:hover { background: #cc1f1f; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(230,51,51,0.3); }
+        .verify-secondary-btn {
+            background: none; border: none; color: #667eea;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            padding: 8px; display: block; width: 100%; margin-bottom: 6px; font-family: inherit;
+        }
+        .verify-secondary-btn:hover { text-decoration: underline; }
+        .verify-divider { border: none; border-top: 1px solid #f0f0f0; margin: 12px 0; }
+        .verify-signout-btn {
+            background: none; border: none; color: #bbb;
+            font-size: 12px; cursor: pointer; padding: 4px; font-family: inherit;
+        }
+        .verify-signout-btn:hover { color: #666; text-decoration: underline; }
+        .verify-message { font-size: 13px; margin-top: 12px; min-height: 18px; font-weight: 600; }
+        .verify-message.success { color: #16a34a; }
+        .verify-message.error { color: #e63333; }
+
+        /* ============ PROFILE SETUP SCREEN ============ */
+        .profile-setup-screen {
+            display: none; min-height: 100vh;
+            background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 100%);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .profile-setup-screen.active { display: flex; }
+        .profile-setup-card {
+            background: white; border-radius: 16px; padding: 48px 40px;
+            width: 100%; max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+        }
+        .profile-setup-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #e63333; margin-bottom: 10px; }
+        .profile-setup-title { font-size: 24px; font-weight: 900; color: #111; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .profile-setup-sub { font-size: 14px; color: #888; line-height: 1.65; margin-bottom: 28px; }
+        .profile-setup-label { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 6px; display: block; }
+        .profile-setup-input {
+            width: 100%; padding: 13px 16px; border: 2px solid #eee;
+            border-radius: 8px; font-size: 16px; font-family: inherit;
+            outline: none; transition: border-color 0.2s;
+            margin-bottom: 8px; color: #111; box-sizing: border-box;
+        }
+        .profile-setup-input:focus { border-color: #e63333; }
+        .profile-setup-hint { font-size: 12px; color: #bbb; margin-bottom: 20px; }
+        .profile-setup-submit {
+            width: 100%; padding: 15px; background: #e63333; color: white;
+            font-size: 15px; font-weight: 800; border: none; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s ease; letter-spacing: 0.01em; font-family: inherit;
+        }
+        .profile-setup-submit:hover { background: #cc1f1f; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(230,51,51,0.35); }
+        .profile-setup-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .profile-setup-error { font-size: 13px; color: #e63333; margin-bottom: 12px; min-height: 16px; }
+
+        /* ============ FORGOT PASSWORD PANEL ============ */
+        .forgot-password-panel { display: none; }
+        .forgot-password-panel.active { display: block; }
+        .forgot-back-link {
+            background: none; border: none; color: #667eea;
+            font-size: 13px; font-weight: 600; cursor: pointer;
+            padding: 0 0 18px 0; display: flex; align-items: center; gap: 4px;
+            font-family: inherit;
+        }
+        .forgot-back-link:hover { text-decoration: underline; }
+        .forgot-title { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 8px; }
+        .forgot-sub { font-size: 13px; color: #888; line-height: 1.6; margin-bottom: 20px; }
+        .forgot-success {
+            background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+            padding: 14px 16px; font-size: 13px; color: #16a34a;
+            font-weight: 600; line-height: 1.55; display: none; margin-top: 12px;
+        }
+        .forgot-success.show { display: block; }
+
+        /* ============ HEADER AUTH BUTTONS (logged-out) ============ */
+        .header-auth-btns { display: none; gap: 8px; align-items: center; }
+        .header-auth-btns.active { display: flex; }
+        .header-sign-in-btn {
+            padding: 8px 18px; background: none;
+            border: 1.5px solid #ddd; border-radius: 6px;
+            font-size: 13px; font-weight: 600; color: #555;
+            cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .header-sign-in-btn:hover { border-color: #aaa; color: #333; }
+        .header-register-btn {
+            padding: 8px 18px; background: #e63333; border: none;
+            border-radius: 6px; font-size: 13px; font-weight: 700;
+            color: white; cursor: pointer; transition: all 0.2s; font-family: inherit;
+        }
+        .header-register-btn:hover { background: #cc1f1f; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(230,51,51,0.3); }
     </style>
 </head>
 <body>
     <!-- Firebase is pre-configured -->
 
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div style="text-align:center">
+            <div class="loading-logo-text">Fantasy <span>Fights</span></div>
+            <div class="loading-spinner" style="margin:20px auto 0;"></div>
+        </div>
+    </div>
+
     <!-- Auth Screens -->
-    <div class="auth-container" id="authContainer" style="display:none!important">
+    <div class="auth-container" id="authContainer">
         <div class="auth-card">
             <div class="auth-logo">
                 <img src="Fantasy Fights Logo.png" alt="Fantasy Fights" style="height:56px;width:auto;object-fit:contain;display:block;margin:0 auto;">
             </div>
 
-            <div class="auth-toggle">
-                <button class="active" onclick="switchAuthMode('signin')">Sign In</button>
-                <button onclick="switchAuthMode('signup')">Sign Up</button>
+            <!-- Main sign in / sign up panel -->
+            <div id="authMainPanel">
+                <div class="auth-toggle">
+                    <button class="active" onclick="switchAuthMode('signin')">Sign In</button>
+                    <button onclick="switchAuthMode('signup')">Sign Up</button>
+                </div>
+
+                <form class="auth-form" id="authForm" onsubmit="handleAuth(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="authEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="authPassword" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group" id="confirmPasswordGroup" style="display: none;">
+                        <label>Confirm Password</label>
+                        <input type="password" id="authConfirmPassword" placeholder="••••••••">
+                    </div>
+                    <div class="auth-error" id="authError"></div>
+                    <button type="submit" class="auth-button" id="authSubmitBtn">Sign In</button>
+                </form>
+                <button id="forgotPasswordLink" class="forgot-link" onclick="showForgotPassword()" style="background:none;border:none;color:#aaa;font-size:12px;cursor:pointer;margin-top:12px;display:block;width:100%;text-align:center;font-family:inherit;">
+                    Forgot your password?
+                </button>
             </div>
 
-            <form class="auth-form" id="authForm" onsubmit="handleAuth(event)">
+            <!-- Forgot password panel -->
+            <div class="forgot-password-panel" id="forgotPasswordPanel">
+                <button class="forgot-back-link" onclick="hideForgotPassword()">← Back to sign in</button>
+                <div class="forgot-title">Reset your password</div>
+                <div class="forgot-sub">Enter your email and we'll send you a reset link right away.</div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" id="authEmail" placeholder="your@email.com" required>
+                    <input type="email" id="forgotEmail" placeholder="your@email.com">
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" required>
-                </div>
-                <div class="form-group" id="confirmPasswordGroup" style="display: none;">
-                    <label>Confirm Password</label>
-                    <input type="password" id="authConfirmPassword" placeholder="••••••••">
-                </div>
-                <div class="auth-error" id="authError"></div>
-                <button type="submit" class="auth-button" id="authSubmitBtn">Sign In</button>
-            </form>
+                <div class="auth-error" id="forgotError"></div>
+                <button class="auth-button" id="forgotSubmitBtn" onclick="sendPasswordReset()">Send Reset Email</button>
+                <div class="forgot-success" id="forgotSuccess">✓ Check your inbox — a reset link has been sent.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verify Email Screen -->
+    <div class="verify-screen" id="verifyScreen">
+        <div class="verify-card">
+            <div class="verify-icon">✉️</div>
+            <div class="verify-title">Check your inbox</div>
+            <p class="verify-body">
+                We've sent a verification link to<br>
+                <span class="verify-email-addr" id="verifyEmailAddress"></span><br><br>
+                Click the link in the email, then come back here and tap the button below to continue.
+            </p>
+            <button class="verify-primary-btn" onclick="checkEmailVerification()">I've verified my email →</button>
+            <button class="verify-secondary-btn" onclick="resendVerificationEmail()">Resend verification email</button>
+            <div class="verify-message" id="verifyMessage"></div>
+            <hr class="verify-divider">
+            <button class="verify-signout-btn" onclick="handleSignOut()">Use a different account</button>
+        </div>
+    </div>
+
+    <!-- Profile Setup Screen -->
+    <div class="profile-setup-screen" id="profileSetupScreen">
+        <div class="profile-setup-card">
+            <div class="profile-setup-eyebrow">🥊 Welcome to Fantasy Fights</div>
+            <div class="profile-setup-title">One last thing.</div>
+            <div class="profile-setup-sub">What should other managers call you? This is the name they'll see on the ladder, in the draft, and across all leagues.</div>
+            <label class="profile-setup-label" for="displayNameInput">Display Name</label>
+            <input class="profile-setup-input" id="displayNameInput" type="text" placeholder="e.g. Dom, The Bondi Brawler..." maxlength="30" oninput="clearProfileError()">
+            <div class="profile-setup-hint">2–30 characters. You can change this later.</div>
+            <div class="profile-setup-error" id="profileSetupError"></div>
+            <button class="profile-setup-submit" id="profileSetupBtn" onclick="saveDisplayName()">Enter the League →</button>
         </div>
     </div>
 
@@ -3216,7 +3401,22 @@
                 <div class="logo">
                     <img src="Fantasy Fights Logo.png" alt="Fantasy Fights" class="logo-img">
                 </div>
-                <div class="user-menu" style="display:none"></div>
+                <!-- Logged-out: Sign In / Register buttons -->
+                <div class="header-auth-btns" id="headerAuthBtns">
+                    <button class="header-sign-in-btn" onclick="showAuthScreen()">Sign In</button>
+                    <button class="header-register-btn" onclick="goToSignup()">Register</button>
+                </div>
+                <!-- Logged-in: User menu -->
+                <div class="user-menu" id="userMenu" style="display:none">
+                    <button class="user-menu-button" onclick="toggleUserMenu()">
+                        <span id="userMenuName">—</span>
+                        <span class="user-badge" id="userMenuBadge">Owner</span>
+                    </button>
+                    <div class="user-menu-dropdown" id="userMenuDropdown">
+                        <div class="user-menu-item info" id="userMenuEmail" style="font-size:13px;color:#888;">—</div>
+                        <div class="user-menu-item action" onclick="handleSignOut()">Sign Out</div>
+                    </div>
+                </div>
             </div>
             <nav id="mainNav">
                 <a onclick="showPage('about')" class="nav-about">Home</a>
@@ -4151,6 +4351,7 @@
         let currentUser = null;
         let userRole = null;
         let userTeamId = null;
+        let userData = null; // Firestore user document data
         let firebaseConfig = {
             apiKey: "AIzaSyClPopj3tJA5pufvH5nVPRNlhSJ03XMBIw",
             authDomain: "fantasy-fights-c8248.firebaseapp.com",
@@ -4183,7 +4384,7 @@
         async function initApp() {
             try {
                 await initializeFirebase();
-                // Auth bypassed — setupAuthListener handles showing the app directly
+                // setupAuthListener handles all auth state via Firebase onAuthStateChanged
             } catch (error) {
                 console.error('Failed to initialize Firebase:', error);
                 // Show app even if Firebase fails
@@ -4311,10 +4512,165 @@
             document.getElementById('authContainer').classList.remove('active');
         }
 
+        // ── Loading screen ──
+        function showLoadingScreen() { document.getElementById('loadingScreen').classList.add('active'); }
+        function hideLoadingScreen() { document.getElementById('loadingScreen').classList.remove('active'); }
+
+        // ── Email verification screen ──
+        function showVerifyEmailScreen(email) {
+            document.getElementById('verifyEmailAddress').textContent = email;
+            document.getElementById('verifyMessage').textContent = '';
+            document.getElementById('verifyMessage').className = 'verify-message';
+            document.getElementById('verifyScreen').classList.add('active');
+        }
+        function hideVerifyEmailScreen() {
+            document.getElementById('verifyScreen').classList.remove('active');
+        }
+
+        async function checkEmailVerification() {
+            const msgEl = document.getElementById('verifyMessage');
+            msgEl.className = 'verify-message';
+            msgEl.textContent = 'Checking...';
+            try {
+                await firebase.auth().currentUser.reload();
+                const user = firebase.auth().currentUser;
+                if (user && user.emailVerified) {
+                    msgEl.className = 'verify-message success';
+                    msgEl.textContent = '✓ Verified! Taking you in...';
+                    currentUser = user;
+                    try { await loadUserData(); } catch(e) {}
+                    setTimeout(() => {
+                        hideVerifyEmailScreen();
+                        if (!userData || !userData.profileComplete) {
+                            showProfileSetupScreen();
+                        } else {
+                            enterApp();
+                        }
+                    }, 900);
+                } else {
+                    msgEl.className = 'verify-message error';
+                    msgEl.textContent = 'Not verified yet — check your inbox and try again.';
+                }
+            } catch(e) {
+                msgEl.className = 'verify-message error';
+                msgEl.textContent = 'Something went wrong. Please try again.';
+            }
+        }
+
+        async function resendVerificationEmail() {
+            const msgEl = document.getElementById('verifyMessage');
+            try {
+                await firebase.auth().currentUser.sendEmailVerification();
+                msgEl.className = 'verify-message success';
+                msgEl.textContent = '✓ Verification email resent.';
+            } catch(e) {
+                msgEl.className = 'verify-message error';
+                msgEl.textContent = 'Could not resend — try again in a minute.';
+            }
+        }
+
+        // ── Profile setup screen ──
+        function showProfileSetupScreen() {
+            document.getElementById('profileSetupScreen').classList.add('active');
+            setTimeout(() => document.getElementById('displayNameInput').focus(), 200);
+        }
+        function hideProfileSetupScreen() {
+            document.getElementById('profileSetupScreen').classList.remove('active');
+        }
+        function clearProfileError() {
+            document.getElementById('profileSetupError').textContent = '';
+        }
+
+        async function saveDisplayName() {
+            const input = document.getElementById('displayNameInput');
+            const errorEl = document.getElementById('profileSetupError');
+            const btn = document.getElementById('profileSetupBtn');
+            const name = input.value.trim();
+
+            errorEl.textContent = '';
+            if (!name || name.length < 2) { errorEl.textContent = 'Please enter at least 2 characters.'; return; }
+            if (name.length > 30) { errorEl.textContent = 'Name must be 30 characters or less.'; return; }
+
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+            try {
+                const db = firebase.firestore();
+                await db.collection('users').doc(currentUser.uid).update({
+                    displayName: name,
+                    profileComplete: true,
+                });
+                if (!userData) userData = {};
+                userData.displayName = name;
+                userData.profileComplete = true;
+                hideProfileSetupScreen();
+                enterApp();
+            } catch(e) {
+                errorEl.textContent = 'Could not save. Please try again.';
+                btn.disabled = false;
+                btn.textContent = 'Enter the League →';
+            }
+        }
+
+        // ── Forgot password panel ──
+        function showForgotPassword() {
+            document.getElementById('authMainPanel').style.display = 'none';
+            document.getElementById('forgotPasswordPanel').classList.add('active');
+            document.getElementById('forgotError').classList.remove('show');
+            document.getElementById('forgotSuccess').classList.remove('show');
+            document.getElementById('forgotEmail').value = '';
+        }
+        function hideForgotPassword() {
+            document.getElementById('authMainPanel').style.display = '';
+            document.getElementById('forgotPasswordPanel').classList.remove('active');
+        }
+        async function sendPasswordReset() {
+            const email = document.getElementById('forgotEmail').value.trim();
+            const errorDiv = document.getElementById('forgotError');
+            const successDiv = document.getElementById('forgotSuccess');
+            const btn = document.getElementById('forgotSubmitBtn');
+            errorDiv.classList.remove('show'); successDiv.classList.remove('show');
+            if (!email) { errorDiv.textContent = 'Please enter your email address.'; errorDiv.classList.add('show'); return; }
+            btn.disabled = true; btn.textContent = 'Sending...';
+            try {
+                await firebase.auth().sendPasswordResetEmail(email);
+                successDiv.classList.add('show');
+            } catch(e) {
+                errorDiv.textContent = e.message; errorDiv.classList.add('show');
+            } finally {
+                btn.disabled = false; btn.textContent = 'Send Reset Email';
+            }
+        }
+
+        // ── App entry points ──
+        function showPublicSite() {
+            // Show header + content with limited nav (no league pages)
+            document.getElementById('mainHeader').classList.add('active');
+            document.getElementById('mainContent').classList.add('active');
+            document.getElementById('leagueBtn').style.display = 'none';
+            document.getElementById('draftDropdown').style.display = 'none';
+            document.getElementById('headerAuthBtns').classList.add('active');
+            document.getElementById('userMenu').style.display = 'none';
+            showPage('about');
+        }
+
+        function enterApp() {
+            // Restore full nav and enter the league
+            document.getElementById('leagueBtn').style.display = '';
+            document.getElementById('draftDropdown').style.display = '';
+            document.getElementById('headerAuthBtns').classList.remove('active');
+            document.getElementById('userMenu').style.display = '';
+            showMainApp();
+            updateNavigation();
+            updateUserMenu();
+            showPage('about');
+            startSheetsAutoRefresh();
+        }
+
         function switchAuthMode(mode) {
             const toggleBtns = document.querySelectorAll('.auth-toggle button');
             const confirmGroup = document.getElementById('confirmPasswordGroup');
             const submitBtn = document.getElementById('authSubmitBtn');
+            const forgotLink = document.getElementById('forgotPasswordLink');
 
             toggleBtns.forEach(btn => btn.classList.remove('active'));
 
@@ -4323,11 +4679,13 @@
                 confirmGroup.style.display = 'flex';
                 submitBtn.textContent = 'Create Account';
                 document.getElementById('authForm').dataset.mode = 'signup';
+                if (forgotLink) forgotLink.style.display = 'none';
             } else {
                 document.querySelector('.auth-toggle button:nth-child(1)').classList.add('active');
                 confirmGroup.style.display = 'none';
                 submitBtn.textContent = 'Sign In';
                 document.getElementById('authForm').dataset.mode = 'signin';
+                if (forgotLink) forgotLink.style.display = 'block';
             }
         }
 
@@ -4346,7 +4704,7 @@
                 if (mode === 'signup') {
                     const confirmPassword = document.getElementById('authConfirmPassword').value;
                     if (password !== confirmPassword) {
-                        throw new Error('Passwords do not match');
+                        throw new Error('Passwords do not match.');
                     }
 
                     const result = await firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -4360,7 +4718,9 @@
                         email: email,
                         role: role,
                         teamId: null,
-                        displayName: email.split('@')[0],
+                        displayName: null,
+                        profileComplete: false,
+                        createdAt: new Date().toISOString(),
                     });
 
                     if (role === 'commissioner') {
@@ -4369,17 +4729,31 @@
                         await db.collection('league').doc('rosters').set({});
                     }
 
+                    // Send verification email
+                    await result.user.sendEmailVerification();
                     currentUser = result.user;
+                    hideAuthScreen();
+                    showVerifyEmailScreen(email);
+                    return;
+
                 } else {
                     const result = await firebase.auth().signInWithEmailAndPassword(email, password);
                     currentUser = result.user;
+
+                    if (!currentUser.emailVerified) {
+                        hideAuthScreen();
+                        showVerifyEmailScreen(email);
+                        return;
+                    }
                 }
 
                 await loadUserData();
                 hideAuthScreen();
-                showMainApp();
-                updateNavigation();
-                renderHome();
+                if (!userData || !userData.profileComplete) {
+                    showProfileSetupScreen();
+                } else {
+                    enterApp();
+                }
             } catch (error) {
                 errorDiv.classList.add('show');
                 errorDiv.textContent = error.message;
@@ -4389,11 +4763,10 @@
         async function loadUserData() {
             const db = firebase.firestore();
             const userDoc = await db.collection('users').doc(currentUser.uid).get();
-
             if (userDoc.exists) {
-                const data = userDoc.data();
-                userRole = data.role;
-                userTeamId = data.teamId;
+                userData = userDoc.data();
+                userRole = userData.role;
+                userTeamId = userData.teamId;
             }
         }
 
@@ -4403,12 +4776,18 @@
                 currentUser = null;
                 userRole = null;
                 userTeamId = null;
-                hideMainApp();
-                showAuthScreen();
+                userData = null;
+                // Hide any intermediate screens
+                document.getElementById('verifyScreen').classList.remove('active');
+                document.getElementById('profileSetupScreen').classList.remove('active');
+                document.getElementById('authContainer').classList.remove('active');
+                // Clear auth form
                 document.getElementById('authEmail').value = '';
                 document.getElementById('authPassword').value = '';
                 document.getElementById('authConfirmPassword').value = '';
                 document.getElementById('authError').classList.remove('show');
+                hideForgotPassword();
+                showPublicSite();
             } catch (error) {
                 console.error('Sign out error:', error);
             }
@@ -4456,8 +4835,9 @@
         }
 
         function updateUserMenu() {
-            document.getElementById('userMenuName').textContent = currentUser.email.split('@')[0];
-            document.getElementById('userMenuEmail').textContent = currentUser.email;
+            const displayName = (userData && userData.displayName) || (currentUser && currentUser.email ? currentUser.email.split('@')[0] : '—');
+            document.getElementById('userMenuName').textContent = displayName;
+            document.getElementById('userMenuEmail').textContent = currentUser ? currentUser.email : '';
             const badgeEl = document.getElementById('userMenuBadge');
             badgeEl.textContent = userRole === 'commissioner' ? 'Commissioner' : 'Team Owner';
 
@@ -5366,13 +5746,38 @@
 
         // ============ AUTH STATE LISTENER ============
         function setupAuthListener() {
-            // Auth bypassed — app loads directly (re-enable by restoring Firebase auth check here)
-            currentUser = { email: 'admin', uid: 'guest' };
-            userRole = 'commissioner';
-            showMainApp();
-            updateNavigation();
-            showPage('about');
-            startSheetsAutoRefresh();
+            showLoadingScreen();
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    // Refresh to get latest email verification status
+                    try { await user.reload(); } catch(e) {}
+                    const freshUser = firebase.auth().currentUser;
+
+                    if (!freshUser.emailVerified) {
+                        currentUser = freshUser;
+                        hideLoadingScreen();
+                        showVerifyEmailScreen(freshUser.email);
+                        return;
+                    }
+
+                    currentUser = freshUser;
+                    try { await loadUserData(); } catch(e) { console.error('loadUserData:', e); }
+
+                    hideLoadingScreen();
+                    if (!userData || !userData.profileComplete) {
+                        showProfileSetupScreen();
+                    } else {
+                        enterApp();
+                    }
+                } else {
+                    currentUser = null;
+                    userRole = null;
+                    userTeamId = null;
+                    userData = null;
+                    hideLoadingScreen();
+                    showPublicSite();
+                }
+            });
         }
 
         // ============ LIVE BOXING NEWS FEED ============
