@@ -380,6 +380,33 @@
         .nav-dropdown-menu a.active { background: #fff5f5; color: #e63333; }
         .nav-dropdown-menu a.hidden { display: none; }
 
+        /* ── League sub-nav bar ── */
+        #leagueSubnav {
+            width: 100%;
+            display: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2px;
+            padding: 6px 20px 0;
+            border-top: 1px solid #f0f0f0;
+            margin-top: -6px;
+        }
+        #leagueSubnav.active { display: flex; }
+
+        .subnav-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: #999;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.18s, background 0.18s;
+            user-select: none;
+        }
+        .subnav-link:hover { color: #e63333; background: #f5f5f5; }
+        .subnav-link.active { color: #e63333; background: #f0f0f0; }
+
         /* ============ MAIN CONTENT ============ */
         main {
             display: none;
@@ -2584,18 +2611,7 @@
             </div>
             <nav id="mainNav">
                 <a onclick="showPage('about')" class="nav-about">Our Story</a>
-
-                <div class="nav-dropdown" id="leagueDropdown">
-                    <button class="nav-dropdown-btn" id="leagueBtn" onclick="toggleNavDropdown('league')">League VI &#9662;</button>
-                    <div class="nav-dropdown-menu" id="leagueMenu">
-                        <a onclick="showPage('home');closeNavDropdowns()" class="nav-home">Home</a>
-                        <a onclick="showPage('upcoming');closeNavDropdowns()" class="nav-upcoming">Upcoming</a>
-                        <a onclick="showPage('ladder');closeNavDropdowns()" class="nav-ladder">Ladder</a>
-                        <a onclick="showPage('teams');closeNavDropdowns()" class="nav-teams">Teams</a>
-                        <a onclick="showPage('results');closeNavDropdowns()" class="nav-results">Results</a>
-                    </div>
-                </div>
-
+                <button class="nav-dropdown-btn" id="leagueBtn" onclick="showPage('home')">League VI</button>
                 <div class="nav-dropdown" id="draftDropdown">
                     <button class="nav-dropdown-btn" id="draftBtn" onclick="toggleNavDropdown('draft')">Draft &#9662;</button>
                     <div class="nav-dropdown-menu" id="draftMenu">
@@ -2604,6 +2620,14 @@
                     </div>
                 </div>
             </nav>
+            <!-- League sub-nav: always visible while on a league page -->
+            <div id="leagueSubnav">
+                <a onclick="showPage('home')" class="subnav-link nav-home">Home</a>
+                <a onclick="showPage('upcoming')" class="subnav-link nav-upcoming">Upcoming</a>
+                <a onclick="showPage('ladder')" class="subnav-link nav-ladder">Ladder</a>
+                <a onclick="showPage('teams')" class="subnav-link nav-teams">Teams</a>
+                <a onclick="showPage('results')" class="subnav-link nav-results">Results</a>
+            </div>
         </div>
     </header>
 
@@ -3692,20 +3716,25 @@
 
         function showPage(pageName) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('nav a, .nav-dropdown-btn').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('nav a, .nav-dropdown-btn, .subnav-link').forEach(link => link.classList.remove('active'));
             closeNavDropdowns();
 
             document.getElementById(pageName + 'Page').classList.add('active');
             const navLink = document.querySelector('.nav-' + pageName);
             if (navLink) navLink.classList.add('active');
 
-            // Highlight parent dropdown button
+            // Highlight parent button and show/hide persistent sub-nav
             const leaguePages = ['home','upcoming','ladder','teams','results'];
             const draftPages  = ['draft','setup'];
+            const leagueSubnav = document.getElementById('leagueSubnav');
             if (leaguePages.includes(pageName)) {
                 document.getElementById('leagueBtn').classList.add('active');
-            } else if (draftPages.includes(pageName)) {
-                document.getElementById('draftBtn').classList.add('active');
+                leagueSubnav.classList.add('active');
+            } else {
+                leagueSubnav.classList.remove('active');
+                if (draftPages.includes(pageName)) {
+                    document.getElementById('draftBtn').classList.add('active');
+                }
             }
 
             switch (pageName) {
