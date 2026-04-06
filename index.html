@@ -1348,9 +1348,10 @@
         }
 
         .f-meta {
-            display: flex;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .rd-badge {
@@ -1368,15 +1369,14 @@
             font-size: 9.5px;
             font-weight: 700;
             color: #bbb;
-            min-width: 38px;
             text-align: center;
+            justify-self: center;
             padding: 2px 4px;
-            flex-shrink: 0;
         }
         .f-pts-badge.has-pts {
             color: #16a34a;
             background: #f0fdf4;
-            padding: 2px 5px;
+            padding: 2px 6px;
             border-radius: 3px;
             text-align: center;
         }
@@ -1389,14 +1389,13 @@
             padding: 2px 5px;
             border-radius: 3px;
             white-space: nowrap;
-            flex-shrink: 0;
+            justify-self: end;
         }
         .f-date-badge.empty {
             background: transparent;
             visibility: hidden;
             pointer-events: none;
-            width: 0;
-            padding: 0;
+            padding: 2px 5px;
         }
 
         /* ── FIGHTER AVATAR (Teams page) ── */
