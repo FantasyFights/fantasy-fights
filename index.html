@@ -2564,6 +2564,358 @@
         }
         .rr-review-btn:hover { transform: scale(1.25); }
         @media (max-width: 480px) { .rr-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* ============ FIGHTERS DATABASE PAGE ============ */
+        .fd-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 28px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .fd-hero-title {
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            line-height: 1.1;
+        }
+        .fd-hero-title span { color: #e63333; }
+        .fd-hero-sub {
+            font-size: 15px;
+            opacity: 0.7;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+        .fd-hero-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .fd-hero-pill {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 14px 22px;
+            text-align: center;
+            min-width: 90px;
+        }
+        .fd-hero-pill-num {
+            font-size: 26px;
+            font-weight: 800;
+            color: #e63333;
+            display: block;
+            line-height: 1;
+        }
+        .fd-hero-pill-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.6;
+            display: block;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .fd-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .fd-search-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 10px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            background: white;
+        }
+        .fd-search-input:focus {
+            border-color: #e63333;
+            box-shadow: 0 0 0 3px rgba(230,51,51,0.08);
+        }
+        .fd-count {
+            font-size: 13px;
+            color: #aaa;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .fd-div-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .fd-div-btn {
+            padding: 7px 16px;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.18s;
+            font-family: inherit;
+        }
+        .fd-div-btn:hover { border-color: #e63333; color: #e63333; }
+        .fd-div-btn.active { background: #e63333; border-color: #e63333; color: white; }
+        .fd-table-wrap {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            overflow-x: auto;
+        }
+        .fd-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .fd-table thead th {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            color: #bbb;
+            font-weight: 700;
+            border-bottom: 2px solid #f0f0f0;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: color 0.15s;
+        }
+        .fd-table thead th:hover { color: #e63333; }
+        .fd-table thead th.fd-sorted { color: #e63333; }
+        .fd-table thead th.fd-sorted::after { content: ' ↓'; font-size: 10px; }
+        .fd-table thead th.fd-sorted.fd-asc::after { content: ' ↑'; font-size: 10px; }
+        .fd-table thead th.fd-no-sort { cursor: default; }
+        .fd-table thead th.fd-no-sort:hover { color: #bbb; }
+        .fd-table tbody tr {
+            border-bottom: 1px solid #f5f5f5;
+            cursor: pointer;
+            transition: background 0.12s;
+        }
+        .fd-table tbody tr:last-child { border-bottom: none; }
+        .fd-table tbody tr:hover { background: #fafafa; }
+        .fd-table tbody tr.fd-rk1 { background: linear-gradient(90deg, rgba(255,215,0,0.07), transparent 60%); }
+        .fd-table tbody tr.fd-rk2 { background: linear-gradient(90deg, rgba(192,192,192,0.07), transparent 60%); }
+        .fd-table tbody tr.fd-rk3 { background: linear-gradient(90deg, rgba(205,127,50,0.07), transparent 60%); }
+        .fd-table tbody tr.fd-rk1:hover { background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(250,250,250,0.5) 60%); }
+        .fd-table tbody tr.fd-rk2:hover { background: linear-gradient(90deg, rgba(192,192,192,0.12), rgba(250,250,250,0.5) 60%); }
+        .fd-table tbody tr.fd-rk3:hover { background: linear-gradient(90deg, rgba(205,127,50,0.12), rgba(250,250,250,0.5) 60%); }
+        .fd-table tbody td { padding: 11px 12px; vertical-align: middle; }
+        .fd-rank-cell { width: 44px; text-align: center; }
+        .fd-fighter-name { font-weight: 700; color: #222; line-height: 1.3; }
+        .fd-fighter-meta { font-size: 11px; color: #bbb; margin-top: 2px; display: flex; align-items: center; gap: 3px; }
+        .fd-div-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .fd-stat-num {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            text-align: center;
+        }
+        .fd-stat-none { color: #ddd !important; }
+        .fd-yr-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 2px;
+            background: #e63333;
+            opacity: 0.7;
+        }
+        .fd-pts-cell { text-align: right; padding-right: 20px !important; }
+        .fd-pts-num {
+            font-size: 16px;
+            font-weight: 800;
+            color: #e63333;
+        }
+        .fd-pts-zero { color: #ccc; }
+
+        /* Fighter modal */
+        .fd-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .fd-modal-overlay.open { display: flex; animation: fdFadeIn 0.18s ease; }
+        @keyframes fdFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fd-modal {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 680px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+            animation: fdSlideUp 0.22s ease;
+        }
+        @keyframes fdSlideUp {
+            from { transform: translateY(16px); opacity: 0; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+        .fd-modal-top {
+            padding: 26px 28px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+            border-radius: 16px 16px 0 0;
+        }
+        .fd-modal-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+        .fd-modal-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #222;
+            line-height: 1.2;
+        }
+        .fd-modal-close {
+            background: #f0f0f0;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s;
+            line-height: 1;
+        }
+        .fd-modal-close:hover { background: #ddd; }
+        .fd-modal-totals-row {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .fd-modal-stat {
+            text-align: center;
+        }
+        .fd-modal-stat-num {
+            font-size: 20px;
+            font-weight: 800;
+            display: block;
+            line-height: 1;
+        }
+        .fd-modal-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #bbb;
+            font-weight: 700;
+            margin-top: 3px;
+            display: block;
+        }
+        .fd-modal-body {
+            padding: 22px 28px 28px;
+        }
+        .fd-modal-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #bbb;
+            margin-bottom: 14px;
+        }
+        .fd-season-card {
+            border: 1.5px solid #eeeeee;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .fd-season-card:hover { border-color: #e63333; box-shadow: 0 2px 10px rgba(230,51,51,0.08); }
+        .fd-season-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .fd-season-year-badge {
+            font-size: 13px;
+            font-weight: 800;
+            color: #222;
+            background: #f5f5f5;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .fd-season-team-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #444;
+        }
+        .fd-season-team-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        .fd-season-pts {
+            font-size: 22px;
+            font-weight: 800;
+            color: #e63333;
+        }
+        .fd-season-stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .fd-ss-item { text-align: center; min-width: 34px; }
+        .fd-ss-num { font-size: 15px; font-weight: 700; color: #444; display: block; line-height: 1.2; }
+        .fd-ss-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; color: #bbb; font-weight: 600; }
+        .fd-modal-empty {
+            text-align: center;
+            padding: 40px;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .fd-hero { padding: 24px 20px; }
+            .fd-hero-title { font-size: 26px; }
+            .fd-table { font-size: 12px; }
+            .fd-table thead th, .fd-table tbody td { padding: 9px 8px; }
+            .fd-modal-top { padding: 20px 20px 16px; }
+            .fd-modal-body { padding: 18px 20px 24px; }
+            .fd-modal-name { font-size: 18px; }
+        }
     </style>
 </head>
 <body>
@@ -2611,6 +2963,7 @@
             </div>
             <nav id="mainNav">
                 <a onclick="showPage('about')" class="nav-about">Our Story</a>
+                <a onclick="showPage('fighters')" class="nav-fighters">Fighters</a>
                 <button class="nav-dropdown-btn" id="leagueBtn" onclick="showPage('home')">League VI</button>
                 <div class="nav-dropdown" id="draftDropdown">
                     <button class="nav-dropdown-btn" id="draftBtn" onclick="toggleNavDropdown('draft')">Draft &#9662;</button>
@@ -3159,6 +3512,101 @@
             </div>
 
           </div>
+        </div>
+
+        <!-- FIGHTERS DATABASE PAGE -->
+        <div class="page" id="fightersPage">
+
+            <!-- Hero -->
+            <div class="fd-hero">
+                <div>
+                    <div class="fd-hero-title">Fighter <span>Database</span></div>
+                    <div class="fd-hero-sub">Five seasons of Fantasy Fights history. Every elite boxer tracked, ranked, and broken down by performance.</div>
+                </div>
+                <div class="fd-hero-pills">
+                    <div class="fd-hero-pill">
+                        <span class="fd-hero-pill-num" id="fdHeroPillFighters">—</span>
+                        <span class="fd-hero-pill-label">Fighters</span>
+                    </div>
+                    <div class="fd-hero-pill">
+                        <span class="fd-hero-pill-num">5</span>
+                        <span class="fd-hero-pill-label">Seasons</span>
+                    </div>
+                    <div class="fd-hero-pill">
+                        <span class="fd-hero-pill-num" id="fdHeroPillSeasons">—</span>
+                        <span class="fd-hero-pill-label">Fighter Seasons</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="fd-controls">
+                <input type="text" id="fdSearch" class="fd-search-input" placeholder="🔍  Search fighters…" oninput="fdRender()" autocomplete="off">
+                <span class="fd-count" id="fdCount"></span>
+            </div>
+
+            <!-- Division Filters -->
+            <div class="fd-div-filters" id="fdDivFilters"></div>
+
+            <!-- Loading state -->
+            <div id="fdLoad" style="text-align:center;padding:70px 20px;color:#aaa;">
+                <div style="display:inline-block;width:30px;height:30px;border:3px solid #eee;border-top-color:#e63333;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+                <p style="margin-top:14px;font-size:14px;font-weight:600;">Loading fighter database…</p>
+            </div>
+
+            <!-- Error state -->
+            <div id="fdErr" style="display:none;text-align:center;padding:50px 20px;">
+                <div style="font-size:32px;margin-bottom:12px;">⚠️</div>
+                <p style="font-size:14px;font-weight:600;color:#c33;">Could not load fighter data.</p>
+                <p style="font-size:13px;color:#aaa;margin-top:6px;">Check that the Google Sheet is publicly shared.</p>
+                <button onclick="fdLoaded=false;fdLoad();" style="margin-top:16px;padding:8px 20px;background:#e63333;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;font-family:inherit;">Retry</button>
+            </div>
+
+            <!-- Main table -->
+            <div id="fdMain" style="display:none;">
+                <div class="fd-table-wrap">
+                    <table class="fd-table">
+                        <thead>
+                            <tr>
+                                <th class="fd-rank-cell fd-no-sort">#</th>
+                                <th onclick="fdSort('name')">Fighter</th>
+                                <th class="fd-no-sort">Division</th>
+                                <th onclick="fdSort('yrsPicked')" title="Seasons drafted">Yrs</th>
+                                <th onclick="fdSort('fights')" title="Total fights">F</th>
+                                <th onclick="fdSort('wins')" title="Wins">W</th>
+                                <th onclick="fdSort('kos')" title="Knockouts">KOs</th>
+                                <th onclick="fdSort('losses')" title="Losses">L</th>
+                                <th onclick="fdSort('kod')" title="Times knocked out">KO'd</th>
+                                <th onclick="fdSort('belts')" title="Belt points">🏆</th>
+                                <th onclick="fdSort('stars')" title="Star points">⭐</th>
+                                <th onclick="fdSort('h2h')" title="Head-to-head points">H2H</th>
+                                <th onclick="fdSort('totalPts')" class="fd-pts-cell" title="Total Fantasy Fights points">PTS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fdBody"></tbody>
+                    </table>
+                </div>
+                <p style="font-size:12px;color:#ccc;text-align:right;margin-top:10px;padding-right:4px;">Click any fighter to view season-by-season history</p>
+            </div>
+
+            <!-- Fighter Detail Modal -->
+            <div class="fd-modal-overlay" id="fdModalOverlay" onclick="fdCloseModal()">
+                <div class="fd-modal" onclick="event.stopPropagation()">
+                    <div class="fd-modal-top">
+                        <div class="fd-modal-title-row">
+                            <div class="fd-modal-name" id="fdModalName"></div>
+                            <button class="fd-modal-close" onclick="fdCloseModal()">✕</button>
+                        </div>
+                        <div id="fdModalMeta"></div>
+                        <div class="fd-modal-totals-row" id="fdModalTotals"></div>
+                    </div>
+                    <div class="fd-modal-body">
+                        <div class="fd-modal-section-title">Season History — click any season to expand</div>
+                        <div id="fdModalSeasons"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -3757,6 +4205,7 @@
                     else showPage('home');
                     break;
                 case 'about': break;
+                case 'fighters': fdLoad(); break;
             }
         }
 
@@ -5389,6 +5838,303 @@
             else{rpSortKey=key;rpSortAsc=(key==='name'||key==='team'||key==='division'||key==='country');}
             rpRenderTable();
         }
+        // ============ FIGHTERS DATABASE ============
+        let fdRollingData = [];
+        let fdHistoryData = [];
+        let fdDivFilter   = 'All';
+        let fdSortKey     = 'totalPts';
+        let fdSortAsc     = false;
+        let fdLoaded      = false;
+
+        const FD_DIV_STYLES = {
+            'Lights':  { bg:'#fefce8', c:'#713f12' },
+            'Welters': { bg:'#eff6ff', c:'#1e3a8a' },
+            'Smalls':  { bg:'#f0fdf4', c:'#14532d' },
+            'Middles': { bg:'#fff7ed', c:'#7c2d12' },
+            'Heavies': { bg:'#fdf2f8', c:'#831843' }
+        };
+        const FD_MEDALS = { 1:'🥇', 2:'🥈', 3:'🥉' };
+        const FD_TEAM_COLORS_LOWER = {
+            'dom':     '#e63333', 'tom':     '#16a34a', 'elyse':   '#ec4899',
+            'pat':     '#f97316', 'mort':    '#eab308', 'ash':     '#0ea5e9',
+            'brad':    '#1d4ed8', 'kieran':  '#b45309', 'rejects': '#6b7280',
+            'gus':     '#a855f7', 'josh':    '#0d9488', 'nick':    '#64748b'
+        };
+
+        function fdTeamColor(teamRaw) {
+            return FD_TEAM_COLORS_LOWER[teamRaw.toLowerCase()] || '#999';
+        }
+        function fdTeamDisplay(teamRaw) {
+            return teamRaw.charAt(0).toUpperCase() + teamRaw.slice(1).toLowerCase();
+        }
+        function fdEsc(s) {
+            const d = document.createElement('div');
+            d.textContent = String(s || '');
+            return d.innerHTML;
+        }
+
+        async function fdFetchSheet(sheetName) {
+            const url = `https://docs.google.com/spreadsheets/d/${GS_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+            const resp = await fetch(url, { cache: 'no-store' });
+            if (!resp.ok) throw new Error('Sheet fetch failed: ' + resp.status);
+            const text = await resp.text();
+            const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);?\s*$/);
+            if (!match) throw new Error('Unexpected sheet response format');
+            return JSON.parse(match[1]);
+        }
+        function fdCell(row, col) {
+            const c = row.c?.[col];
+            if (!c || c.v === null || c.v === undefined) return '';
+            return String(c.v).trim();
+        }
+        function fdNum(row, col) {
+            const c = row.c?.[col];
+            if (!c || c.v === null || c.v === undefined) return 0;
+            return Number(c.v) || 0;
+        }
+
+        async function fdLoad() {
+            if (fdLoaded) { fdRenderDivFilters(); fdRender(); return; }
+            document.getElementById('fdLoad').style.display = 'block';
+            document.getElementById('fdMain').style.display = 'none';
+            document.getElementById('fdErr').style.display  = 'none';
+            try {
+                const [rollingRes, histRes] = await Promise.all([
+                    fdFetchSheet('Rolling total'),
+                    fdFetchSheet('total points 2021-2025')
+                ]);
+
+                // Rolling total columns: Name(0), yrs picked(1), Fights(2), Wins(3),
+                // KO's(4), Losses(5), KO'd(6), Belts(7), Stars(8), H2H(9), Total Points(10)
+                fdRollingData = (rollingRes.table?.rows || [])
+                    .filter(r => r.c?.[0]?.v)
+                    .map(r => ({
+                        name:      fdCell(r, 0),
+                        yrsPicked: fdNum(r, 1),
+                        fights:    fdNum(r, 2),
+                        wins:      fdNum(r, 3),
+                        kos:       fdNum(r, 4),
+                        losses:    fdNum(r, 5),
+                        kod:       Math.abs(fdNum(r, 6)),
+                        belts:     fdNum(r, 7),
+                        stars:     fdNum(r, 8),
+                        h2h:       fdNum(r, 9),
+                        totalPts:  fdNum(r, 10),
+                        division:  ''
+                    }));
+
+                // History columns: year(0), DraftedRd(1), Team(2), Name(3), Division(4),
+                // #REF!(5), F(6), W(7), KO(8), L(9), KO'd(10), D(11), B(12), S(13), H2H(14), total pts(15)
+                fdHistoryData = (histRes.table?.rows || [])
+                    .filter(r => r.c?.[0]?.v && r.c?.[3]?.v)
+                    .map(r => ({
+                        year:     fdNum(r, 0),
+                        team:     fdCell(r, 2),
+                        name:     fdCell(r, 3),
+                        division: fdCell(r, 4),
+                        fights:   fdNum(r, 6),
+                        wins:     fdNum(r, 7),
+                        kos:      fdNum(r, 8),
+                        losses:   fdNum(r, 9),
+                        kod:      Math.abs(fdNum(r, 10)),
+                        draws:    fdNum(r, 11),
+                        belts:    fdNum(r, 12),
+                        stars:    fdNum(r, 13),
+                        h2h:      fdNum(r, 14),
+                        pts:      fdNum(r, 15)
+                    }));
+
+                // Build division lookup from history (more complete data source)
+                const divMap = {};
+                fdHistoryData.forEach(h => { if (h.name && h.division) divMap[h.name] = h.division; });
+                fdRollingData.forEach(f => { if (!f.division) f.division = divMap[f.name] || ''; });
+
+                // Update hero pills with live counts
+                const pillF = document.getElementById('fdHeroPillFighters');
+                const pillS = document.getElementById('fdHeroPillSeasons');
+                if (pillF) pillF.textContent = fdRollingData.length;
+                if (pillS) pillS.textContent = fdHistoryData.length;
+
+                fdLoaded = true;
+                document.getElementById('fdLoad').style.display = 'none';
+                document.getElementById('fdMain').style.display = 'block';
+                fdRenderDivFilters();
+                fdRender();
+
+            } catch (e) {
+                console.error('[FighterDB]', e);
+                document.getElementById('fdLoad').style.display = 'none';
+                document.getElementById('fdErr').style.display  = 'block';
+            }
+        }
+
+        function fdRenderDivFilters() {
+            const divs = ['All', 'Heavies', 'Middles', 'Welters', 'Lights', 'Smalls'];
+            document.getElementById('fdDivFilters').innerHTML = divs.map(d =>
+                `<button class="fd-div-btn ${d === fdDivFilter ? 'active' : ''}" onclick="fdSetDiv('${d}')">${d}</button>`
+            ).join('');
+        }
+
+        function fdSetDiv(div) { fdDivFilter = div; fdRenderDivFilters(); fdRender(); }
+
+        function fdSort(key) {
+            if (fdSortKey === key) { fdSortAsc = !fdSortAsc; }
+            else { fdSortKey = key; fdSortAsc = (key === 'name'); }
+            fdRender();
+        }
+
+        function fdRender() {
+            if (!fdLoaded) return;
+            const q = (document.getElementById('fdSearch')?.value || '').toLowerCase().trim();
+            let data = [...fdRollingData];
+            if (fdDivFilter !== 'All') data = data.filter(f => f.division === fdDivFilter);
+            if (q) data = data.filter(f => f.name.toLowerCase().includes(q));
+
+            data.sort((a, b) => {
+                let av = a[fdSortKey], bv = b[fdSortKey];
+                if (typeof av === 'string') { const c = av.localeCompare(bv); return fdSortAsc ? c : -c; }
+                if (av !== bv) return fdSortAsc ? av - bv : bv - av;
+                return b.totalPts - a.totalPts || a.name.localeCompare(b.name);
+            });
+
+            const countEl = document.getElementById('fdCount');
+            if (countEl) countEl.textContent = `${data.length} fighter${data.length !== 1 ? 's' : ''}`;
+
+            // Update sort indicators
+            document.querySelectorAll('.fd-table thead th[onclick]').forEach(th => {
+                const m = th.getAttribute('onclick').match(/fdSort\('(\w+)'\)/);
+                if (!m) return;
+                th.classList.remove('fd-sorted', 'fd-asc');
+                if (m[1] === fdSortKey) {
+                    th.classList.add('fd-sorted');
+                    if (fdSortAsc) th.classList.add('fd-asc');
+                }
+            });
+
+            document.getElementById('fdBody').innerHTML = data.map((f, i) => {
+                const rank  = i + 1;
+                const rkCls = rank <= 3 ? `fd-rk${rank}` : '';
+                const rankHtml = FD_MEDALS[rank]
+                    ? `<span style="font-size:18px;line-height:1">${FD_MEDALS[rank]}</span>`
+                    : `<span style="font-size:12px;font-weight:700;color:#ccc">${rank}</span>`;
+                const ds = FD_DIV_STYLES[f.division] || { bg:'#f5f5f5', c:'#888' };
+                const divHtml = f.division
+                    ? `<span class="fd-div-badge" style="background:${ds.bg};color:${ds.c}">${fdEsc(f.division)}</span>`
+                    : `<span style="color:#ddd;font-size:12px;">—</span>`;
+                const yearDots = Array.from({ length: f.yrsPicked }, () =>
+                    `<span class="fd-yr-dot"></span>`).join('');
+                const sn = (v, col) => v
+                    ? `<span class="fd-stat-num" style="text-align:center;${col?'color:'+col:''}">${v}</span>`
+                    : `<span class="fd-stat-num fd-stat-none" style="text-align:center;">—</span>`;
+                const safeName = f.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+                return `<tr class="${rkCls}" onclick="fdOpenModal('${safeName}')" title="View ${fdEsc(f.name)}'s season history">
+                    <td class="fd-rank-cell">${rankHtml}</td>
+                    <td>
+                        <div class="fd-fighter-name">${fdEsc(f.name)}</div>
+                        <div class="fd-fighter-meta">${yearDots}&nbsp;${f.yrsPicked} season${f.yrsPicked !== 1 ? 's' : ''}</div>
+                    </td>
+                    <td>${divHtml}</td>
+                    <td style="text-align:center;">${sn(f.yrsPicked)}</td>
+                    <td style="text-align:center;">${sn(f.fights)}</td>
+                    <td style="text-align:center;">${sn(f.wins,   f.wins   ? '#16a34a' : null)}</td>
+                    <td style="text-align:center;">${sn(f.kos,    f.kos    ? '#7c3aed' : null)}</td>
+                    <td style="text-align:center;">${sn(f.losses, f.losses ? '#dc2626' : null)}</td>
+                    <td style="text-align:center;">${sn(f.kod)}</td>
+                    <td style="text-align:center;">${sn(f.belts,  f.belts  ? '#f59e0b' : null)}</td>
+                    <td style="text-align:center;">${sn(f.stars,  f.stars  ? '#0ea5e9' : null)}</td>
+                    <td style="text-align:center;">${sn(f.h2h,   f.h2h    ? '#ec4899' : null)}</td>
+                    <td class="fd-pts-cell">
+                        <span class="fd-pts-num ${!f.totalPts ? 'fd-pts-zero' : ''}">${f.totalPts || 0}</span>
+                    </td>
+                </tr>`;
+            }).join('') || `<tr><td colspan="13" style="text-align:center;padding:40px;color:#bbb;font-size:14px;">No fighters found.</td></tr>`;
+        }
+
+        function fdOpenModal(name) {
+            const fighter = fdRollingData.find(f => f.name === name);
+            if (!fighter) return;
+
+            document.getElementById('fdModalName').textContent = name;
+
+            // Division badge in meta
+            const ds = FD_DIV_STYLES[fighter.division] || null;
+            const metaEl = document.getElementById('fdModalMeta');
+            metaEl.innerHTML = ds && fighter.division
+                ? `<span class="fd-div-badge" style="background:${ds.bg};color:${ds.c};margin-bottom:4px;">${fdEsc(fighter.division)}</span>`
+                : '';
+
+            // Totals bar
+            const statsConfig = [
+                { num: fighter.totalPts, label: 'Total Pts', color: '#e63333' },
+                { num: fighter.yrsPicked, label: 'Seasons',  color: '#667eea' },
+                { num: fighter.fights,   label: 'Fights',   color: '#555'    },
+                { num: fighter.wins,     label: 'Wins',     color: '#16a34a' },
+                { num: fighter.kos,      label: 'KOs',      color: '#7c3aed' },
+                { num: fighter.losses,   label: 'Losses',   color: '#dc2626' },
+                { num: fighter.belts,    label: 'Belts',    color: '#f59e0b' },
+                { num: fighter.stars,    label: 'Stars',    color: '#0ea5e9' },
+                { num: fighter.h2h,      label: 'H2H',      color: '#ec4899' },
+            ];
+            document.getElementById('fdModalTotals').innerHTML = statsConfig.map(s =>
+                `<div class="fd-modal-stat">
+                    <span class="fd-modal-stat-num" style="color:${s.color}">${s.num || 0}</span>
+                    <span class="fd-modal-stat-label">${s.label}</span>
+                </div>`
+            ).join('');
+
+            // Season history cards (newest first)
+            const seasons = fdHistoryData
+                .filter(h => h.name === name)
+                .sort((a, b) => b.year - a.year);
+
+            if (!seasons.length) {
+                document.getElementById('fdModalSeasons').innerHTML =
+                    '<div class="fd-modal-empty">No season history available.</div>';
+            } else {
+                document.getElementById('fdModalSeasons').innerHTML = seasons.map(s => {
+                    const teamColor   = fdTeamColor(s.team);
+                    const teamDisplay = fdTeamDisplay(s.team);
+                    const statItems = [
+                        s.fights  ? `<div class="fd-ss-item"><span class="fd-ss-num">${s.fights}</span><span class="fd-ss-label">Fights</span></div>` : '',
+                        s.wins    ? `<div class="fd-ss-item"><span class="fd-ss-num" style="color:#16a34a">${s.wins}</span><span class="fd-ss-label">Wins</span></div>` : '',
+                        s.kos     ? `<div class="fd-ss-item"><span class="fd-ss-num" style="color:#7c3aed">${s.kos}</span><span class="fd-ss-label">KOs</span></div>` : '',
+                        s.losses  ? `<div class="fd-ss-item"><span class="fd-ss-num" style="color:#dc2626">${s.losses}</span><span class="fd-ss-label">Losses</span></div>` : '',
+                        s.kod     ? `<div class="fd-ss-item"><span class="fd-ss-num">${s.kod}</span><span class="fd-ss-label">KO'd</span></div>` : '',
+                        s.draws   ? `<div class="fd-ss-item"><span class="fd-ss-num">${s.draws}</span><span class="fd-ss-label">Draws</span></div>` : '',
+                        s.belts   ? `<div class="fd-ss-item"><span class="fd-ss-num" style="color:#f59e0b">${s.belts}</span><span class="fd-ss-label">Belts</span></div>` : '',
+                        s.stars   ? `<div class="fd-ss-item"><span class="fd-ss-num" style="color:#0ea5e9">${s.stars}</span><span class="fd-ss-label">Stars</span></div>` : '',
+                        s.h2h     ? `<div class="fd-ss-item"><span class="fd-ss-num" style="color:#ec4899">${s.h2h}</span><span class="fd-ss-label">H2H</span></div>` : '',
+                    ].filter(Boolean).join('');
+                    return `<div class="fd-season-card">
+                        <div class="fd-season-top">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <span class="fd-season-year-badge">${s.year}</span>
+                                <div class="fd-season-team-pill">
+                                    <span class="fd-season-team-dot" style="background:${teamColor}"></span>
+                                    ${fdEsc(teamDisplay)}
+                                </div>
+                            </div>
+                            <div class="fd-season-pts">${s.pts} <span style="font-size:13px;font-weight:600;color:#e0a0a0">pts</span></div>
+                        </div>
+                        ${statItems ? `<div class="fd-season-stats">${statItems}</div>` : ''}
+                    </div>`;
+                }).join('');
+            }
+
+            document.getElementById('fdModalOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fdCloseModal() {
+            document.getElementById('fdModalOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') fdCloseModal();
+        });
+
         async function rpLoad() {
             const btn=document.getElementById('rpRefreshBtn');
             if(btn)btn.disabled=true;
