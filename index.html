@@ -5907,7 +5907,7 @@
                 // Rolling total columns: Name(0), yrs picked(1), Fights(2), Wins(3),
                 // KO's(4), Losses(5), KO'd(6), Belts(7), Stars(8), H2H(9), Total Points(10)
                 fdRollingData = (rollingRes.table?.rows || [])
-                    .filter(r => r.c?.[0]?.v)
+                    .filter(r => r.c?.[0]?.v && !/grand total|total/i.test(String(r.c[0].v).trim()))
                     .map(r => ({
                         name:      fdCell(r, 0),
                         yrsPicked: fdNum(r, 1),
