@@ -1193,21 +1193,38 @@
 
         .ladder-table th,
         .ladder-table td {
-            padding: 15px 20px;
-            text-align: left;
+            padding: 13px 10px;
+            text-align: center;
             border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        /* Rank column */
+        .ladder-table th:first-child,
+        .ladder-table td:first-child {
+            padding-left: 18px;
+            padding-right: 8px;
+            width: 36px;
+        }
+
+        /* Team name column — left-align */
+        .ladder-table th:nth-child(2),
+        .ladder-table td:nth-child(2) {
+            text-align: left;
+            padding-left: 14px;
+            padding-right: 20px;
         }
 
         .ladder-table th {
             background: #f8f8f8;
-            font-weight: 600;
-            color: #333;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 11px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: #999;
         }
 
-        .ladder-table tr:hover {
+        .ladder-table tbody tr:hover {
             background: #f9f9f9;
         }
 
@@ -1220,14 +1237,23 @@
         }
 
         .team-color-dot {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 3px;
+            flex-shrink: 0;
         }
 
         .stat-number {
-            font-weight: 700;
-            color: #667eea;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Pts column gets special treatment */
+        .ladder-pts {
+            font-size: 17px;
+            font-weight: 800;
+            color: #e63333;
         }
 
         /* ============ TEAMS PAGE ============ */
@@ -1342,9 +1368,10 @@
             font-size: 9.5px;
             font-weight: 700;
             color: #bbb;
-            flex: 1;
+            min-width: 38px;
             text-align: center;
-            padding: 2px 0;
+            padding: 2px 4px;
+            flex-shrink: 0;
         }
         .f-pts-badge.has-pts {
             color: #16a34a;
@@ -4820,12 +4847,12 @@
                     const tr = document.createElement('tr');
                     if (missing) tr.style.opacity = '0.45';
                     tr.innerHTML = `
-                        <td style="font-weight:700;color:#888;">${missing ? '—' : rank}</td>
+                        <td style="font-weight:700;color:#aaa;font-size:13px;">${missing ? '—' : rank}</td>
                         <td class="team-name">
                             <span class="team-color-dot" style="background:${color}"></span>
                             ${teamName}
                         </td>
-                        <td class="stat-number" style="font-size:18px;font-weight:800;color:#e63333;">${pts}</td>
+                        <td class="ladder-pts">${pts}</td>
                         <td class="stat-number">${fights}</td>
                         <td class="stat-number">${w}</td>
                         <td class="stat-number">${l}</td>
