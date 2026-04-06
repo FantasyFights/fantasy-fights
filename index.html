@@ -1302,25 +1302,74 @@
 
         .f-flag { font-size: 13px; flex-shrink: 0; width: 20px; line-height: 1; }
 
-        .f-name {
+        /* ── fighter info block ── */
+        .f-info {
             flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .f-name {
             font-size: 12.5px;
-            font-weight: 500;
+            font-weight: 600;
             color: #1a1a1a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .f-meta {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .rd-badge {
-            font-size: 9.5px;
+            font-size: 9px;
             font-weight: 700;
             color: #aaa;
             background: #f2f2f2;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 2px 5px;
+            border-radius: 3px;
             flex-shrink: 0;
             letter-spacing: 0.2px;
+        }
+
+        .f-pts-badge {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #bbb;
+            flex: 1;
+            text-align: center;
+            padding: 2px 0;
+        }
+        .f-pts-badge.has-pts {
+            color: #16a34a;
+            background: #f0fdf4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .f-date-badge {
+            font-size: 9px;
+            font-weight: 700;
+            color: #2563eb;
+            background: #eff6ff;
+            padding: 2px 5px;
+            border-radius: 3px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .f-date-badge.empty {
+            background: transparent;
+            visibility: hidden;
+            pointer-events: none;
+            width: 0;
+            padding: 0;
         }
 
         /* ── FIGHTER AVATAR (Teams page) ── */
@@ -3538,7 +3587,15 @@
                 case 'home': renderHome(); break;
                 case 'upcoming': renderUpcoming(); break;
                 case 'ladder': renderLadder(); break;
-                case 'teams': renderTeams(); break;
+                case 'teams':
+                    renderTeams();
+                    // Silently pre-load live stats if not yet fetched so pts/dates populate
+                    if (!rpLoaded) {
+                        rpLoad().then(() => {
+                            if (document.querySelector('#teamsPage.active')) renderTeams();
+                        }).catch(() => {});
+                    }
+                    break;
                 case 'draft': renderDraft(); break;
                 case 'results': rpLoad(); break;
                 case 'setup':
@@ -3843,8 +3900,8 @@
 
             const DIV_ORDER = ['Heavies','Middles','Welters','Lights','Smalls'];
             const DIV_LABEL = {
-                'Heavies':'Heavyweight','Middles':'Super Middle & Middleweight',
-                'Welters':'Welterweight','Lights':'Lightweight','Smalls':'Featherweight & Below'
+                'Heavies':'Heavies','Middles':'Middles',
+                'Welters':'Welters','Lights':'Lights','Smalls':'Smalls'
             };
 
             const ROSTER = [
@@ -4041,6 +4098,10 @@
 
             const TEAM_ORDER = ['Dom','Tom','Elyse','Pat','Mort','Ash','Brad','Kieran','Rejects'];
 
+            // Build a name → {pts, upcoming} lookup from live sheet data (if loaded)
+            const statsMap = {};
+            rpFighters.forEach(f => { statsMap[f.name.toLowerCase()] = {pts: f.pts, upcoming: f.upcoming}; });
+
             grid.innerHTML = TEAM_ORDER.map(teamName => {
                 const color = TEAM_COLOR_MAP[teamName] || '#999';
                 const squad = ROSTER.filter(f => f.team === teamName);
@@ -4050,16 +4111,31 @@
                     if (!rows.length) return '';
                     return `<div class="div-section">
                         <div class="div-label">${DIV_LABEL[div]}</div>
-                        ${rows.map(f => `
+                        ${rows.map(f => {
+                            const stats = statsMap[f.name.toLowerCase()] || {pts: 0, upcoming: ''};
+                            const ptsHtml = stats.pts > 0
+                                ? `<span class="f-pts-badge has-pts">${stats.pts}pts</span>`
+                                : `<span class="f-pts-badge">—</span>`;
+                            const dateHtml = stats.upcoming
+                                ? `<span class="f-date-badge">📅 ${stats.upcoming}</span>`
+                                : `<span class="f-date-badge empty"></span>`;
+                            return `
                         <div class="fighter-row">
                             <div class="fighter-avatar-wrap" style="border-color:${color}40">
                                 <img data-fighter="${f.name}" alt="${f.name}" style="display:none">
                                 <span class="avatar-fallback">👤</span>
                             </div>
                             <span class="f-flag">${FLAG[f.country] || '🌍'}</span>
-                            <span class="f-name">${f.name}</span>
-                            <span class="rd-badge">Rd ${f.rd}</span>
-                        </div>`).join('')}
+                            <div class="f-info">
+                                <div class="f-name">${f.name}</div>
+                                <div class="f-meta">
+                                    <span class="rd-badge">Rd ${f.rd}</span>
+                                    ${ptsHtml}
+                                    ${dateHtml}
+                                </div>
+                            </div>
+                        </div>`;
+                        }).join('')}
                     </div>`;
                 }).join('');
 
