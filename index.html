@@ -3435,7 +3435,7 @@
                 console.error('Failed to initialize Firebase:', error);
                 // Show app even if Firebase fails
                 showMainApp();
-                renderHome();
+                showPage('about');
             }
         }
 
@@ -4612,7 +4612,7 @@
             userRole = 'commissioner';
             showMainApp();
             updateNavigation();
-            renderHome();
+            showPage('about');
             startSheetsAutoRefresh();
         }
 
