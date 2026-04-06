@@ -320,6 +320,66 @@
             display: none;
         }
 
+        /* ============ NAV DROPDOWNS ============ */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-btn:hover { color: #e63333; }
+
+        .nav-dropdown-btn.active {
+            background-color: #f0f0f0;
+            color: #e63333;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.13);
+            border: 1px solid #eee;
+            min-width: 155px;
+            z-index: 300;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.open { display: block; }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            border-radius: 0 !important;
+            border-bottom: 1px solid #f5f5f5;
+            background: none;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown-menu a:last-child { border-bottom: none; }
+        .nav-dropdown-menu a:hover { background: #fafafa; color: #e63333; }
+        .nav-dropdown-menu a.active { background: #fff5f5; color: #e63333; }
+        .nav-dropdown-menu a.hidden { display: none; }
+
         /* ============ MAIN CONTENT ============ */
         main {
             display: none;
@@ -2523,14 +2583,26 @@
                 <div class="user-menu" style="display:none"></div>
             </div>
             <nav id="mainNav">
-                <a onclick="showPage('home')" class="nav-home active">Home</a>
-                <a onclick="showPage('upcoming')" class="nav-upcoming">Upcoming</a>
-                <a onclick="showPage('ladder')" class="nav-ladder">Ladder</a>
-                <a onclick="showPage('teams')" class="nav-teams">Teams</a>
-                <a onclick="showPage('draft')" class="nav-draft">Draft</a>
-                <a onclick="showPage('results')" class="nav-results">Results</a>
-                <a onclick="showPage('setup')" class="nav-setup">Setup</a>
                 <a onclick="showPage('about')" class="nav-about">Our Story</a>
+
+                <div class="nav-dropdown" id="leagueDropdown">
+                    <button class="nav-dropdown-btn" id="leagueBtn" onclick="toggleNavDropdown('league')">League VI &#9662;</button>
+                    <div class="nav-dropdown-menu" id="leagueMenu">
+                        <a onclick="showPage('home');closeNavDropdowns()" class="nav-home">Home</a>
+                        <a onclick="showPage('upcoming');closeNavDropdowns()" class="nav-upcoming">Upcoming</a>
+                        <a onclick="showPage('ladder');closeNavDropdowns()" class="nav-ladder">Ladder</a>
+                        <a onclick="showPage('teams');closeNavDropdowns()" class="nav-teams">Teams</a>
+                        <a onclick="showPage('results');closeNavDropdowns()" class="nav-results">Results</a>
+                    </div>
+                </div>
+
+                <div class="nav-dropdown" id="draftDropdown">
+                    <button class="nav-dropdown-btn" id="draftBtn" onclick="toggleNavDropdown('draft')">Draft &#9662;</button>
+                    <div class="nav-dropdown-menu" id="draftMenu">
+                        <a onclick="showPage('draft');closeNavDropdowns()" class="nav-draft">Draft</a>
+                        <a onclick="showPage('setup');closeNavDropdowns()" class="nav-setup hidden">Setup</a>
+                    </div>
+                </div>
             </nav>
         </div>
     </header>
@@ -3572,6 +3644,22 @@
         }
 
         // ============ NAVIGATION ============
+        function toggleNavDropdown(name) {
+            const menu = document.getElementById(name + 'Menu');
+            const isOpen = menu.classList.contains('open');
+            closeNavDropdowns();
+            if (!isOpen) menu.classList.add('open');
+        }
+
+        function closeNavDropdowns() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('open'));
+        }
+
+        // Close dropdown when clicking outside nav
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-dropdown')) closeNavDropdowns();
+        });
+
         function updateNavigation() {
             const navSetup = document.querySelector('.nav-setup');
             if (navSetup) {
@@ -3604,10 +3692,21 @@
 
         function showPage(pageName) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('nav a, .nav-dropdown-btn').forEach(link => link.classList.remove('active'));
+            closeNavDropdowns();
 
             document.getElementById(pageName + 'Page').classList.add('active');
-            document.querySelector('.nav-' + pageName).classList.add('active');
+            const navLink = document.querySelector('.nav-' + pageName);
+            if (navLink) navLink.classList.add('active');
+
+            // Highlight parent dropdown button
+            const leaguePages = ['home','upcoming','ladder','teams','results'];
+            const draftPages  = ['draft','setup'];
+            if (leaguePages.includes(pageName)) {
+                document.getElementById('leagueBtn').classList.add('active');
+            } else if (draftPages.includes(pageName)) {
+                document.getElementById('draftBtn').classList.add('active');
+            }
 
             switch (pageName) {
                 case 'home': renderHome(); break;
@@ -4141,7 +4240,7 @@
                             const stats = statsMap[f.name.toLowerCase()] || {pts: 0, upcoming: ''};
                             const ptsHtml = stats.pts > 0
                                 ? `<span class="f-pts-badge has-pts">${stats.pts}pts</span>`
-                                : `<span class="f-pts-badge">—</span>`;
+                                : `<span class="f-pts-badge"></span>`;
                             const dateHtml = stats.upcoming
                                 ? `<span class="f-date-badge">📅 ${stats.upcoming}</span>`
                                 : `<span class="f-date-badge empty"></span>`;
