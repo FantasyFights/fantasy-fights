@@ -148,7 +148,7 @@
             document.getElementById('mainContent').classList.add('active');
             document.getElementById('leagueBtn').style.display = 'none';
             document.getElementById('draftDropdown').style.display = 'none';
-            document.getElementById('leagueSubnav').style.display = 'none';
+            document.getElementById('leagueSubnav').classList.remove('active');
             document.getElementById('headerAuthBtns').classList.add('active');
             document.getElementById('userMenu').style.display = 'none';
             showPage('about');
@@ -158,7 +158,6 @@
             // Restore full nav and enter the league
             document.getElementById('leagueBtn').style.display = '';
             document.getElementById('draftDropdown').style.display = '';
-            document.getElementById('leagueSubnav').style.display = '';
             document.getElementById('headerAuthBtns').classList.remove('active');
             document.getElementById('userMenu').style.display = '';
             showMainApp();

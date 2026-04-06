@@ -162,6 +162,110 @@
             display: none;
         }
 
+        /* ============ NAV DROPDOWN BUTTONS ============ */
+        .nav-dropdown-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-btn:hover {
+            color: #e63333;
+        }
+
+        .nav-dropdown-btn.active {
+            background-color: #f0f0f0;
+            color: #e63333;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 200;
+            min-width: 140px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.open {
+            display: block;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 10px 16px;
+            color: #444;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.15s;
+        }
+
+        .nav-dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: #f8f8f8;
+            color: #e63333;
+        }
+
+        /* ============ LEAGUE SUBNAV ============ */
+        #leagueSubnav {
+            display: none;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 12px;
+        }
+
+        #leagueSubnav.active {
+            display: flex;
+        }
+
+        .subnav-link {
+            text-decoration: none;
+            color: #888;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .subnav-link:hover {
+            color: #e63333;
+            background: #f8f8f8;
+        }
+
+        .subnav-link.active {
+            color: #e63333;
+            background: #f0f0f0;
+        }
+
         /* ============ MAIN CONTENT ============ */
         main {
             display: none;
